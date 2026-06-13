@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAKA World Monitor</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Poppins,sans-serif;
+}
+
+body{
+    background:#0f172a;
+    color:#fff;
+    min-height:100vh;
+    padding:20px;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+}
+
+.header{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.header h1{
+    font-size:3rem;
+    background:linear-gradient(90deg,#22c55e,#06b6d4);
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.header p{
+    opacity:.7;
+}
+
+.dashboard{
+    display:grid;
+    grid-template-columns:350px 1fr;
+    gap:20px;
+}
+
+.card{
+    background:#1e293b;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 0 20px rgba(0,0,0,.2);
+}
+
+.server-icon{
+    width:128px;
+    height:128px;
+    border-radius:16px;
+    display:block;
+    margin:auto;
+}
+
+.status{
+    text-align:center;
+    margin-top:15px;
+}
+
+.status-badge{
+    display:inline-block;
+    padding:8px 15px;
+    border-radius:999px;
+    font-size:.9rem;
+    font-weight:600;
+}
+
+.online{
+    background:#14532d;
+    color:#4ade80;
+}
+
+.offline{
+    background:#450a0a;
+    color:#f87171;
+}
+
+.server-name{
+    text-align:center;
+    font-size:1.5rem;
+    margin-top:10px;
+}
+
+.motd{
+    text-align:center;
+    opacity:.8;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.stat{
+    background:#1e293b;
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+}
+
+.stat h2{
+    font-size:2rem;
+    color:#22c55e;
+}
+
+.players{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:15px;
+}
+
+.player{
+    background:#0f172a;
+    border-radius:15px;
+    padding:15px;
+    border:1px solid rgba(255,255,255,.05);
+}
+
+.player-name{
+    font-weight:600;
+}
+
+.player-uuid{
+    font-size:.75rem;
+    opacity:.6;
+    word-break:break-all;
+}
+
+.refresh{
+    margin-top:15px;
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    background:#22c55e;
+    color:white;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.refresh:hover{
+    opacity:.9;
+}
+
+@media(max-width:900px){
+    .dashboard{
+        grid-template-columns:1fr;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>SAKA World</h1>
+        <p>Minecraft Server Monitoring Dashboard</p>
+    </div>
+
+    <div class="dashboard">
+
+        <div class="card">
+            <img id="icon" class="server-icon">
+
+            <div class="status">
+                <span id="statusBadge" class="status-badge">
+                    Loading...
+                </span>
+            </div>
+
+            <h2 class="server-name">SAKA World</h2>
+            <p class="motd" id="motd">Loading...</p>
+
+            <button class="refresh" onclick="loadServer()">
+                Refresh Data
+            </button>
+        </div>
+
+        <div>
+
+            <div class="stats">
+
+                <div class="stat">
+                    <small>Players</small>
+                    <h2 id="players">0</h2>
+                </div>
+
+                <div class="stat">
+                    <small>Max Slots</small>
+                    <h2 id="max">0</h2>
+                </div>
+
+                <div class="stat">
+                    <small>Version</small>
+                    <h2 id="version">-</h2>
+                </div>
+
+                <div class="stat">
+                    <small>Software</small>
+                    <h2 id="software">-</h2>
+                </div>
+
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom:15px">
+                    Online Players
+                </h3>
+
+                <div id="playerList" class="players">
+                    Loading...
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const API =
+"https://api.mcsrvstat.us/3/168.144.40.12";
+
+async function loadServer(){
+
+    try{
+
+        const res = await fetch(API);
+        const data = await res.json();
+
+        document.getElementById("icon").src =
+            data.icon || "https://mc-heads.net/avatar/Steve";
+
+        document.getElementById("motd").innerText =
+            data.motd?.clean?.[0] || "No MOTD";
+
+        document.getElementById("players").innerText =
+            data.players?.online || 0;
+
+        document.getElementById("max").innerText =
+            data.players?.max || 0;
+
+        document.getElementById("version").innerText =
+            data.version || "-";
+
+        document.getElementById("software").innerText =
+            data.software || "-";
+
+        const badge =
+            document.getElementById("statusBadge");
+
+        if(data.online){
+            badge.innerText = "🟢 ONLINE";
+            badge.className =
+            "status-badge online";
+        }else{
+            badge.innerText = "🔴 OFFLINE";
+            badge.className =
+            "status-badge offline";
+        }
+
+        const players =
+            data.players?.list || [];
+
+        document.getElementById("playerList")
+        .innerHTML = players.length ?
+
+        players.map(player=>`
+            <div class="player">
+                <div class="player-name">
+                    ${player.name}
+                </div>
+                <div class="player-uuid">
+                    ${player.uuid}
+                </div>
+            </div>
+        `).join("")
+
+        :
+
+        `<div>Tidak ada player online</div>`;
+
+    }catch(err){
+
+        console.error(err);
+
+        document.getElementById(
+        "playerList").innerHTML =
+        "Gagal mengambil data server.";
+
+    }
+
+}
+
+loadServer();
+
+setInterval(loadServer,30000);
+
+</script>
+
+</body>
+</html>
