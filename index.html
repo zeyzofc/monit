@@ -3,11 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SAKA World Monitor</title>
+
+<title>SAKA World Dashboard</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -16,15 +18,23 @@
 }
 
 body{
-    background:#0f172a;
-    color:#fff;
     min-height:100vh;
-    padding:20px;
+    color:white;
+    overflow-x:hidden;
+
+    background:
+    linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.75)),
+    url("https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=2000");
+
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
 }
 
 .container{
-    max-width:1200px;
+    max-width:1300px;
     margin:auto;
+    padding:25px;
 }
 
 .header{
@@ -32,71 +42,85 @@ body{
     margin-bottom:25px;
 }
 
-.header h1{
-    font-size:3rem;
+.logo{
+    font-size:4rem;
+    font-weight:700;
     background:linear-gradient(90deg,#22c55e,#06b6d4);
     -webkit-background-clip:text;
     color:transparent;
 }
 
-.header p{
-    opacity:.7;
+.subtitle{
+    opacity:.8;
 }
 
-.dashboard{
-    display:grid;
-    grid-template-columns:350px 1fr;
-    gap:20px;
-}
-
-.card{
-    background:#1e293b;
+.glass{
+    backdrop-filter:blur(20px);
+    background:rgba(15,23,42,.55);
     border:1px solid rgba(255,255,255,.08);
-    border-radius:20px;
-    padding:20px;
-    box-shadow:0 0 20px rgba(0,0,0,.2);
+    box-shadow:
+    0 0 20px rgba(0,0,0,.3),
+    0 0 50px rgba(34,197,94,.08);
 }
 
-.server-icon{
-    width:128px;
-    height:128px;
-    border-radius:16px;
-    display:block;
-    margin:auto;
+.hero{
+    border-radius:25px;
+    padding:30px;
+    margin-bottom:20px;
+}
+
+.hero-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:15px;
 }
 
 .status{
-    text-align:center;
-    margin-top:15px;
-}
-
-.status-badge{
-    display:inline-block;
-    padding:8px 15px;
-    border-radius:999px;
-    font-size:.9rem;
+    display:flex;
+    align-items:center;
+    gap:10px;
     font-weight:600;
 }
 
-.online{
-    background:#14532d;
-    color:#4ade80;
+.dot{
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:#22c55e;
+
+    box-shadow:
+    0 0 10px #22c55e,
+    0 0 25px #22c55e,
+    0 0 50px #22c55e;
 }
 
-.offline{
-    background:#450a0a;
-    color:#f87171;
+.server-icon{
+    width:90px;
+    height:90px;
+    border-radius:20px;
+    border:2px solid rgba(255,255,255,.1);
 }
 
-.server-name{
-    text-align:center;
-    font-size:1.5rem;
-    margin-top:10px;
+.progress-box{
+    margin-top:25px;
 }
 
-.motd{
-    text-align:center;
-    opacity:.8;
+.progress{
+    width:100%;
+    height:16px;
+    background:rgba(255,255,255,.08);
+    border-radius:999px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+    width:0%;
+    border-radius:999px;
+    background:linear-gradient(90deg,#22c55e,#06b6d4);
+    transition:.8s;
 }
 
 .stats{
@@ -106,29 +130,41 @@ body{
     margin-bottom:20px;
 }
 
-.stat{
-    background:#1e293b;
+.card{
     padding:20px;
-    border-radius:15px;
+    border-radius:20px;
     text-align:center;
 }
 
-.stat h2{
+.card h2{
     font-size:2rem;
-    color:#22c55e;
+    margin-top:8px;
 }
 
-.players{
+.players-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
     gap:15px;
 }
 
 .player{
-    background:#0f172a;
-    border-radius:15px;
+    display:flex;
+    gap:15px;
+    align-items:center;
     padding:15px;
-    border:1px solid rgba(255,255,255,.05);
+    border-radius:18px;
+    transition:.3s;
+}
+
+.player:hover{
+    transform:translateY(-4px);
+    border-color:#22c55e;
+}
+
+.player img{
+    width:60px;
+    height:60px;
+    border-radius:12px;
 }
 
 .player-name{
@@ -136,36 +172,44 @@ body{
 }
 
 .player-uuid{
-    font-size:.75rem;
+    font-size:.7rem;
     opacity:.6;
     word-break:break-all;
 }
 
+.section-title{
+    margin-bottom:15px;
+    font-size:1.3rem;
+}
+
+.time{
+    opacity:.7;
+}
+
 .refresh{
-    margin-top:15px;
-    width:100%;
-    padding:12px;
+    margin-top:20px;
+    padding:12px 25px;
     border:none;
     border-radius:12px;
-    background:#22c55e;
+    background:linear-gradient(90deg,#22c55e,#06b6d4);
     color:white;
     cursor:pointer;
     font-weight:600;
 }
 
-.refresh:hover{
-    opacity:.9;
-}
-
 @media(max-width:900px){
-    .dashboard{
-        grid-template-columns:1fr;
-    }
 
     .stats{
         grid-template-columns:repeat(2,1fr);
     }
+
+    .hero-top{
+        flex-direction:column;
+        text-align:center;
+    }
+
 }
+
 </style>
 </head>
 <body>
@@ -173,64 +217,104 @@ body{
 <div class="container">
 
     <div class="header">
-        <h1>SAKA World</h1>
-        <p>Minecraft Server Monitoring Dashboard</p>
+        <div class="logo">SAKA World</div>
+        <div class="subtitle">
+            Premium Minecraft Server Dashboard
+        </div>
     </div>
 
-    <div class="dashboard">
+    <div class="hero glass">
 
-        <div class="card">
+        <div class="hero-top">
+
+            <div>
+
+                <div class="status">
+                    <span class="dot"></span>
+                    <span id="statusText">
+                        ONLINE
+                    </span>
+                </div>
+
+                <h1 style="margin-top:10px">
+                    SAKA World
+                </h1>
+
+                <p id="motd">
+                    Loading...
+                </p>
+
+            </div>
+
             <img id="icon" class="server-icon">
 
-            <div class="status">
-                <span id="statusBadge" class="status-badge">
-                    Loading...
-                </span>
-            </div>
-
-            <h2 class="server-name">SAKA World</h2>
-            <p class="motd" id="motd">Loading...</p>
-
-            <button class="refresh" onclick="loadServer()">
-                Refresh Data
-            </button>
         </div>
 
-        <div>
+        <div class="progress-box">
 
-            <div class="stats">
+            <div style="
+            display:flex;
+            justify-content:space-between;
+            margin-bottom:8px">
 
-                <div class="stat">
-                    <small>Players</small>
-                    <h2 id="players">0</h2>
-                </div>
-
-                <div class="stat">
-                    <small>Max Slots</small>
-                    <h2 id="max">0</h2>
-                </div>
-
-                <div class="stat">
-                    <small>Version</small>
-                    <h2 id="version">-</h2>
-                </div>
-
-                <div class="stat">
-                    <small>Software</small>
-                    <h2 id="software">-</h2>
-                </div>
+                <span>Player Capacity</span>
+                <span id="capacity">
+                    0 / 0
+                </span>
 
             </div>
 
-            <div class="card">
-                <h3 style="margin-bottom:15px">
-                    Online Players
-                </h3>
-
-                <div id="playerList" class="players">
-                    Loading...
-                </div>
+            <div class="progress">
+                <div
+                class="progress-bar"
+                id="progressBar"></div>
             </div>
+
+        </div>
+
+        <button
+        class="refresh"
+        onclick="loadServer()">
+            Refresh
+        </button>
+
+    </div>
+
+    <div class="stats">
+
+        <div class="card glass">
+            <small>Players</small>
+            <h2 id="players">0</h2>
+        </div>
+
+        <div class="card glass">
+            <small>Version</small>
+            <h2 id="version">-</h2>
+        </div>
+
+        <div class="card glass">
+            <small>Software</small>
+            <h2 id="software">-</h2>
+        </div>
+
+        <div class="card glass">
+            <small>Time</small>
+            <h2 id="clock">--:--</h2>
+        </div>
+
+    </div>
+
+    <div class="glass card">
+
+        <h2 class="section-title">
+            Online Players
+        </h2>
+
+        <div
+        class="players-grid"
+        id="playerList">
+
+            Loading...
 
         </div>
 
@@ -251,72 +335,96 @@ async function loadServer(){
         const data = await res.json();
 
         document.getElementById("icon").src =
-            data.icon || "https://mc-heads.net/avatar/Steve";
+        data.icon;
 
-        document.getElementById("motd").innerText =
-            data.motd?.clean?.[0] || "No MOTD";
+        document.getElementById("motd").textContent =
+        data.motd?.clean?.[0] || "No MOTD";
 
-        document.getElementById("players").innerText =
-            data.players?.online || 0;
+        document.getElementById("players").textContent =
+        data.players?.online || 0;
 
-        document.getElementById("max").innerText =
-            data.players?.max || 0;
+        document.getElementById("version").textContent =
+        data.version || "-";
 
-        document.getElementById("version").innerText =
-            data.version || "-";
+        document.getElementById("software").textContent =
+        data.software || "-";
 
-        document.getElementById("software").innerText =
-            data.software || "-";
+        const online =
+        data.players?.online || 0;
 
-        const badge =
-            document.getElementById("statusBadge");
+        const max =
+        data.players?.max || 0;
 
-        if(data.online){
-            badge.innerText = "🟢 ONLINE";
-            badge.className =
-            "status-badge online";
+        document.getElementById("capacity")
+        .textContent =
+        `${online} / ${max}`;
+
+        const percent =
+        max ? (online/max)*100 : 0;
+
+        document.getElementById("progressBar")
+        .style.width =
+        percent + "%";
+
+        const playerList =
+        document.getElementById("playerList");
+
+        if(data.players?.list?.length){
+
+            playerList.innerHTML =
+            data.players.list.map(player => `
+
+            <div class="player glass">
+
+                <img src="
+                https://mc-heads.net/avatar/${player.name}/100">
+
+                <div>
+
+                    <div class="player-name">
+                        ${player.name}
+                    </div>
+
+                    <div class="player-uuid">
+                        ${player.uuid}
+                    </div>
+
+                </div>
+
+            </div>
+
+            `).join("");
+
         }else{
-            badge.innerText = "🔴 OFFLINE";
-            badge.className =
-            "status-badge offline";
+
+            playerList.innerHTML =
+            "<p>Tidak ada player online.</p>";
+
         }
 
-        const players =
-            data.players?.list || [];
+    }catch(e){
 
-        document.getElementById("playerList")
-        .innerHTML = players.length ?
-
-        players.map(player=>`
-            <div class="player">
-                <div class="player-name">
-                    ${player.name}
-                </div>
-                <div class="player-uuid">
-                    ${player.uuid}
-                </div>
-            </div>
-        `).join("")
-
-        :
-
-        `<div>Tidak ada player online</div>`;
-
-    }catch(err){
-
-        console.error(err);
-
-        document.getElementById(
-        "playerList").innerHTML =
-        "Gagal mengambil data server.";
+        console.error(e);
 
     }
 
 }
 
+function updateClock(){
+
+    const now = new Date();
+
+    document.getElementById("clock")
+    .textContent =
+    now.toLocaleTimeString("id-ID");
+
+}
+
 loadServer();
+updateClock();
 
 setInterval(loadServer,30000);
+setInterval(updateClock,1000);
 
 </script>
 
