@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Code Auto Detector - Fixed</title>
+    <title>Auto Absensi Geschool</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -24,7 +24,7 @@
         .container {
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             max-width: 900px;
             width: 100%;
             padding: 40px;
@@ -69,7 +69,7 @@
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #0f3460;
         }
 
         .status-item {
@@ -106,6 +106,10 @@
 
         .status-value.loading {
             color: #ffc107;
+        }
+
+        .status-value.absent {
+            color: #17a2b8;
         }
 
         .screenshot-container {
@@ -176,9 +180,42 @@
             border-radius: 8px;
             word-break: break-all;
             font-family: 'Courier New', monospace;
-            font-size: 14px;
+            font-size: 12px;
             color: #333;
             margin: 10px 0;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+
+        .absent-result {
+            background: #d1ecf1;
+            border: 2px solid #17a2b8;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .absent-result.show {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .absent-result h3 {
+            color: #0c5460;
+            margin-bottom: 10px;
+        }
+
+        .absent-result .detail {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            color: #333;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 150px;
+            overflow-y: auto;
         }
 
         .btn {
@@ -195,7 +232,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
             color: white;
             width: 100%;
             justify-content: center;
@@ -203,7 +240,7 @@
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 20px rgba(15, 52, 96, 0.4);
         }
 
         .btn-primary:disabled {
@@ -236,6 +273,33 @@
             background: #c82333;
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(220, 53, 69, 0.4);
+        }
+
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-info:hover {
+            background: #138496;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(23, 162, 184, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #0f3460;
+            border: 2px solid #0f3460;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-outline:hover {
+            background: #0f3460;
+            color: white;
+            transform: translateY(-2px);
         }
 
         .btn-group {
@@ -280,7 +344,7 @@
         }
 
         .log-container::-webkit-scrollbar-thumb {
-            background: #667eea;
+            background: #0f3460;
             border-radius: 3px;
         }
 
@@ -311,6 +375,11 @@
             color: #dcdcaa;
         }
 
+        .log-entry.absent {
+            color: #4ec9b0;
+            font-weight: bold;
+        }
+
         .log-entry.qr-found {
             color: #ffd700;
             font-weight: bold;
@@ -321,6 +390,42 @@
             margin-top: 30px;
             color: #999;
             font-size: 12px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #0f3460, #1a1a2e);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .iframe-container {
+            display: none;
+            margin: 20px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .iframe-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
         }
 
         @media (max-width: 600px) {
@@ -346,6 +451,10 @@
             .btn-group {
                 flex-direction: column;
             }
+
+            .iframe-container iframe {
+                height: 400px;
+            }
         }
     </style>
 </head>
@@ -353,8 +462,8 @@
     <div class="container">
         <div class="header">
             <span class="qr-icon">📱</span>
-            <h1>QR Code Auto Detector</h1>
-            <p class="subtitle">Deteksi QR Code dari screenshot dan buka otomatis</p>
+            <h1>Auto Absensi Geschool</h1>
+            <p class="subtitle">Scan QR Code → Auto Absensi</p>
         </div>
 
         <div class="status-card">
@@ -363,13 +472,21 @@
                 <span class="status-value" id="statusText">Menunggu...</span>
             </div>
             <div class="status-item">
-                <span class="status-label">URL Target</span>
-                <span class="status-value" id="targetUrl">https://diy.geschool.net/_k/1020423-vAH8nDt/</span>
+                <span class="status-label">QR Code URL</span>
+                <span class="status-value" id="targetUrl">-</span>
             </div>
             <div class="status-item">
                 <span class="status-label">QR Code</span>
                 <span class="status-value" id="qrStatus">Belum terdeteksi</span>
             </div>
+            <div class="status-item">
+                <span class="status-label">Absensi</span>
+                <span class="status-value" id="absentStatus">-</span>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress" id="progressBar"></div>
         </div>
 
         <div class="screenshot-container" id="screenshotContainer">
@@ -384,53 +501,76 @@
             <h3>✅ QR Code Terdeteksi!</h3>
             <div class="url" id="qrUrl">-</div>
             <button class="btn btn-success" id="openUrlBtn">
-                🌐 Buka URL Sekarang
+                🌐 Buka Halaman Absensi
             </button>
         </div>
 
+        <div class="absent-result" id="absentResult">
+            <h3>✅ Halaman Absensi Dimuat!</h3>
+            <div class="detail" id="absentDetail">-</div>
+            <button class="btn btn-info" id="iframeToggleBtn">
+                👁️ Tampilkan/Sembunyikan Halaman
+            </button>
+        </div>
+
+        <div class="iframe-container" id="iframeContainer">
+            <iframe id="absentIframe" src="about:blank"></iframe>
+        </div>
+
         <button class="btn btn-primary" id="detectBtn">
-            🔍 Deteksi QR Code
+            🔍 Scan QR & Absen Otomatis
         </button>
 
         <div class="log-container" id="logContainer">
             <div class="log-entry info">
-                <span class="time">[System]</span> Siap untuk mendeteksi QR Code
+                <span class="time">[System]</span> Siap untuk absensi otomatis
             </div>
         </div>
 
         <div class="footer">
-            <p>Powered by Microlink API & jsQR</p>
+            <p>Powered by Microlink API & jsQR | Auto Absensi System v2.0</p>
         </div>
     </div>
 
     <!-- Library -->
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
     <script>
-        // ==================== MAIN APP ====================
-        class QRCodeWebApp {
+        // ==================== AUTO ABSENSI APP ====================
+        class AutoAbsensiApp {
             constructor() {
                 this.screenshotUrl = null;
                 this.qrResult = null;
+                this.absentData = null;
                 this.isProcessing = false;
+                this.iframeVisible = false;
 
                 // DOM Elements
                 this.statusText = document.getElementById('statusText');
                 this.qrStatus = document.getElementById('qrStatus');
+                this.absentStatus = document.getElementById('absentStatus');
+                this.targetUrl = document.getElementById('targetUrl');
                 this.screenshotImage = document.getElementById('screenshotImage');
                 this.placeholder = document.getElementById('placeholder');
                 this.screenshotContainer = document.getElementById('screenshotContainer');
                 this.qrResultDiv = document.getElementById('qrResult');
                 this.qrUrl = document.getElementById('qrUrl');
+                this.absentResultDiv = document.getElementById('absentResult');
+                this.absentDetail = document.getElementById('absentDetail');
                 this.openUrlBtn = document.getElementById('openUrlBtn');
                 this.detectBtn = document.getElementById('detectBtn');
+                this.iframeToggleBtn = document.getElementById('iframeToggleBtn');
                 this.logContainer = document.getElementById('logContainer');
+                this.progressBar = document.getElementById('progressBar');
+                this.iframeContainer = document.getElementById('iframeContainer');
+                this.absentIframe = document.getElementById('absentIframe');
 
                 // Event Listeners
-                this.detectBtn.addEventListener('click', () => this.startDetection());
-                this.openUrlBtn.addEventListener('click', () => this.openURL());
+                this.detectBtn.addEventListener('click', () => this.startAbsensi());
+                this.openUrlBtn.addEventListener('click', () => this.openInIframe());
+                this.iframeToggleBtn.addEventListener('click', () => this.toggleIframe());
 
                 // Auto detect on load
-                setTimeout(() => this.startDetection(), 1000);
+                setTimeout(() => this.startAbsensi(), 1000);
             }
 
             // ==================== LOGGING ====================
@@ -441,6 +581,11 @@
                 entry.innerHTML = `<span class="time">[${time}]</span> ${message}`;
                 this.logContainer.appendChild(entry);
                 this.logContainer.scrollTop = this.logContainer.scrollHeight;
+            }
+
+            // ==================== PROGRESS ====================
+            updateProgress(percent) {
+                this.progressBar.style.width = percent + '%';
             }
 
             // ==================== UPDATE UI ====================
@@ -454,6 +599,15 @@
                 this.qrStatus.className = 'status-value ' + type;
             }
 
+            setAbsentStatus(text, type = 'loading') {
+                this.absentStatus.textContent = text;
+                this.absentStatus.className = 'status-value ' + type;
+            }
+
+            setTargetUrl(text) {
+                this.targetUrl.textContent = text || '-';
+            }
+
             showScreenshot(url) {
                 this.screenshotImage.src = url;
                 this.screenshotImage.style.display = 'block';
@@ -465,6 +619,7 @@
                 this.qrResultDiv.classList.add('show');
                 this.qrUrl.textContent = url;
                 this.setQRStatus('✅ Terdeteksi!', 'success');
+                this.setTargetUrl(url);
                 this.log(`✅ QR Code terdeteksi: ${url}`, 'qr-found');
             }
 
@@ -472,89 +627,204 @@
                 this.qrResultDiv.classList.remove('show');
             }
 
-            // ==================== MAIN FUNCTIONS ====================
-            async startDetection() {
+            showAbsentResult(data) {
+                this.absentResultDiv.classList.add('show');
+                this.absentDetail.textContent = JSON.stringify(data, null, 2);
+                this.setAbsentStatus('✅ Siap!', 'success');
+                this.log('✅ Halaman absensi siap dimuat', 'absent');
+            }
+
+            hideAbsentResult() {
+                this.absentResultDiv.classList.remove('show');
+            }
+
+            toggleIframe() {
+                this.iframeVisible = !this.iframeVisible;
+                this.iframeContainer.classList.toggle('show');
+                this.iframeToggleBtn.textContent = this.iframeVisible ? 
+                    '🙈 Sembunyikan Halaman' : '👁️ Tampilkan Halaman';
+                
+                if (this.iframeVisible && this.qrResult) {
+                    this.absentIframe.src = this.qrResult;
+                    this.log('🔄 Memuat ulang halaman absensi', 'info');
+                }
+            }
+
+            // ==================== MAIN ABSENSI ====================
+            async startAbsensi() {
                 if (this.isProcessing) return;
                 this.isProcessing = true;
                 this.detectBtn.disabled = true;
                 this.detectBtn.innerHTML = '<span class="spinner"></span> Memproses...';
                 this.hideQRResult();
+                this.hideAbsentResult();
+                this.iframeContainer.classList.remove('show');
+                this.iframeVisible = false;
+                this.iframeToggleBtn.textContent = '👁️ Tampilkan Halaman';
+                this.updateProgress(0);
 
                 try {
-                    this.log('🚀 Memulai deteksi QR Code...', 'info');
+                    this.log('🚀 Memulai proses absensi otomatis...', 'info');
                     this.setStatus('Mengambil screenshot...', 'loading');
                     this.setQRStatus('⏳ Mendeteksi...', 'loading');
+                    this.setAbsentStatus('⏳ Proses...', 'loading');
+                    this.updateProgress(20);
 
-                    // 1. Ambil screenshot dari Microlink
+                    // 1. Ambil screenshot
                     const screenshotUrl = await this.fetchScreenshot();
                     this.screenshotUrl = screenshotUrl;
                     this.showScreenshot(screenshotUrl);
                     this.log('✅ Screenshot berhasil diambil', 'success');
+                    this.updateProgress(40);
 
-                    // 2. Download dan deteksi QR
+                    // 2. Detect QR Code
                     this.setStatus('Mendeteksi QR Code...', 'loading');
                     const qrData = await this.detectQRFromImage(screenshotUrl);
+                    this.updateProgress(60);
 
-                    if (qrData) {
-                        // Cek apakah URL valid dan lengkap
-                        const fullUrl = this.validateAndFixURL(qrData);
-                        this.qrResult = fullUrl;
-                        this.showQRResult(fullUrl);
-                        this.setStatus('✅ QR Code ditemukan!', 'success');
-                        this.log(`✅ URL lengkap: ${fullUrl}`, 'success');
-
-                        // Auto open URL
-                        setTimeout(() => this.openURL(), 1500);
-                    } else {
+                    if (!qrData) {
                         this.setStatus('❌ QR Code tidak ditemukan', 'error');
                         this.setQRStatus('❌ Tidak ditemukan', 'error');
+                        this.setAbsentStatus('❌ Gagal', 'error');
                         this.log('❌ QR Code tidak ditemukan dalam screenshot', 'error');
+                        this.updateProgress(100);
+                        return;
+                    }
+
+                    // 3. Parse dan validasi URL
+                    const fullUrl = this.validateAndFixURL(qrData);
+                    this.qrResult = fullUrl;
+                    this.showQRResult(fullUrl);
+                    this.log(`✅ URL QR: ${fullUrl}`, 'success');
+                    this.updateProgress(80);
+
+                    // 4. Ekstrak data absensi
+                    const absentData = this.extractAbsentData(fullUrl);
+                    
+                    if (absentData) {
+                        this.absentData = absentData;
+                        this.showAbsentResult(absentData);
+                        this.setStatus('✅ Siap absensi!', 'success');
+                        this.log('📋 Data absensi berhasil diekstrak', 'absent');
+                        this.updateProgress(100);
+
+                        // 5. Auto buka di iframe
+                        setTimeout(() => {
+                            this.openInIframe();
+                        }, 1000);
+                    } else {
+                        this.setStatus('✅ QR Code terdeteksi', 'success');
+                        this.log('ℹ️ QR Code bukan URL absensi, membuka di iframe...', 'warning');
+                        setTimeout(() => this.openInIframe(), 1000);
                     }
 
                 } catch (error) {
                     this.setStatus('❌ Error: ' + error.message, 'error');
                     this.log(`❌ Error: ${error.message}`, 'error');
                     console.error(error);
+                    this.updateProgress(100);
                 } finally {
                     this.isProcessing = false;
                     this.detectBtn.disabled = false;
-                    this.detectBtn.innerHTML = '🔄 Deteksi Ulang';
+                    this.detectBtn.innerHTML = '🔄 Scan & Absen Ulang';
+                }
+            }
+
+            // ==================== EKSTRAK DATA ABSENSI ====================
+            extractAbsentData(url) {
+                try {
+                    const urlObj = new URL(url);
+                    const params = urlObj.searchParams;
+                    const pathParts = urlObj.pathname.split('/');
+
+                    // Cek apakah ini URL absensi
+                    const isAttendance = url.includes('attendance') || 
+                                       url.includes('absensi') ||
+                                       pathParts.includes('attendance');
+
+                    if (isAttendance) {
+                        const data = {
+                            url: url,
+                            path: urlObj.pathname,
+                            params: Object.fromEntries(params),
+                            c: params.get('c') || '',
+                            timestamp: new Date().toISOString(),
+                            type: 'attendance'
+                        };
+                        this.log(`📋 Data: c=${data.c}`, 'absent');
+                        return data;
+                    }
+
+                    return null;
+                } catch (e) {
+                    this.log(`❌ Gagal ekstrak data: ${e.message}`, 'error');
+                    return null;
+                }
+            }
+
+            // ==================== OPEN IN IFRAME ====================
+            openInIframe() {
+                if (!this.qrResult) {
+                    this.log('❌ Tidak ada URL untuk dibuka', 'error');
+                    return;
+                }
+
+                try {
+                    let urlToOpen = this.qrResult;
+                    if (!urlToOpen.startsWith('http://') && !urlToOpen.startsWith('https://')) {
+                        urlToOpen = 'https://' + urlToOpen;
+                    }
+
+                    this.log(`🚀 Membuka halaman absensi: ${urlToOpen}`, 'info');
+                    
+                    // Buka di iframe
+                    this.absentIframe.src = urlToOpen;
+                    this.iframeContainer.classList.add('show');
+                    this.iframeVisible = true;
+                    this.iframeToggleBtn.textContent = '🙈 Sembunyikan Halaman';
+                    
+                    this.setStatus('✅ Halaman absensi dimuat!', 'success');
+                    this.log('✅ Halaman absensi berhasil dimuat di iframe', 'success');
+                    
+                    // Tambahkan event listener untuk iframe load
+                    this.absentIframe.onload = () => {
+                        this.log('✅ Iframe selesai dimuat', 'success');
+                        this.setAbsentStatus('✅ Berhasil dimuat!', 'success');
+                    };
+
+                    this.absentIframe.onerror = () => {
+                        this.log('⚠️ Gagal memuat di iframe, buka di tab baru', 'warning');
+                        window.open(urlToOpen, '_blank');
+                    };
+
+                } catch (error) {
+                    this.log(`❌ Gagal membuka: ${error.message}`, 'error');
+                    // Fallback: buka di tab baru
+                    window.open(this.qrResult, '_blank');
                 }
             }
 
             // ==================== VALIDASI URL ====================
             validateAndFixURL(url) {
-                // Trim whitespace
                 url = url.trim();
-
-                // Cek apakah URL dimulai dengan http atau https
+                
                 if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                    // Cek apakah ada domain
                     if (url.includes('.')) {
-                        // Tambahkan https://
                         url = 'https://' + url;
                     }
                 }
 
-                // Cek apakah ada karakter aneh di akhir
-                // Hapus karakter non-URL di akhir
                 url = url.replace(/[^a-zA-Z0-9\-._~:/?#[\]@!$&'()*+,;=]+$/, '');
 
-                // Cek apakah URL valid
                 try {
                     new URL(url);
-                    this.log(`✅ URL valid: ${url}`, 'success');
                     return url;
                 } catch (e) {
-                    this.log(`⚠️ URL tidak valid: ${url}`, 'warning');
-                    // Coba perbaiki dengan menambahkan protocol
                     try {
                         const fixedUrl = 'https://' + url.replace(/^https?:\/\//, '');
                         new URL(fixedUrl);
-                        this.log(`✅ URL diperbaiki: ${fixedUrl}`, 'success');
                         return fixedUrl;
                     } catch (e2) {
-                        this.log(`❌ Gagal memperbaiki URL: ${url}`, 'error');
                         return url;
                     }
                 }
@@ -563,8 +833,11 @@
             // ==================== API CALLS ====================
             async fetchScreenshot() {
                 try {
+                    // Gunakan URL target dari QR code jika sudah ada
+                    const targetUrl = this.qrResult || 'https://diy.geschool.net/_k/1020423-vAH8nDt/';
+                    
                     const url = new URL('https://api.microlink.io/');
-                    url.searchParams.append('url', 'https://diy.geschool.net/_k/1020423-vAH8nDt/');
+                    url.searchParams.append('url', targetUrl);
                     url.searchParams.append('meta', 'false');
                     url.searchParams.append('screenshot.type', 'png');
                     url.searchParams.append('screenshot.fullPage', 'true');
@@ -598,7 +871,7 @@
 
             async detectQRFromImage(imageUrl) {
                 try {
-                    this.log('📥 Mendownload gambar untuk deteksi...', 'info');
+                    this.log('📥 Mendownload gambar...', 'info');
 
                     const response = await fetch(imageUrl);
                     if (!response.ok) {
@@ -615,38 +888,27 @@
                     ctx.drawImage(imageBitmap, 0, 0);
 
                     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
                     this.log(`📄 Gambar: ${canvas.width}x${canvas.height} px`, 'info');
 
-                    // === PERBAIKAN: Multi-scan dengan berbagai pengaturan ===
+                    // Multi-scan
                     const qrResults = [];
 
-                    // 1. Scan original
-                    this.log('🔍 Scanning dengan setting default...', 'info');
+                    // Scan 1: Default
                     let code = jsQR(imageData.data, canvas.width, canvas.height, {
                         inversionAttempts: "attemptBoth",
                     });
+                    if (code && code.data) qrResults.push(code.data);
 
-                    if (code && code.data) {
-                        qrResults.push(code.data);
-                        this.log(`✅ Found QR: ${code.data}`, 'qr-found');
-                    }
-
-                    // 2. Scan dengan threshold berbeda
+                    // Scan 2: Threshold berbeda
                     if (!code || !code.data) {
-                        this.log('🔍 Scanning dengan threshold 0.5...', 'info');
                         code = jsQR(imageData.data, canvas.width, canvas.height, {
                             inversionAttempts: "attemptBoth",
                             greyScaleWeights: { red: 0.5, green: 0.5, blue: 0.5 }
                         });
-
-                        if (code && code.data) {
-                            qrResults.push(code.data);
-                            this.log(`✅ Found QR: ${code.data}`, 'qr-found');
-                        }
+                        if (code && code.data) qrResults.push(code.data);
                     }
 
-                    // 3. Jika gambar besar, scan dengan resize
+                    // Scan 3: Resize jika perlu
                     if (canvas.width > 1000 || canvas.height > 1000) {
                         const scale = Math.min(1500 / canvas.width, 1500 / canvas.height);
                         const newWidth = Math.floor(canvas.width * scale);
@@ -659,37 +921,31 @@
                         tempCtx.drawImage(canvas, 0, 0, newWidth, newHeight);
 
                         const tempData = tempCtx.getImageData(0, 0, newWidth, newHeight);
-                        this.log(`📐 Scanning resize: ${newWidth}x${newHeight} px`, 'info');
-
                         const codeResized = jsQR(tempData.data, newWidth, newHeight, {
                             inversionAttempts: "attemptBoth",
                         });
-
                         if (codeResized && codeResized.data) {
                             qrResults.push(codeResized.data);
-                            this.log(`✅ Found QR from resize: ${codeResized.data}`, 'qr-found');
                         }
                     }
 
-                    // Ambil hasil pertama yang valid
+                    // Ambil hasil
                     for (const result of qrResults) {
                         if (result && result.length > 0) {
                             // Cek apakah mengandung URL pattern
                             if (result.includes('http') || result.includes('.')) {
-                                this.log(`✅ QR Code valid: ${result}`, 'success');
+                                this.log(`✅ QR Code ditemukan: ${result.substring(0, 80)}...`, 'qr-found');
                                 return result;
                             }
                         }
                     }
 
-                    // Jika ada hasil tapi tidak valid URL
+                    // Jika ada hasil tapi tidak valid
                     if (qrResults.length > 0) {
-                        this.log(`⚠️ QR Code terdeteksi tapi bukan URL: ${qrResults[0]}`, 'warning');
-                        // Tapi tetap return sebagai URL (mungkin user ingin melihat)
+                        this.log(`⚠️ QR Code terdeteksi: ${qrResults[0]}`, 'warning');
                         return qrResults[0];
                     }
 
-                    this.log('❌ Tidak ada QR Code terdeteksi', 'warning');
                     return null;
 
                 } catch (error) {
@@ -697,77 +953,18 @@
                     throw error;
                 }
             }
-
-            // ==================== OPEN URL ====================
-            async openURL() {
-                if (!this.qrResult) {
-                    this.log('❌ Tidak ada URL untuk dibuka', 'error');
-                    return;
-                }
-
-                try {
-                    // Validasi URL sebelum dibuka
-                    let urlToOpen = this.qrResult;
-                    
-                    // Tambahkan protocol jika tidak ada
-                    if (!urlToOpen.startsWith('http://') && !urlToOpen.startsWith('https://')) {
-                        urlToOpen = 'https://' + urlToOpen;
-                    }
-
-                    // Cek validitas URL
-                    try {
-                        new URL(urlToOpen);
-                    } catch (e) {
-                        // Jika tidak valid, encode
-                        urlToOpen = 'https://' + encodeURI(urlToOpen);
-                    }
-
-                    this.log(`🚀 Membuka URL: ${urlToOpen}`, 'info');
-
-                    // Buka di tab baru
-                    const win = window.open(urlToOpen, '_blank');
-
-                    if (!win || win.closed || typeof win.closed === 'undefined') {
-                        // Popup blocked
-                        this.log('⚠️ Popup diblokir. Gunakan tombol manual.', 'warning');
-                        alert('Popup diblokir!\nSilakan klik "Buka URL" secara manual.');
-                        this.showQRResult(this.qrResult);
-                    } else {
-                        this.log('✅ Browser terbuka!', 'success');
-                    }
-                } catch (error) {
-                    this.log(`❌ Gagal membuka URL: ${error.message}`, 'error');
-                    this.showQRResult(this.qrResult);
-                }
-            }
-
-            // ==================== RESET ====================
-            reset() {
-                this.screenshotUrl = null;
-                this.qrResult = null;
-                this.hideQRResult();
-                this.setStatus('Menunggu...', 'loading');
-                this.setQRStatus('Belum terdeteksi', 'loading');
-                this.screenshotImage.style.display = 'none';
-                this.placeholder.style.display = 'block';
-                this.detectBtn.innerHTML = '🔍 Deteksi QR Code';
-                this.detectBtn.disabled = false;
-                this.isProcessing = false;
-                this.log('🔄 Reset aplikasi', 'info');
-            }
         }
 
         // ==================== INIT ====================
         document.addEventListener('DOMContentLoaded', () => {
-            const app = new QRCodeWebApp();
-            window.qrApp = app;
+            const app = new AutoAbsensiApp();
+            window.absensiApp = app;
         });
 
-        // Error handling
         window.addEventListener('error', (e) => {
             console.error('Global error:', e);
-            if (window.qrApp) {
-                window.qrApp.log(`❌ Error: ${e.message}`, 'error');
+            if (window.absensiApp) {
+                window.absensiApp.log(`❌ Error: ${e.message}`, 'error');
             }
         });
     </script>
