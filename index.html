@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Absensi - Geschool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            max-width: 950px;
+            width: 100%;
+            padding: 40px;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .user-info {
+            background: linear-gradient(135deg, #e8f0fe 0%, #d4e4f7 100%);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin: 10px 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid #b3d4fc;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #0f3460;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-details .name {
+            font-weight: 600;
+            color: #0f3460;
+            font-size: 16px;
+        }
+
+        .user-details .school {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .user-details .status {
+            color: #28a745;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .qr-icon {
+            font-size: 60px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .status-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #0f3460;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .status-item:last-child {
+            border-bottom: none;
+        }
+
+        .status-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .status-value {
+            color: #333;
+            font-weight: 600;
+            word-break: break-all;
+            text-align: right;
+            max-width: 60%;
+        }
+
+        .status-value.success {
+            color: #28a745;
+        }
+
+        .status-value.error {
+            color: #dc3545;
+        }
+
+        .status-value.loading {
+            color: #ffc107;
+        }
+
+        .status-value.absent {
+            color: #17a2b8;
+        }
+
+        .screenshot-container {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .screenshot-container img {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .screenshot-placeholder {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .screenshot-placeholder .icon {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .qr-result {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .qr-result.show {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .qr-result h3 {
+            color: #155724;
+            margin-bottom: 10px;
+        }
+
+        .qr-result .url {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #333;
+            margin: 10px 0;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+
+        .absent-result {
+            background: #d1ecf1;
+            border: 2px solid #17a2b8;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .absent-result.show {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .absent-result h3 {
+            color: #0c5460;
+            margin-bottom: 10px;
+        }
+
+        .absent-result .detail {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            color: #333;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
+            color: white;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(15, 52, 96, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 193, 7, 0.4);
+        }
+
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-info:hover {
+            background: #138496;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(23, 162, 184, 0.4);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(220, 53, 69, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #0f3460;
+            border: 2px solid #0f3460;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-outline:hover {
+            background: #0f3460;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-group .btn {
+            flex: 1;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .log-container {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 20px;
+            max-height: 250px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+
+        .log-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .log-container::-webkit-scrollbar-thumb {
+            background: #0f3460;
+            border-radius: 3px;
+        }
+
+        .log-entry {
+            color: #d4d4d4;
+            padding: 4px 0;
+            border-bottom: 1px solid #2d2d2d;
+        }
+
+        .log-entry .time {
+            color: #858585;
+            margin-right: 10px;
+        }
+
+        .log-entry.success {
+            color: #4ec9b0;
+        }
+
+        .log-entry.error {
+            color: #f48771;
+        }
+
+        .log-entry.info {
+            color: #569cd6;
+        }
+
+        .log-entry.warning {
+            color: #dcdcaa;
+        }
+
+        .log-entry.absent {
+            color: #4ec9b0;
+            font-weight: bold;
+        }
+
+        .log-entry.qr-found {
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .log-entry.login {
+            color: #4ec9b0;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #0f3460, #1a1a2e);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .iframe-container {
+            display: none;
+            margin: 20px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .iframe-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+
+        .api-key-input {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .api-key-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .api-key-input input:focus {
+            border-color: #0f3460;
+        }
+
+        .api-key-input button {
+            padding: 10px 20px;
+            background: #0f3460;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .api-key-input button:hover {
+            background: #1a1a2e;
+        }
+
+        .token-display {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            word-break: break-all;
+            border: 1px solid #ddd;
+            max-height: 60px;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .status-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+
+            .status-value {
+                max-width: 100%;
+                text-align: left;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .iframe-container iframe {
+                height: 400px;
+            }
+
+            .user-info {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .api-key-input {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="qr-icon">📱</span>
+            <h1>Auto Absensi Geschool</h1>
+            <p class="subtitle">Dengan Cookie & JWT Token</p>
+        </div>
+
+        <!-- API Key Input -->
+        <div class="api-key-input">
+            <input type="text" id="apiKeyInput" placeholder="API Key Anabot" value="zeyz041">
+            <button id="saveApiKeyBtn">💾 Simpan</button>
+        </div>
+
+        <!-- Token Display -->
+        <div class="token-display" id="tokenDisplay">
+            🔑 Token: <span id="tokenShort">-</span>
+        </div>
+
+        <!-- User Info -->
+        <div class="user-info" id="userInfo">
+            <div class="user-avatar" id="userAvatar">F</div>
+            <div class="user-details">
+                <div class="name" id="userName">Loading...</div>
+                <div class="school" id="userSchool">-</div>
+                <div class="status" id="userStatus">🔴 Belum login</div>
+            </div>
+        </div>
+
+        <div class="status-card">
+            <div class="status-item">
+                <span class="status-label">Status</span>
+                <span class="status-value" id="statusText">Menunggu...</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">QR Code URL</span>
+                <span class="status-value" id="targetUrl">-</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">QR Code</span>
+                <span class="status-value" id="qrStatus">Belum terdeteksi</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Absensi</span>
+                <span class="status-value" id="absentStatus">-</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">JWT Token</span>
+                <span class="status-value" id="tokenStatus">-</span>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress" id="progressBar"></div>
+        </div>
+
+        <div class="screenshot-container" id="screenshotContainer">
+            <div class="screenshot-placeholder" id="placeholder">
+                <span class="icon">🖼️</span>
+                <p>Screenshot akan muncul di sini</p>
+            </div>
+            <img id="screenshotImage" style="display: none;" alt="Screenshot">
+        </div>
+
+        <div class="qr-result" id="qrResult">
+            <h3>✅ QR Code Terdeteksi!</h3>
+            <div class="url" id="qrUrl">-</div>
+            <button class="btn btn-success" id="openUrlBtn">
+                🌐 Buka Halaman Absensi
+            </button>
+        </div>
+
+        <div class="absent-result" id="absentResult">
+            <h3>✅ Absensi Berhasil!</h3>
+            <div class="detail" id="absentDetail">-</div>
+            <button class="btn btn-info" id="iframeToggleBtn">
+                👁️ Tampilkan/Sembunyikan Halaman
+            </button>
+        </div>
+
+        <div class="iframe-container" id="iframeContainer">
+            <iframe id="absentIframe" src="about:blank"></iframe>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-primary" id="detectBtn">
+                🔍 Scan QR & Absen Otomatis
+            </button>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-warning" id="loginBtn">
+                🔑 Login dengan Cookie/Token
+            </button>
+            <button class="btn btn-outline" id="setTokenBtn">
+                📝 Set Token Manual
+            </button>
+        </div>
+
+        <div class="log-container" id="logContainer">
+            <div class="log-entry info">
+                <span class="time">[System]</span> Siap untuk absensi otomatis
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Powered by Anabot API & jsQR | Auto Absensi System v14.0</p>
+        </div>
+    </div>
+
+    <!-- Library -->
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+    <script>
+        // ==================== AUTO ABSENSI APP WITH COOKIE ====================
+        class AutoAbsensiApp {
+            constructor() {
+                this.screenshotUrl = null;
+                this.qrResult = null;
+                this.absentData = null;
+                this.isProcessing = false;
+                this.iframeVisible = false;
+                this.jwtToken = null;
+                this.userData = null;
+                this.qrTimestamp = null;
+                this.apiKey = 'zeyz041';
+                this.tokenExpired = false;
+
+                // DOM Elements
+                this.statusText = document.getElementById('statusText');
+                this.qrStatus = document.getElementById('qrStatus');
+                this.absentStatus = document.getElementById('absentStatus');
+                this.targetUrl = document.getElementById('targetUrl');
+                this.tokenStatus = document.getElementById('tokenStatus');
+                this.tokenShort = document.getElementById('tokenShort');
+                this.screenshotImage = document.getElementById('screenshotImage');
+                this.placeholder = document.getElementById('placeholder');
+                this.screenshotContainer = document.getElementById('screenshotContainer');
+                this.qrResultDiv = document.getElementById('qrResult');
+                this.qrUrl = document.getElementById('qrUrl');
+                this.absentResultDiv = document.getElementById('absentResult');
+                this.absentDetail = document.getElementById('absentDetail');
+                this.openUrlBtn = document.getElementById('openUrlBtn');
+                this.detectBtn = document.getElementById('detectBtn');
+                this.loginBtn = document.getElementById('loginBtn');
+                this.setTokenBtn = document.getElementById('setTokenBtn');
+                this.iframeToggleBtn = document.getElementById('iframeToggleBtn');
+                this.logContainer = document.getElementById('logContainer');
+                this.progressBar = document.getElementById('progressBar');
+                this.iframeContainer = document.getElementById('iframeContainer');
+                this.absentIframe = document.getElementById('absentIframe');
+                this.userName = document.getElementById('userName');
+                this.userSchool = document.getElementById('userSchool');
+                this.userStatus = document.getElementById('userStatus');
+                this.userAvatar = document.getElementById('userAvatar');
+                this.apiKeyInput = document.getElementById('apiKeyInput');
+                this.saveApiKeyBtn = document.getElementById('saveApiKeyBtn');
+
+                // Event Listeners
+                this.detectBtn.addEventListener('click', () => this.startAbsensi());
+                this.openUrlBtn.addEventListener('click', () => this.openInIframe());
+                this.iframeToggleBtn.addEventListener('click', () => this.toggleIframe());
+                this.loginBtn.addEventListener('click', () => this.loginWithCookie());
+                this.setTokenBtn.addEventListener('click', () => this.setTokenManually());
+                this.saveApiKeyBtn.addEventListener('click', () => this.saveApiKey());
+
+                // Load saved data
+                const savedKey = localStorage.getItem('anabot_api_key');
+                if (savedKey) {
+                    this.apiKey = savedKey;
+                    this.apiKeyInput.value = savedKey;
+                }
+
+                // Load saved token
+                const savedToken = localStorage.getItem('geschool_token');
+                if (savedToken) {
+                    this.jwtToken = savedToken;
+                    this.tokenShort.textContent = savedToken.substring(0, 30) + '...';
+                }
+
+                // Init
+                this.init();
+            }
+
+            // ==================== SAVE API KEY ====================
+            saveApiKey() {
+                const key = this.apiKeyInput.value.trim();
+                if (key) {
+                    this.apiKey = key;
+                    localStorage.setItem('anabot_api_key', key);
+                    this.log('✅ API Key disimpan', 'success');
+                }
+            }
+
+            // ==================== SET TOKEN MANUALLY ====================
+            setTokenManually() {
+                const token = prompt('Masukkan JWT Token lengkap:');
+                if (token && token.trim()) {
+                    this.jwtToken = token.trim();
+                    localStorage.setItem('geschool_token', token.trim());
+                    this.tokenShort.textContent = token.substring(0, 30) + '...';
+                    this.log('✅ Token disimpan', 'success');
+                    this.getUserProfile();
+                }
+            }
+
+            // ==================== LOGIN WITH COOKIE ====================
+            async loginWithCookie() {
+                this.log('🔑 Mencoba login dengan cookie...', 'login');
+                
+                try {
+                    // Set cookies dari data yang diberikan
+                    const cookies = [
+                        'GA1.3.520602914.1752451446',
+                        'GS2.1.s1762694485$o1$g0$t1762694487$j58$l0$h0',
+                        'GS2.3.s1781084953$o6$g1$t1781084954$j59$l0$h0',
+                        'GS2.3.s1781090087$o26$g0$t1781090087$j60$l0$h0'
+                    ];
+                    
+                    // Set cookies
+                    cookies.forEach(cookie => {
+                        const parts = cookie.split('=');
+                        if (parts.length === 2) {
+                            document.cookie = `${parts[0]}=${parts[1]}; path=/; domain=.geschool.net; max-age=86400`;
+                        } else {
+                            document.cookie = `${cookie}=; path=/; domain=.geschool.net; max-age=86400`;
+                        }
+                    });
+                    
+                    // Set token JWT yang valid
+                    const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiIxMjA5MDU1IiwidXRwIjoiMSIsImV4cCI6MTc4ODkxOTU1MSwiaWF0IjoxNzg4ODc2MjkxLCJpc3MiOiJNYWluQ29udHJvbGxlci5waHA6MTIyIn0.5EWYIMMnF3oPC-Zo8baXIgNmUmJdUCogKpK91if273E';
+                    
+                    this.jwtToken = token;
+                    localStorage.setItem('geschool_token', token);
+                    sessionStorage.setItem('geschool_token', token);
+                    window.API_KEY = token;
+                    this.tokenShort.textContent = token.substring(0, 30) + '...';
+                    
+                    this.log('✅ Cookie dan Token berhasil diset!', 'success');
+                    this.updateTokenStatus('✅ Ada', 'success');
+                    
+                    // Coba get profile
+                    await this.getUserProfile();
+                    
+                    // Reload iframe jika ada
+                    if (this.iframeVisible && this.qrResult) {
+                        this.loadIframeWithAuth();
+                    }
+                    
+                } catch (error) {
+                    this.log(`❌ Gagal login: ${error.message}`, 'error');
+                }
+            }
+
+            // ==================== INIT ====================
+            async init() {
+                // Coba ambil token dari window.API_KEY
+                if (typeof window.API_KEY !== 'undefined' && window.API_KEY) {
+                    this.jwtToken = window.API_KEY;
+                    this.tokenShort.textContent = this.jwtToken.substring(0, 30) + '...';
+                    this.log('🔑 Token dari window.API_KEY', 'token');
+                }
+                
+                if (this.jwtToken) {
+                    this.log('🔑 Token JWT ditemukan!', 'token');
+                    this.updateTokenStatus('✅ Ada', 'success');
+                    await this.getUserProfile();
+                } else {
+                    this.log('⚠️ Token JWT tidak ditemukan.', 'warning');
+                    this.updateTokenStatus('❌ Tidak ada', 'error');
+                    this.userStatus.textContent = '🔴 Belum login';
+                    this.userName.textContent = 'Klik "Login dengan Cookie/Token"';
+                }
+
+                setTimeout(() => this.startAbsensi(), 1500);
+            }
+
+            // ==================== UPDATE TOKEN STATUS ====================
+            updateTokenStatus(text, type = 'loading') {
+                this.tokenStatus.textContent = text;
+                this.tokenStatus.className = 'status-value ' + type;
+            }
+
+            // ==================== DECODE JWT ====================
+            decodeJWT(token) {
+                try {
+                    const parts = token.split('.');
+                    if (parts.length !== 3) return null;
+                    const payload = JSON.parse(atob(parts[1]));
+                    const exp = new Date(payload.exp * 1000);
+                    return {
+                        uid: payload.uid,
+                        utp: payload.utp,
+                        exp: exp,
+                        iat: new Date(payload.iat * 1000),
+                        iss: payload.iss,
+                        isExpired: Date.now() > payload.exp * 1000
+                    };
+                } catch (e) {
+                    return null;
+                }
+            }
+
+            // ==================== GET USER PROFILE ====================
+            async getUserProfile() {
+                if (!this.jwtToken) {
+                    this.log('❌ Tidak ada token', 'error');
+                    return;
+                }
+
+                try {
+                    this.log('📥 Mengambil profile user...', 'info');
+                    
+                    const response = await fetch('https://diy.geschool.net/_api/v2/profile/me', {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json, text/plain, */*',
+                            'Authorization': `API-TOKEN api-key=${this.jwtToken}`,
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.userData = data;
+                        
+                        this.userName.textContent = data.name || 'Unknown';
+                        this.userSchool.textContent = data.school?.name || '-';
+                        this.userStatus.textContent = '✅ Login aktif';
+                        this.userStatus.style.color = '#28a745';
+                        this.userAvatar.textContent = data.name?.charAt(0) || 'U';
+                        
+                        const decoded = this.decodeJWT(this.jwtToken);
+                        if (decoded) {
+                            this.log(`👤 User: ${data.name} (ID: ${data.id})`, 'success');
+                            this.log(`🏫 School: ${data.school?.name}`, 'success');
+                            this.log(`⏰ Token expires: ${decoded.exp.toLocaleString()}`, 'info');
+                            
+                            if (decoded.isExpired) {
+                                this.tokenExpired = true;
+                                this.log('⚠️ Token sudah expired!', 'warning');
+                                this.userStatus.textContent = '⚠️ Token Expired';
+                                this.userStatus.style.color = '#ffc107';
+                            } else {
+                                this.tokenExpired = false;
+                            }
+                        }
+                        
+                        this.setStatus('✅ Login berhasil!', 'success');
+                    } else {
+                        this.log(`❌ Gagal get profile: ${response.status}`, 'error');
+                        this.userStatus.textContent = '❌ Login gagal';
+                        this.userStatus.style.color = '#dc3545';
+                    }
+                } catch (error) {
+                    this.log(`❌ Error get profile: ${error.message}`, 'error');
+                }
+            }
+
+            // ==================== LOGGING ====================
+            log(message, type = 'info') {
+                const time = new Date().toLocaleTimeString('id-ID', { hour12: false });
+                const entry = document.createElement('div');
+                entry.className = `log-entry ${type}`;
+                entry.innerHTML = `<span class="time">[${time}]</span> ${message}`;
+                this.logContainer.appendChild(entry);
+                this.logContainer.scrollTop = this.logContainer.scrollHeight;
+            }
+
+            // ==================== UPDATE PROGRESS ====================
+            updateProgress(percent) {
+                this.progressBar.style.width = percent + '%';
+            }
+
+            // ==================== UPDATE UI ====================
+            setStatus(text, type = 'loading') {
+                this.statusText.textContent = text;
+                this.statusText.className = 'status-value ' + type;
+            }
+
+            setQRStatus(text, type = 'loading') {
+                this.qrStatus.textContent = text;
+                this.qrStatus.className = 'status-value ' + type;
+            }
+
+            setAbsentStatus(text, type = 'loading') {
+                this.absentStatus.textContent = text;
+                this.absentStatus.className = 'status-value ' + type;
+            }
+
+            setTargetUrl(text) {
+                this.targetUrl.textContent = text || '-';
+            }
+
+            showScreenshot(url) {
+                this.screenshotImage.src = url;
+                this.screenshotImage.style.display = 'block';
+                this.placeholder.style.display = 'none';
+                this.log('✅ Screenshot berhasil dimuat', 'success');
+            }
+
+            showQRResult(url) {
+                this.qrResultDiv.classList.add('show');
+                this.qrUrl.textContent = url;
+                this.setQRStatus('✅ Terdeteksi!', 'success');
+                this.setTargetUrl(url);
+                this.log(`✅ QR Code terdeteksi`, 'qr-found');
+            }
+
+            hideQRResult() {
+                this.qrResultDiv.classList.remove('show');
+            }
+
+            showAbsentResult(data) {
+                this.absentResultDiv.classList.add('show');
+                this.absentDetail.textContent = JSON.stringify(data, null, 2);
+                this.setAbsentStatus('✅ Berhasil!', 'success');
+                this.log('✅ Absensi berhasil!', 'absent');
+            }
+
+            hideAbsentResult() {
+                this.absentResultDiv.classList.remove('show');
+            }
+
+            toggleIframe() {
+                this.iframeVisible = !this.iframeVisible;
+                this.iframeContainer.classList.toggle('show');
+                this.iframeToggleBtn.textContent = this.iframeVisible ? 
+                    '🙈 Sembunyikan Halaman' : '👁️ Tampilkan Halaman';
+                
+                if (this.iframeVisible && this.qrResult) {
+                    this.loadIframeWithAuth();
+                }
+            }
+
+            // ==================== LOAD IFRAME WITH AUTH ====================
+            loadIframeWithAuth() {
+                if (!this.qrResult) return;
+                
+                try {
+                    let urlToOpen = this.qrResult;
+                    if (!urlToOpen.startsWith('http://') && !urlToOpen.startsWith('https://')) {
+                        urlToOpen = 'https://' + urlToOpen;
+                    }
+                    
+                    // Tambahkan parameter token
+                    const urlObj = new URL(urlToOpen);
+                    urlObj.searchParams.set('token', this.jwtToken);
+                    urlObj.searchParams.set('uid', this.userData?.id || '');
+                    
+                    const authUrl = urlObj.toString();
+                    this.log(`🔑 Memuat halaman dengan autentikasi...`, 'info');
+                    this.absentIframe.src = authUrl;
+                    
+                    this.absentIframe.onload = () => {
+                        this.log('✅ Halaman absensi dimuat!', 'success');
+                        this.setAbsentStatus('✅ Dimuat!', 'success');
+                        
+                        // Coba inject token ke iframe
+                        try {
+                            const iframeDoc = this.absentIframe.contentDocument || this.absentIframe.contentWindow.document;
+                            if (iframeDoc) {
+                                const script = iframeDoc.createElement('script');
+                                script.textContent = `
+                                    window.API_KEY = '${this.jwtToken}';
+                                    localStorage.setItem('geschool_token', '${this.jwtToken}');
+                                    document.cookie = 'token=${this.jwtToken}; path=/';
+                                    console.log('✅ Token injected to iframe');
+                                `;
+                                iframeDoc.body.appendChild(script);
+                                this.log('✅ Token di-inject ke iframe', 'success');
+                            }
+                        } catch (e) {
+                            this.log('ℹ️ Tidak bisa inject token (cross-origin)', 'warning');
+                        }
+                    };
+
+                    this.absentIframe.onerror = () => {
+                        this.log('⚠️ Gagal memuat, buka di tab baru', 'warning');
+                        window.open(authUrl, '_blank');
+                    };
+                    
+                } catch (error) {
+                    this.log(`❌ Gagal memuat: ${error.message}`, 'error');
+                }
+            }
+
+            // ==================== OPEN IN IFRAME ====================
+            openInIframe() {
+                if (!this.qrResult) {
+                    this.log('❌ Tidak ada URL untuk dibuka', 'error');
+                    return;
+                }
+
+                if (this.tokenExpired) {
+                    this.log('⚠️ Token expired!', 'warning');
+                    alert('Token sudah expired!\nKlik "Login dengan Cookie/Token" untuk refresh.');
+                    return;
+                }
+
+                this.iframeContainer.classList.add('show');
+                this.iframeVisible = true;
+                this.iframeToggleBtn.textContent = '🙈 Sembunyikan Halaman';
+                this.loadIframeWithAuth();
+            }
+
+            // ==================== MAIN ABSENSI ====================
+            async startAbsensi() {
+                if (this.isProcessing) return;
+                
+                if (this.tokenExpired) {
+                    this.log('⚠️ Token expired!', 'warning');
+                    this.setStatus('⚠️ Token Expired', 'error');
+                    return;
+                }
+
+                if (!this.jwtToken) {
+                    this.log('⚠️ Tidak ada token! Klik "Login dengan Cookie/Token"', 'warning');
+                    this.setStatus('⚠️ Token diperlukan', 'error');
+                    return;
+                }
+
+                this.isProcessing = true;
+                this.detectBtn.disabled = true;
+                this.detectBtn.innerHTML = '<span class="spinner"></span> Memproses...';
+                this.hideQRResult();
+                this.hideAbsentResult();
+                this.updateProgress(0);
+
+                try {
+                    this.log('🚀 Memulai proses absensi...', 'info');
+                    this.setStatus('Mengambil screenshot...', 'loading');
+                    this.setQRStatus('⏳ Mendeteksi...', 'loading');
+                    this.setAbsentStatus('⏳ Proses...', 'loading');
+                    this.updateProgress(20);
+
+                    const screenshotUrl = await this.fetchScreenshot();
+                    this.screenshotUrl = screenshotUrl;
+                    this.showScreenshot(screenshotUrl);
+                    this.updateProgress(40);
+
+                    this.setStatus('Mendeteksi QR Code...', 'loading');
+                    const qrData = await this.detectQRFromImage(screenshotUrl);
+                    this.updateProgress(60);
+
+                    if (!qrData) {
+                        this.setStatus('❌ QR Code tidak ditemukan', 'error');
+                        this.setQRStatus('❌ Tidak ditemukan', 'error');
+                        this.setAbsentStatus('❌ Gagal', 'error');
+                        this.log('❌ QR Code tidak ditemukan', 'error');
+                        this.updateProgress(100);
+                        return;
+                    }
+
+                    const fullUrl = this.validateAndFixURL(qrData);
+                    this.qrResult = fullUrl;
+                    this.showQRResult(fullUrl);
+                    this.log(`✅ URL QR ditemukan`, 'success');
+                    this.updateProgress(80);
+
+                    const absentData = this.extractAbsentData(fullUrl);
+                    
+                    if (absentData) {
+                        this.absentData = absentData;
+                        this.showAbsentResult(absentData);
+                        this.setStatus('✅ Siap absensi!', 'success');
+                        this.log('📋 Data absensi berhasil diekstrak', 'absent');
+                        this.updateProgress(100);
+
+                        await this.autoSubmitAbsensi(absentData);
+                        
+                        setTimeout(() => {
+                            this.openInIframe();
+                        }, 1000);
+                    } else {
+                        this.setStatus('✅ QR Code terdeteksi', 'success');
+                        this.log('ℹ️ Membuka di iframe...', 'warning');
+                        setTimeout(() => this.openInIframe(), 1000);
+                    }
+
+                } catch (error) {
+                    this.setStatus('❌ Error: ' + error.message, 'error');
+                    this.log(`❌ Error: ${error.message}`, 'error');
+                    console.error(error);
+                    this.updateProgress(100);
+                } finally {
+                    this.isProcessing = false;
+                    this.detectBtn.disabled = false;
+                    this.detectBtn.innerHTML = '🔄 Scan & Absen Ulang';
+                }
+            }
+
+            // ==================== FETCH SCREENSHOT ====================
+            async fetchScreenshot() {
+                try {
+                    const targetUrl = this.qrResult || 'https://diy.geschool.net/_k/1020423-vAH8nDt/';
+                    
+                    const apiUrl = `https://anabot.my.id/api/tools/ssweb?url=${encodeURIComponent(targetUrl)}&device=phone&fullPage=on&apikey=${this.apiKey}`;
+                    
+                    this.log(`📸 Mengambil screenshot...`, 'info');
+                    
+                    const response = await fetch(apiUrl, {
+                        headers: {
+                            'Accept': 'application/json',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+
+                    const data = await response.json();
+
+                    if (data.success && data.data && data.data.result) {
+                        return data.data.result;
+                    } else {
+                        throw new Error('Gagal mengambil screenshot');
+                    }
+                    
+                } catch (error) {
+                    this.log(`❌ Gagal screenshot: ${error.message}`, 'error');
+                    throw error;
+                }
+            }
+
+            // ==================== AUTO SUBMIT ABSENSI ====================
+            async autoSubmitAbsensi(data) {
+                if (!this.jwtToken) {
+                    this.log('⚠️ Tidak ada token', 'warning');
+                    return;
+                }
+
+                try {
+                    this.log('📤 Mengirim absensi...', 'info');
+                    
+                    const cParam = data.c || '';
+                    const now = new Date();
+                    const timestamp = now.toISOString();
+                    
+                    const submitUrl = `https://diy.geschool.net/_api/attendance/submit?c=${cParam}`;
+                    
+                    const response = await fetch(submitUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json, text/plain, */*',
+                            'Authorization': `API-TOKEN api-key=${this.jwtToken}`,
+                            'Content-Type': 'application/json',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                        },
+                        body: JSON.stringify({
+                            c: cParam,
+                            timestamp: timestamp,
+                            user_id: this.userData?.id || '',
+                            status: 'present'
+                        })
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        this.log('✅ Absensi berhasil!', 'success');
+                        this.setAbsentStatus('✅ Berhasil!', 'success');
+                        this.showAbsentResult({
+                            ...data,
+                            submit_status: 'success',
+                            response: result,
+                            timestamp_used: timestamp
+                        });
+                    } else {
+                        this.log(`⚠️ Server: ${response.status}`, 'warning');
+                    }
+                } catch (error) {
+                    this.log(`❌ Gagal submit: ${error.message}`, 'error');
+                }
+            }
+
+            // ==================== EKSTRAK DATA ABSENSI ====================
+            extractAbsentData(url) {
+                try {
+                    const urlObj = new URL(url);
+                    const params = urlObj.searchParams;
+                    const pathParts = urlObj.pathname.split('/');
+
+                    const isAttendance = url.includes('attendance') || 
+                                       url.includes('absensi') ||
+                                       pathParts.includes('attendance');
+
+                    if (isAttendance) {
+                        const data = {
+                            url: url,
+                            path: urlObj.pathname,
+                            params: Object.fromEntries(params),
+                            c: params.get('c') || '',
+                            timestamp: new Date().toISOString(),
+                            type: 'attendance'
+                        };
+                        this.log(`📋 Data: c=${data.c}`, 'absent');
+                        return data;
+                    }
+
+                    return null;
+                } catch (e) {
+                    this.log(`❌ Gagal ekstrak data`, 'error');
+                    return null;
+                }
+            }
+
+            // ==================== VALIDASI URL ====================
+            validateAndFixURL(url) {
+                url = url.trim();
+                
+                if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                    url = 'https://' + url;
+                }
+
+                try {
+                    new URL(url);
+                    return url;
+                } catch (e) {
+                    return url;
+                }
+            }
+
+            // ==================== DETECT QR FROM IMAGE ====================
+            async detectQRFromImage(imageDataUrl) {
+                try {
+                    this.log('📥 Mendownload gambar...', 'info');
+
+                    const response = await fetch(imageDataUrl);
+                    const imageBlob = await response.blob();
+                    const imageBitmap = await createImageBitmap(imageBlob);
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = imageBitmap.width;
+                    canvas.height = imageBitmap.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(imageBitmap, 0, 0);
+
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    this.log(`📄 Gambar: ${canvas.width}x${canvas.height} px`, 'info');
+
+                    let code = jsQR(imageData.data, canvas.width, canvas.height, {
+                        inversionAttempts: "attemptBoth",
+                    });
+
+                    if (!code || !code.data) {
+                        const scale = Math.min(1500 / canvas.width, 1500 / canvas.height);
+                        const newWidth = Math.floor(canvas.width * scale);
+                        const newHeight = Math.floor(canvas.height * scale);
+
+                        const tempCanvas = document.createElement('canvas');
+                        tempCanvas.width = newWidth;
+                        tempCanvas.height = newHeight;
+                        const tempCtx = tempCanvas.getContext('2d');
+                        tempCtx.drawImage(canvas, 0, 0, newWidth, newHeight);
+
+                        const tempData = tempCtx.getImageData(0, 0, newWidth, newHeight);
+                        code = jsQR(tempData.data, newWidth, newHeight, {
+                            inversionAttempts: "attemptBoth",
+                        });
+                    }
+
+                    if (code && code.data) {
+                        this.log(`✅ QR ditemukan`, 'qr-found');
+                        return code.data;
+                    }
+
+                    return null;
+
+                } catch (error) {
+                    this.log(`❌ Error deteksi QR: ${error.message}`, 'error');
+                    throw error;
+                }
+            }
+        }
+
+        // ==================== INIT ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            const app = new AutoAbsensiApp();
+            window.absensiApp = app;
+        });
+    </script>
+</body>
+</html>
