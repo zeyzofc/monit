@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Code Auto Detector</title>
+    <title>QR Code Auto Detector - Fixed</title>
     <style>
         * {
             margin: 0;
@@ -25,7 +25,7 @@
             background: white;
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 800px;
+            max-width: 900px;
             width: 100%;
             padding: 40px;
             animation: slideUp 0.5s ease-out;
@@ -269,7 +269,7 @@
             border-radius: 12px;
             padding: 15px;
             margin-top: 20px;
-            max-height: 200px;
+            max-height: 250px;
             overflow-y: auto;
             font-family: 'Courier New', monospace;
             font-size: 12px;
@@ -309,6 +309,11 @@
 
         .log-entry.warning {
             color: #dcdcaa;
+        }
+
+        .log-entry.qr-found {
+            color: #ffd700;
+            font-weight: bold;
         }
 
         .footer {
@@ -430,7 +435,7 @@
 
             // ==================== LOGGING ====================
             log(message, type = 'info') {
-                const time = new Date().toLocaleTimeString();
+                const time = new Date().toLocaleTimeString('id-ID', { hour12: false });
                 const entry = document.createElement('div');
                 entry.className = `log-entry ${type}`;
                 entry.innerHTML = `<span class="time">[${time}]</span> ${message}`;
@@ -460,7 +465,7 @@
                 this.qrResultDiv.classList.add('show');
                 this.qrUrl.textContent = url;
                 this.setQRStatus('✅ Terdeteksi!', 'success');
-                this.log(`QR Code terdeteksi: ${url}`, 'success');
+                this.log(`✅ QR Code terdeteksi: ${url}`, 'qr-found');
             }
 
             hideQRResult() {
@@ -491,10 +496,12 @@
                     const qrData = await this.detectQRFromImage(screenshotUrl);
 
                     if (qrData) {
-                        this.qrResult = qrData;
-                        this.showQRResult(qrData);
+                        // Cek apakah URL valid dan lengkap
+                        const fullUrl = this.validateAndFixURL(qrData);
+                        this.qrResult = fullUrl;
+                        this.showQRResult(fullUrl);
                         this.setStatus('✅ QR Code ditemukan!', 'success');
-                        this.log('✅ Proses deteksi selesai', 'success');
+                        this.log(`✅ URL lengkap: ${fullUrl}`, 'success');
 
                         // Auto open URL
                         setTimeout(() => this.openURL(), 1500);
@@ -515,18 +522,47 @@
                 }
             }
 
+            // ==================== VALIDASI URL ====================
+            validateAndFixURL(url) {
+                // Trim whitespace
+                url = url.trim();
+
+                // Cek apakah URL dimulai dengan http atau https
+                if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                    // Cek apakah ada domain
+                    if (url.includes('.')) {
+                        // Tambahkan https://
+                        url = 'https://' + url;
+                    }
+                }
+
+                // Cek apakah ada karakter aneh di akhir
+                // Hapus karakter non-URL di akhir
+                url = url.replace(/[^a-zA-Z0-9\-._~:/?#[\]@!$&'()*+,;=]+$/, '');
+
+                // Cek apakah URL valid
+                try {
+                    new URL(url);
+                    this.log(`✅ URL valid: ${url}`, 'success');
+                    return url;
+                } catch (e) {
+                    this.log(`⚠️ URL tidak valid: ${url}`, 'warning');
+                    // Coba perbaiki dengan menambahkan protocol
+                    try {
+                        const fixedUrl = 'https://' + url.replace(/^https?:\/\//, '');
+                        new URL(fixedUrl);
+                        this.log(`✅ URL diperbaiki: ${fixedUrl}`, 'success');
+                        return fixedUrl;
+                    } catch (e2) {
+                        this.log(`❌ Gagal memperbaiki URL: ${url}`, 'error');
+                        return url;
+                    }
+                }
+            }
+
             // ==================== API CALLS ====================
             async fetchScreenshot() {
                 try {
-                    const response = await fetch('https://api.microlink.io/', {
-                        method: 'GET',
-                        headers: {
-                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                            'Referer': 'https://microlink.io/tools/website-screenshot/full-page'
-                        }
-                    });
-
-                    // Build URL dengan parameter
                     const url = new URL('https://api.microlink.io/');
                     url.searchParams.append('url', 'https://diy.geschool.net/_k/1020423-vAH8nDt/');
                     url.searchParams.append('meta', 'false');
@@ -536,18 +572,18 @@
                     url.searchParams.append('adblock', 'true');
                     url.searchParams.append('force', 'false');
 
-                    const finalResponse = await fetch(url.toString(), {
+                    const response = await fetch(url.toString(), {
                         headers: {
                             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
                             'Referer': 'https://microlink.io/tools/website-screenshot/full-page'
                         }
                     });
 
-                    if (!finalResponse.ok) {
-                        throw new Error(`HTTP ${finalResponse.status}: ${finalResponse.statusText}`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                     }
 
-                    const data = await finalResponse.json();
+                    const data = await response.json();
 
                     if (data.status === 'success' && data.data && data.data.screenshot) {
                         return data.data.screenshot.url;
@@ -572,7 +608,6 @@
                     const imageBlob = await response.blob();
                     const imageBitmap = await createImageBitmap(imageBlob);
 
-                    // Canvas untuk extract pixel data
                     const canvas = document.createElement('canvas');
                     canvas.width = imageBitmap.width;
                     canvas.height = imageBitmap.height;
@@ -581,20 +616,39 @@
 
                     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-                    this.log(`📐 Gambar: ${canvas.width}x${canvas.height} px`, 'info');
+                    this.log(`📄 Gambar: ${canvas.width}x${canvas.height} px`, 'info');
 
-                    // Detect QR Code menggunakan jsQR
-                    this.log('🔍 Mendeteksi QR Code...', 'info');
+                    // === PERBAIKAN: Multi-scan dengan berbagai pengaturan ===
+                    const qrResults = [];
 
-                    // Optimasi: scan dengan ukuran lebih kecil jika gambar terlalu besar
-                    let scanData = imageData;
-                    let scanWidth = canvas.width;
-                    let scanHeight = canvas.height;
+                    // 1. Scan original
+                    this.log('🔍 Scanning dengan setting default...', 'info');
+                    let code = jsQR(imageData.data, canvas.width, canvas.height, {
+                        inversionAttempts: "attemptBoth",
+                    });
 
-                    // Jika gambar terlalu besar, resize untuk performance
-                    const MAX_SIZE = 2000;
-                    if (canvas.width > MAX_SIZE || canvas.height > MAX_SIZE) {
-                        const scale = Math.min(MAX_SIZE / canvas.width, MAX_SIZE / canvas.height);
+                    if (code && code.data) {
+                        qrResults.push(code.data);
+                        this.log(`✅ Found QR: ${code.data}`, 'qr-found');
+                    }
+
+                    // 2. Scan dengan threshold berbeda
+                    if (!code || !code.data) {
+                        this.log('🔍 Scanning dengan threshold 0.5...', 'info');
+                        code = jsQR(imageData.data, canvas.width, canvas.height, {
+                            inversionAttempts: "attemptBoth",
+                            greyScaleWeights: { red: 0.5, green: 0.5, blue: 0.5 }
+                        });
+
+                        if (code && code.data) {
+                            qrResults.push(code.data);
+                            this.log(`✅ Found QR: ${code.data}`, 'qr-found');
+                        }
+                    }
+
+                    // 3. Jika gambar besar, scan dengan resize
+                    if (canvas.width > 1000 || canvas.height > 1000) {
+                        const scale = Math.min(1500 / canvas.width, 1500 / canvas.height);
                         const newWidth = Math.floor(canvas.width * scale);
                         const newHeight = Math.floor(canvas.height * scale);
 
@@ -604,31 +658,35 @@
                         const tempCtx = tempCanvas.getContext('2d');
                         tempCtx.drawImage(canvas, 0, 0, newWidth, newHeight);
 
-                        scanData = tempCtx.getImageData(0, 0, newWidth, newHeight);
-                        scanWidth = newWidth;
-                        scanHeight = newHeight;
-                        this.log(`📐 Resize untuk deteksi: ${newWidth}x${newHeight} px`, 'info');
+                        const tempData = tempCtx.getImageData(0, 0, newWidth, newHeight);
+                        this.log(`📐 Scanning resize: ${newWidth}x${newHeight} px`, 'info');
+
+                        const codeResized = jsQR(tempData.data, newWidth, newHeight, {
+                            inversionAttempts: "attemptBoth",
+                        });
+
+                        if (codeResized && codeResized.data) {
+                            qrResults.push(codeResized.data);
+                            this.log(`✅ Found QR from resize: ${codeResized.data}`, 'qr-found');
+                        }
                     }
 
-                    const code = jsQR(
-                        scanData.data,
-                        scanWidth,
-                        scanHeight,
-                        {
-                            inversionAttempts: "dontInvert",
+                    // Ambil hasil pertama yang valid
+                    for (const result of qrResults) {
+                        if (result && result.length > 0) {
+                            // Cek apakah mengandung URL pattern
+                            if (result.includes('http') || result.includes('.')) {
+                                this.log(`✅ QR Code valid: ${result}`, 'success');
+                                return result;
+                            }
                         }
-                    );
+                    }
 
-                    if (code && code.data) {
-                        // Validasi apakah data adalah URL
-                        const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
-                        if (urlPattern.test(code.data)) {
-                            this.log('✅ QR Code valid (URL)', 'success');
-                            return code.data;
-                        } else {
-                            this.log('⚠️ QR Code terdeteksi tapi bukan URL: ' + code.data, 'warning');
-                            return null;
-                        }
+                    // Jika ada hasil tapi tidak valid URL
+                    if (qrResults.length > 0) {
+                        this.log(`⚠️ QR Code terdeteksi tapi bukan URL: ${qrResults[0]}`, 'warning');
+                        // Tapi tetap return sebagai URL (mungkin user ingin melihat)
+                        return qrResults[0];
                     }
 
                     this.log('❌ Tidak ada QR Code terdeteksi', 'warning');
@@ -648,24 +706,37 @@
                 }
 
                 try {
-                    this.log(`🚀 Membuka URL: ${this.qrResult}`, 'info');
+                    // Validasi URL sebelum dibuka
+                    let urlToOpen = this.qrResult;
+                    
+                    // Tambahkan protocol jika tidak ada
+                    if (!urlToOpen.startsWith('http://') && !urlToOpen.startsWith('https://')) {
+                        urlToOpen = 'https://' + urlToOpen;
+                    }
+
+                    // Cek validitas URL
+                    try {
+                        new URL(urlToOpen);
+                    } catch (e) {
+                        // Jika tidak valid, encode
+                        urlToOpen = 'https://' + encodeURI(urlToOpen);
+                    }
+
+                    this.log(`🚀 Membuka URL: ${urlToOpen}`, 'info');
 
                     // Buka di tab baru
-                    const win = window.open(this.qrResult, '_blank');
+                    const win = window.open(urlToOpen, '_blank');
 
                     if (!win || win.closed || typeof win.closed === 'undefined') {
-                        // Popup blocked, alternatif
+                        // Popup blocked
                         this.log('⚠️ Popup diblokir. Gunakan tombol manual.', 'warning');
                         alert('Popup diblokir!\nSilakan klik "Buka URL" secara manual.');
-
-                        // Tampilkan URL di hasil
                         this.showQRResult(this.qrResult);
                     } else {
                         this.log('✅ Browser terbuka!', 'success');
                     }
                 } catch (error) {
                     this.log(`❌ Gagal membuka URL: ${error.message}`, 'error');
-                    // Fallback: tampilkan di hasil
                     this.showQRResult(this.qrResult);
                 }
             }
@@ -687,15 +758,12 @@
         }
 
         // ==================== INIT ====================
-        // Tunggu DOM ready
         document.addEventListener('DOMContentLoaded', () => {
             const app = new QRCodeWebApp();
-
-            // Expose ke global untuk debugging
             window.qrApp = app;
         });
 
-        // Error handling global
+        // Error handling
         window.addEventListener('error', (e) => {
             console.error('Global error:', e);
             if (window.qrApp) {
