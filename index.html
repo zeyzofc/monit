@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dual Account Auto Absensi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0e1a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(ellipse at 10% 20%, rgba(15, 52, 96, 0.4) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(102, 126, 234, 0.2) 0%, transparent 50%),
+                linear-gradient(180deg, #0a0e1a 0%, #121a2e 100%);
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
+            max-width: 1100px;
+            width: 100%;
+            padding: 40px;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .header .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 100px;
+            padding: 4px 16px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #8b9cf7;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .header h1 .icon {
+            font-size: 36px;
+        }
+
+        .header .subtitle {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .accounts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 16px 0;
+        }
+
+        .account-card {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .account-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .account-card .account-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .account-card .account-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .account-card .account-avatar.avatar1 {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .account-card .account-avatar.avatar2 {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .account-card .account-name {
+            font-weight: 600;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .account-card .account-school {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 12px;
+        }
+
+        .account-card .account-status {
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        .account-card .account-status.online { color: #4ade80; }
+        .account-card .account-status.offline { color: #f87171; }
+        .account-card .account-status.loading { color: #fbbf24; }
+
+        .account-card .status-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .account-card .status-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 8px 12px;
+        }
+
+        .account-card .status-item .label {
+            font-size: 9px;
+            color: rgba(255, 255, 255, 0.25);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .account-card .status-item .value {
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            margin-top: 2px;
+            word-break: break-all;
+        }
+
+        .account-card .status-item .value.success { color: #4ade80; }
+        .account-card .status-item .value.error { color: #f87171; }
+        .account-card .status-item .value.loading { color: #fbbf24; }
+        .account-card .status-item .value.redirect { color: #60a5fa; animation: blink 1s infinite; }
+
+        .account-card .btn-account {
+            width: 100%;
+            margin-top: 10px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .account-card .btn-account.primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .account-card .btn-account.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .account-card .btn-account.secondary {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+        }
+
+        .account-card .btn-account.secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(245, 87, 108, 0.3);
+        }
+
+        .account-card .btn-account:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .account-card .btn-account .spinner-sm {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s ease-in-out infinite;
+        }
+
+        .btn {
+            padding: 11px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #0a0e1a;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(251, 191, 36, 0.2);
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(251, 191, 36, 0.3);
+        }
+
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .btn-group .btn {
+            flex: 1;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s ease-in-out infinite;
+        }
+
+        .log-container {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-top: 14px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Inter', monospace;
+            font-size: 11px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .log-container::-webkit-scrollbar { width: 4px; }
+        .log-container::-webkit-scrollbar-thumb { background: rgba(102, 126, 234, 0.3); border-radius: 2px; }
+        .log-container::-webkit-scrollbar-track { background: transparent; }
+
+        .log-entry {
+            color: rgba(255, 255, 255, 0.35);
+            padding: 3px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+            font-size: 11px;
+        }
+
+        .log-entry .time {
+            color: rgba(255, 255, 255, 0.15);
+            margin-right: 10px;
+        }
+
+        .log-entry .account-tag {
+            display: inline-block;
+            padding: 0 8px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 700;
+            margin-right: 6px;
+        }
+
+        .log-entry .account-tag.tag1 {
+            background: rgba(102, 126, 234, 0.3);
+            color: #8b9cf7;
+        }
+
+        .log-entry .account-tag.tag2 {
+            background: rgba(245, 87, 108, 0.3);
+            color: #f87171;
+        }
+
+        .log-entry.success { color: #4ade80; }
+        .log-entry.error { color: #f87171; }
+        .log-entry.info { color: #60a5fa; }
+        .log-entry.warning { color: #fbbf24; }
+        .log-entry.absent { color: #4ade80; font-weight: bold; }
+        .log-entry.qr-found { color: #fbbf24; font-weight: bold; }
+        .log-entry.redirect { color: #60a5fa; font-weight: bold; }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.1);
+            font-size: 11px;
+        }
+
+        @media (max-width: 768px) {
+            .accounts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 24px;
+                border-radius: 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .account-card .status-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">👥 Dual Account</div>
+            <h1>
+                <span class="icon">📱</span>
+                Auto Absensi
+            </h1>
+            <p class="subtitle">2 Akun • Auto Login • Buka Tab Baru</p>
+        </div>
+
+        <div class="accounts-grid" id="accountsGrid">
+            <!-- Account 1 -->
+            <div class="account-card" id="account1">
+                <div class="account-header">
+                    <div class="account-avatar avatar1">F</div>
+                    <div>
+                        <div class="account-name" id="acc1Name">Akun 1</div>
+                        <div class="account-school" id="acc1School">-</div>
+                        <div class="account-status offline" id="acc1Status">🔴 Belum login</div>
+                    </div>
+                </div>
+                <div class="status-grid">
+                    <div class="status-item">
+                        <div class="label">Status</div>
+                        <div class="value" id="acc1StatusText">Menunggu...</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="label">QR Code</div>
+                        <div class="value" id="acc1QRStatus">-</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="label">Absensi</div>
+                        <div class="value" id="acc1AbsenStatus">-</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="label">Token</div>
+                        <div class="value" id="acc1TokenStatus">-</div>
+                    </div>
+                </div>
+                <button class="btn-account primary" id="acc1LoginBtn">🔑 Login Akun 1</button>
+                <button class="btn-account primary" id="acc1AbsenBtn" style="margin-top:6px;">📋 Absen Akun 1</button>
+                <button class="btn-account primary" id="acc1OpenBtn" style="margin-top:6px;background:rgba(96,165,250,0.2);color:#60a5fa;">🌐 Buka Tab</button>
+            </div>
+
+            <!-- Account 2 -->
+            <div class="account-card" id="account2">
+                <div class="account-header">
+                    <div class="account-avatar avatar2">S</div>
+                    <div>
+                        <div class="account-name" id="acc2Name">Akun 2</div>
+                        <div class="account-school" id="acc2School">-</div>
+                        <div class="account-status offline" id="acc2Status">🔴 Belum login</div>
+                    </div>
+                </div>
+                <div class="status-grid">
+                    <div class="status-item">
+                        <div class="label">Status</div>
+                        <div class="value" id="acc2StatusText">Menunggu...</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="label">QR Code</div>
+                        <div class="value" id="acc2QRStatus">-</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="label">Absensi</div>
+                        <div class="value" id="acc2AbsenStatus">-</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="label">Token</div>
+                        <div class="value" id="acc2TokenStatus">-</div>
+                    </div>
+                </div>
+                <button class="btn-account secondary" id="acc2LoginBtn">🔑 Login Akun 2</button>
+                <button class="btn-account secondary" id="acc2AbsenBtn" style="margin-top:6px;">📋 Absen Akun 2</button>
+                <button class="btn-account secondary" id="acc2OpenBtn" style="margin-top:6px;background:rgba(96,165,250,0.2);color:#60a5fa;">🌐 Buka Tab</button>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-primary" id="absenAllBtn">
+                🚀 Absen Semua Akun
+            </button>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-warning" id="loginAllBtn">
+                🔑 Login Semua Akun
+            </button>
+            <button class="btn btn-outline" id="resetBtn">
+                🔄 Reset Semua
+            </button>
+        </div>
+
+        <div class="log-container" id="logContainer">
+            <div class="log-entry info">
+                <span class="time">[System]</span> Siap untuk dual account absensi
+            </div>
+        </div>
+
+        <div class="footer">
+            <span>Powered by Anabot API & jsQR | Dual Account v5.0</span>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+    <script>
+        // ==================== DUAL ACCOUNT APP ====================
+        class DualAccountApp {
+            constructor() {
+                this.apiKey = 'zeyz041';
+                this.accounts = {
+                    acc1: {
+                        id: 'acc1',
+                        name: 'FANIA RAMADHANI',
+                        uid: '1209055',
+                        token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiIxMjA5MDU1IiwidXRwIjoiMSIsImV4cCI6MTc5MTUxODkzMywiaWF0IjoxNzg4OTI2ODczLCJpc3MiOiJNYWluQ29udHJvbGxlci5waHA6MTIyIn0.VddHT-yCZD5mn7ScCB1o1H2-XCkHhMd92U4FHaYG4sA',
+                        cookies: [
+                            '_ga=GA1.3.520602914.1752451446',
+                            '_ga_3WB5VD92TT=GS2.1.s1762694485$o1$g0$t1762694487$j58$l0$h0',
+                            '_ga_7FV35PPQKV=GS2.3.s1781084953$o6$g1$t1781084954$j59$l0$h0',
+                            '_ga_RFKLW2VMW6=GS2.3.s1781090087$o26$g0$t1781090087$j60$l0$h0',
+                            'key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiIxMjA5MDU1IiwidXRwIjoiMSIsImV4cCI6MTc5MTUxODkzMywiaWF0IjoxNzg4OTI2ODczLCJpc3MiOiJNYWluQ29udHJvbGxlci5waHA6MTIyIn0.VddHT-yCZD5mn7ScCB1o1H2-XCkHhMd92U4FHaYG4sA',
+                            'gs-z=tijqcr3jm0kukmmfl81f6v9tqk'
+                        ],
+                        userData: null,
+                        qrResult: null,
+                        isLoggedIn: false,
+                        isProcessing: false,
+                        tokenExpired: false,
+                        redirectUrl: null
+                    },
+                    acc2: {
+                        id: 'acc2',
+                        name: 'Siswa 2',
+                        uid: '1161951',
+                        token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiIxMTYxOTUxIiwidXRwIjoiMSIsImV4cCI6MTc4ODk1Mjc1MiwiaWF0IjoxNzg4OTA5NDkyLCJpc3MiOiJNYWluQ29udHJvbGxlci5waHA6MTIyIn0.q0-teMp2glUsp5R4ksFXpYrlCQ_yqpNaGuICFAJsQxs',
+                        cookies: [
+                            '_ga=GA1.3.520602914.1752451446',
+                            '_ga_3WB5VD92TT=GS2.1.s1762694485$o1$g0$t1762694487$j58$l0$h0',
+                            '_ga_7FV35PPQKV=GS2.3.s1781084953$o6$g1$t1781084954$j59$l0$h0',
+                            '_ga_RFKLW2VMW6=GS2.3.s1781090087$o26$g0$t1781090087$j60$l0$h0',
+                            'key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiIxMTYxOTUxIiwidXRwIjoiMSIsImV4cCI6MTc4ODk1Mjc1MiwiaWF0IjoxNzg4OTA5NDkyLCJpc3MiOiJNYWluQ29udHJvbGxlci5waHA6MTIyIn0.q0-teMp2glUsp5R4ksFXpYrlCQ_yqpNaGuICFAJsQxs',
+                            'gs-z=oiaobckt9h0qvct1n8l6g9k249'
+                        ],
+                        userData: null,
+                        qrResult: null,
+                        isLoggedIn: false,
+                        isProcessing: false,
+                        tokenExpired: false,
+                        redirectUrl: null
+                    }
+                };
+
+                this.logContainer = document.getElementById('logContainer');
+
+                // Bind buttons
+                ['acc1', 'acc2'].forEach(accId => {
+                    const loginBtn = document.getElementById(`${accId}LoginBtn`);
+                    const absenBtn = document.getElementById(`${accId}AbsenBtn`);
+                    const openBtn = document.getElementById(`${accId}OpenBtn`);
+                    if (loginBtn) loginBtn.addEventListener('click', () => this.loginAccount(accId));
+                    if (absenBtn) absenBtn.addEventListener('click', () => this.startAbsensi(accId));
+                    if (openBtn) openBtn.addEventListener('click', () => this.openTab(accId));
+                });
+
+                const loginAllBtn = document.getElementById('loginAllBtn');
+                const absenAllBtn = document.getElementById('absenAllBtn');
+                const resetBtn = document.getElementById('resetBtn');
+
+                if (loginAllBtn) loginAllBtn.addEventListener('click', () => this.loginAll());
+                if (absenAllBtn) absenAllBtn.addEventListener('click', () => this.absenAll());
+                if (resetBtn) resetBtn.addEventListener('click', () => this.resetAll());
+
+                // Auto init
+                setTimeout(() => {
+                    this.log('🚀 System ready', 'info');
+                    this.loginAll();
+                }, 1000);
+            }
+
+            log(message, type = 'info', account = null) {
+                const time = new Date().toLocaleTimeString('id-ID', { hour12: false });
+                const entry = document.createElement('div');
+                let tag = '';
+                if (account === 'acc1') tag = '<span class="account-tag tag1">A1</span>';
+                else if (account === 'acc2') tag = '<span class="account-tag tag2">A2</span>';
+                entry.className = `log-entry ${type}`;
+                entry.innerHTML = `<span class="time">[${time}]</span> ${tag} ${message}`;
+                this.logContainer.appendChild(entry);
+                this.logContainer.scrollTop = this.logContainer.scrollHeight;
+            }
+
+            updateAccountUI(accId) {
+                const acc = this.accounts[accId];
+                const prefix = accId;
+
+                const nameEl = document.getElementById(`${prefix}Name`);
+                const schoolEl = document.getElementById(`${prefix}School`);
+                const statusEl = document.getElementById(`${prefix}Status`);
+                const statusTextEl = document.getElementById(`${prefix}StatusText`);
+                const qrStatusEl = document.getElementById(`${prefix}QRStatus`);
+                const absenStatusEl = document.getElementById(`${prefix}AbsenStatus`);
+                const tokenStatusEl = document.getElementById(`${prefix}TokenStatus`);
+
+                if (nameEl) nameEl.textContent = acc.userData?.name || acc.name;
+                if (schoolEl) schoolEl.textContent = acc.userData?.school?.name || '-';
+
+                if (statusEl) {
+                    if (acc.isLoggedIn && !acc.tokenExpired) {
+                        statusEl.textContent = '🟢 Online';
+                        statusEl.className = 'account-status online';
+                    } else if (acc.isLoggedIn && acc.tokenExpired) {
+                        statusEl.textContent = '🟡 Token Expired';
+                        statusEl.className = 'account-status loading';
+                    } else {
+                        statusEl.textContent = '🔴 Offline';
+                        statusEl.className = 'account-status offline';
+                    }
+                }
+
+                if (statusTextEl) {
+                    statusTextEl.textContent = acc.isProcessing ? '⏳ Processing...' : (acc.isLoggedIn ? '✅ Ready' : '❌ Not logged in');
+                    statusTextEl.className = 'value ' + (acc.isLoggedIn ? 'success' : 'error');
+                }
+
+                if (qrStatusEl) {
+                    qrStatusEl.textContent = acc.qrResult ? '✅ Found' : '⏳ Waiting...';
+                    qrStatusEl.className = 'value ' + (acc.qrResult ? 'success' : 'loading');
+                }
+
+                if (tokenStatusEl) {
+                    tokenStatusEl.textContent = acc.token ? '✅ Ada' : '❌ Tidak ada';
+                    tokenStatusEl.className = 'value ' + (acc.token ? 'success' : 'error');
+                }
+
+                const loginBtn = document.getElementById(`${accId}LoginBtn`);
+                const absenBtn = document.getElementById(`${accId}AbsenBtn`);
+
+                if (loginBtn) {
+                    loginBtn.disabled = acc.isProcessing;
+                    loginBtn.innerHTML = acc.isProcessing ? '<span class="spinner-sm"></span> Processing...' : (acc.isLoggedIn ? '🔄 Refresh Login' : '🔑 Login');
+                }
+
+                if (absenBtn) {
+                    absenBtn.disabled = acc.isProcessing || !acc.isLoggedIn || acc.tokenExpired;
+                    absenBtn.textContent = '📋 Absen';
+                }
+            }
+
+            // ==================== OPEN TAB ====================
+            openTab(accId) {
+                const acc = this.accounts[accId];
+                if (!acc.qrResult) {
+                    this.log(`⚠️ ${acc.name} belum ada QR Code, absen dulu!`, 'warning', accId);
+                    return;
+                }
+
+                // Set cookies sebelum buka tab
+                this.setCookies(accId);
+
+                this.log(`🌐 ${acc.name} membuka tab: ${acc.qrResult}`, 'redirect', accId);
+                window.open(acc.qrResult, '_blank');
+            }
+
+            // ==================== SET COOKIES ====================
+            setCookies(accId) {
+                const acc = this.accounts[accId];
+                acc.cookies.forEach(cookie => {
+                    const parts = cookie.split('=');
+                    if (parts.length === 2) {
+                        document.cookie = `${parts[0]}=${parts[1]}; path=/; domain=.geschool.net; max-age=86400`;
+                    } else {
+                        document.cookie = `${cookie}=; path=/; domain=.geschool.net; max-age=86400`;
+                    }
+                });
+
+                if (acc.token) {
+                    localStorage.setItem(`geschool_token_${accId}`, acc.token);
+                    sessionStorage.setItem(`geschool_token_${accId}`, acc.token);
+                }
+            }
+
+            async loginAccount(accId) {
+                const acc = this.accounts[accId];
+                if (acc.isProcessing) return;
+
+                acc.isProcessing = true;
+                this.updateAccountUI(accId);
+                this.log(`🔑 Login ${acc.name}...`, 'login', accId);
+
+                try {
+                    this.setCookies(accId);
+                    this.log(`✅ Cookie dan Token diset untuk ${acc.name}`, 'success', accId);
+                    await this.getUserProfile(accId);
+
+                } catch (error) {
+                    this.log(`❌ Login gagal: ${error.message}`, 'error', accId);
+                } finally {
+                    acc.isProcessing = false;
+                    this.updateAccountUI(accId);
+                }
+            }
+
+            async getUserProfile(accId) {
+                const acc = this.accounts[accId];
+                if (!acc.token) {
+                    this.log('❌ Tidak ada token', 'error', accId);
+                    return;
+                }
+
+                try {
+                    this.log(`📥 Mengambil profile ${acc.name}...`, 'info', accId);
+
+                    const response = await fetch('https://diy.geschool.net/_api/v2/profile/me', {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json, text/plain, */*',
+                            'Authorization': `API-TOKEN api-key=${acc.token}`,
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        acc.userData = data;
+                        acc.isLoggedIn = true;
+                        acc.tokenExpired = false;
+
+                        this.log(`✅ ${data.name} login berhasil (ID: ${data.id})`, 'success', accId);
+                        this.log(`🏫 ${data.school?.name}`, 'info', accId);
+                    } else {
+                        acc.isLoggedIn = false;
+                        this.log(`❌ Gagal get profile: ${response.status}`, 'error', accId);
+                    }
+                } catch (error) {
+                    acc.isLoggedIn = false;
+                    this.log(`❌ Error: ${error.message}`, 'error', accId);
+                }
+
+                this.updateAccountUI(accId);
+            }
+
+            async startAbsensi(accId) {
+                const acc = this.accounts[accId];
+                if (acc.isProcessing || !acc.isLoggedIn || acc.tokenExpired) return;
+
+                acc.isProcessing = true;
+                this.updateAccountUI(accId);
+                this.log(`🚀 Mulai absensi ${acc.name}...`, 'info', accId);
+
+                try {
+                    const screenshotUrl = await this.fetchScreenshot(accId);
+                    this.log(`📸 Screenshot berhasil`, 'success', accId);
+
+                    const qrData = await this.detectQR(screenshotUrl, accId);
+                    if (!qrData) {
+                        this.log('❌ QR Code tidak ditemukan', 'error', accId);
+                        return;
+                    }
+
+                    acc.qrResult = this.validateURL(qrData);
+                    acc.redirectUrl = acc.qrResult;
+                    this.log(`✅ QR Code ditemukan`, 'qr-found', accId);
+                    this.updateAccountUI(accId);
+
+                    const absentData = this.extractAbsentData(acc.qrResult);
+                    if (absentData) {
+                        await this.submitAbsensi(accId, absentData);
+                    }
+
+                    // Buka tab otomatis
+                    setTimeout(() => {
+                        this.openTab(accId);
+                    }, 1500);
+
+                } catch (error) {
+                    this.log(`❌ Error: ${error.message}`, 'error', accId);
+                } finally {
+                    acc.isProcessing = false;
+                    this.updateAccountUI(accId);
+                }
+            }
+
+            async fetchScreenshot(accId) {
+                const url = 'https://diy.geschool.net/_k/1020423-vAH8nDt/';
+                const apiUrl = `https://anabot.my.id/api/tools/ssweb?url=${encodeURIComponent(url)}&device=phone&fullPage=on&apikey=${this.apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                    }
+                });
+
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data = await response.json();
+                if (data.success && data.data?.result) return data.data.result;
+                throw new Error('Gagal screenshot');
+            }
+
+            async detectQR(imageUrl, accId) {
+                const response = await fetch(imageUrl);
+                const imageBlob = await response.blob();
+                const imageBitmap = await createImageBitmap(imageBlob);
+
+                const canvas = document.createElement('canvas');
+                canvas.width = imageBitmap.width;
+                canvas.height = imageBitmap.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(imageBitmap, 0, 0);
+
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+                let code = jsQR(imageData.data, canvas.width, canvas.height, {
+                    inversionAttempts: "attemptBoth",
+                });
+
+                if (!code || !code.data) {
+                    const scale = Math.min(1500 / canvas.width, 1500 / canvas.height);
+                    const newW = Math.floor(canvas.width * scale);
+                    const newH = Math.floor(canvas.height * scale);
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = newW;
+                    tempCanvas.height = newH;
+                    const tempCtx = tempCanvas.getContext('2d');
+                    tempCtx.drawImage(canvas, 0, 0, newW, newH);
+                    const tempData = tempCtx.getImageData(0, 0, newW, newH);
+                    code = jsQR(tempData.data, newW, newH, { inversionAttempts: "attemptBoth" });
+                }
+
+                return code?.data || null;
+            }
+
+            validateURL(url) {
+                url = url.trim();
+                if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                    url = 'https://' + url;
+                }
+                return url;
+            }
+
+            extractAbsentData(url) {
+                try {
+                    const urlObj = new URL(url);
+                    const params = urlObj.searchParams;
+                    const c = params.get('c') || '';
+                    if (url.includes('attendance') || url.includes('absensi')) {
+                        return { url, c, timestamp: new Date().toISOString(), type: 'attendance' };
+                    }
+                    return null;
+                } catch (e) {
+                    return null;
+                }
+            }
+
+            // ==================== SUBMIT ABSENSI ====================
+            async submitAbsensi(accId, data) {
+                const acc = this.accounts[accId];
+                if (!acc.token) return;
+
+                const absenStatusEl = document.getElementById(`${accId}AbsenStatus`);
+
+                try {
+                    this.log(`📤 Mengirim absensi ${acc.name}...`, 'info', accId);
+
+                    const submitUrl = `https://diy.geschool.net/_api/attendance/submit?c=${data.c}`;
+                    
+                    const response = await fetch(submitUrl, {
+                        method: 'POST',
+                        mode: 'cors',
+                        credentials: 'include',
+                        headers: {
+                            'Accept': 'application/json, text/plain, */*',
+                            'Authorization': `API-TOKEN api-key=${acc.token}`,
+                            'Content-Type': 'application/json',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                            'Origin': window.location.origin,
+                            'Referer': 'https://diy.geschool.net/'
+                        },
+                        body: JSON.stringify({
+                            c: data.c,
+                            timestamp: new Date().toISOString(),
+                            user_id: acc.userData?.id || '',
+                            status: 'present'
+                        })
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success === true || result.status === 'success') {
+                            this.log(`✅ ${acc.name} ABSENSI BERHASIL! 🎉`, 'absent', accId);
+                            if (absenStatusEl) {
+                                absenStatusEl.textContent = '✅ BERHASIL!';
+                                absenStatusEl.className = 'value success';
+                            }
+                            return;
+                        }
+                    }
+                    
+                    this.log(`⚠️ ${acc.name} absensi gagal, buka tab...`, 'redirect', accId);
+                    if (absenStatusEl) {
+                        absenStatusEl.textContent = '🔄 Buka Tab';
+                        absenStatusEl.className = 'value redirect';
+                    }
+                    
+                } catch (error) {
+                    this.log(`⚠️ ${acc.name} error, buka tab...`, 'redirect', accId);
+                    if (absenStatusEl) {
+                        absenStatusEl.textContent = '🔄 Buka Tab';
+                        absenStatusEl.className = 'value redirect';
+                    }
+                }
+            }
+
+            async loginAll() {
+                this.log('🔑 Login semua akun...', 'info');
+                await this.loginAccount('acc1');
+                await this.loginAccount('acc2');
+                this.log('✅ Semua akun selesai login', 'success');
+            }
+
+            async absenAll() {
+                this.log('🚀 Memulai absensi semua akun...', 'info');
+                await this.startAbsensi('acc1');
+                await this.startAbsensi('acc2');
+                this.log('✅ Semua akun selesai absensi', 'success');
+            }
+
+            resetAll() {
+                ['acc1', 'acc2'].forEach(accId => {
+                    const acc = this.accounts[accId];
+                    acc.qrResult = null;
+                    acc.isProcessing = false;
+                    acc.redirectUrl = null;
+                    const absenStatusEl = document.getElementById(`${accId}AbsenStatus`);
+                    if (absenStatusEl) {
+                        absenStatusEl.textContent = '-';
+                        absenStatusEl.className = 'value';
+                    }
+                });
+                this.log('🔄 Reset semua status', 'warning');
+                this.logContainer.innerHTML = '';
+                this.log('🔄 System reset', 'info');
+            }
+        }
+
+        // ==================== INIT ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            const app = new DualAccountApp();
+            window.dualApp = app;
+        });
+    </script>
+</body>
+</html>
