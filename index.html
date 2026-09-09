@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Absensi QR Code</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="text"], input[type="url"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input[type="text"]:focus, input[type="url"]:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            min-width: 100px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(72, 187, 120, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #fc8181 0%, #e53e3e 100%);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(252, 129, 129, 0.4);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(246, 173, 85, 0.4);
+        }
+
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 30px 0;
+            padding: 30px;
+            background: #f7f7f7;
+            border-radius: 15px;
+            min-height: 200px;
+            justify-content: center;
+        }
+
+        #qrcode {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            display: inline-block;
+        }
+
+        .qr-placeholder {
+            color: #999;
+            font-size: 16px;
+        }
+
+        .info-box {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .info-box h3 {
+            color: #667eea;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .info-box p {
+            color: #555;
+            font-size: 13px;
+            word-break: break-all;
+        }
+
+        .info-box .url-display {
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 8px;
+            font-size: 12px;
+            color: #333;
+            border: 1px solid #e0e0e0;
+            word-break: break-all;
+        }
+
+        .status {
+            text-align: center;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            display: none;
+        }
+
+        .status.success {
+            display: block;
+            background: #c6f6d5;
+            color: #22543d;
+            border: 1px solid #9ae6b4;
+        }
+
+        .status.error {
+            display: block;
+            background: #fed7d7;
+            color: #742a2a;
+            border: 1px solid #fc8181;
+        }
+
+        .status.loading {
+            display: block;
+            background: #bee3f8;
+            color: #2a4365;
+            border: 1px solid #90cdf4;
+        }
+
+        .status.info {
+            display: block;
+            background: #e9d8fd;
+            color: #553c9a;
+            border: 1px solid #b794f4;
+        }
+
+        .footer {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #48bb78;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 2px solid #e0e0e0;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📸 Auto Absensi QR</h1>
+        <p class="subtitle">Screenshot halaman absensi → QR Code → Buka & Absen Otomatis</p>
+
+        <div class="input-group">
+            <label>🔗 URL Absensi</label>
+            <input type="url" id="urlInput" value="https://diy.geschool.net/_k/1020423-vAH8nDt/" placeholder="https://diy.geschool.net/_k/...">
+        </div>
+
+        <div class="button-group">
+            <button class="btn-primary" onclick="generateScreenshotQR()">📸 Screenshot → QR</button>
+            <button class="btn-success" onclick="openAbsenUrl()">🚀 Buka & Absen</button>
+            <button class="btn-danger" onclick="clearAll()">🗑️ Clear</button>
+        </div>
+
+        <div class="qr-container">
+            <div id="qrcode">
+                <div class="qr-placeholder">📷 Scan untuk absen otomatis</div>
+            </div>
+            <div id="qrInfo" style="margin-top: 10px; font-size: 12px; color: #666; text-align: center;"></div>
+        </div>
+
+        <!-- Preview Screenshot -->
+        <div id="previewContainer" style="display: none; margin: 20px 0;">
+            <label style="display: block; margin-bottom: 8px; color: #555; font-weight: 600; font-size: 14px;">📸 Preview Screenshot</label>
+            <img id="screenshotPreview" class="preview-image" alt="Preview screenshot">
+        </div>
+
+        <div class="info-box">
+            <h3>⚡ Informasi</h3>
+            <p id="statusText">Masukkan URL absensi, klik "Screenshot → QR" untuk membuat QR Code</p>
+            <div id="resultUrlDisplay" style="display: none;">
+                <div style="margin-top: 10px; font-weight: 600; color: #667eea;">URL QR:</div>
+                <div class="url-display" id="resultUrlText"></div>
+            </div>
+        </div>
+
+        <div id="status" class="status"></div>
+
+        <div class="footer">
+            <span>🔐 Auto absen dengan cookie tersimpan | v3.0</span>
+        </div>
+    </div>
+
+    <script>
+        // Konfigurasi
+        const API_URL = 'https://anabot.my.id/api/tools/ssweb';
+        const API_KEY = 'zeyz041';
+        const COOKIE_KEY = 'geschool_absensi_cookie';
+        
+        // Cookie yang sudah disimpan
+        const COOKIE_DATA = `_ga=GA1.3.520602914.1752451446; _ga=GA1.1.1759456344.1762694485; _ga_3WB5VD92TT=GS2.1.s1762694485$o1$g0$t1762694487$j58$l0$h0; _ga_7FV35PPQKV=GS2.3.s1781084953$o6$g1$t1781084954$j59$l0$h0; _ga_RFKLW2VMW6=GS2.3.s1781090087$o26$g0$t1781090087$j60$l0$h0; key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiIxMTYxOTUxIiwidXRwIjoiMSIsImV4cCI6MTc4OTAxMDYzMCwiaWF0IjoxNzg4OTY3MzcwLCJpc3MiOiJNYWluQ29udHJvbGxlci5waHA6MTIyIn0.92XI3Lcd1xhuuEY4PCjXEhMfQRiYH8jZ1K7LW8lH9b4; gs-z=krvp9h1vnm1gp61k4lnf1i4p02`;
+
+        let currentScreenshotUrl = '';
+        let currentAbsenUrl = '';
+        let qrInstance = null;
+
+        // Simpan cookie ke localStorage
+        function saveCookie() {
+            try {
+                localStorage.setItem(COOKIE_KEY, COOKIE_DATA);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // Load cookie dari localStorage
+        function loadCookie() {
+            try {
+                return localStorage.getItem(COOKIE_KEY);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        // Generate QR dari screenshot URL
+        async function generateScreenshotQR() {
+            const url = document.getElementById('urlInput').value.trim();
+            
+            if (!url) {
+                showStatus('⚠️ Masukkan URL absensi terlebih dahulu!', 'error');
+                return;
+            }
+
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                showStatus('⚠️ URL harus dimulai dengan http:// atau https://', 'error');
+                return;
+            }
+
+            showStatus('⏳ Mengambil screenshot halaman absensi...', 'loading');
+            document.getElementById('statusText').textContent = '⏳ Sedang mengambil screenshot...';
+
+            try {
+                // Encode URL untuk API
+                const encodedUrl = encodeURIComponent(url);
+                const apiUrl = `${API_URL}?url=${encodedUrl}&device=phone&fullPage=on&apikey=${API_KEY}`;
+
+                // Panggil API untuk screenshot
+                const response = await axios.get(apiUrl, {
+                    headers: {
+                        'accept': 'application/json'
+                    },
+                    timeout: 45000
+                });
+
+                console.log('API Response:', response.data);
+
+                if (response.data && response.data.success && response.data.data && response.data.data.result) {
+                    const imageUrl = response.data.data.result;
+                    currentScreenshotUrl = imageUrl;
+                    currentAbsenUrl = url;
+
+                    // Tampilkan preview screenshot
+                    const previewContainer = document.getElementById('previewContainer');
+                    const previewImg = document.getElementById('screenshotPreview');
+                    previewImg.src = imageUrl;
+                    previewContainer.style.display = 'block';
+
+                    // Buat QR Code dari URL screenshot
+                    generateQRCode(imageUrl);
+                    
+                    // Tampilkan URL hasil
+                    document.getElementById('resultUrlDisplay').style.display = 'block';
+                    document.getElementById('resultUrlText').textContent = imageUrl;
+                    
+                    showStatus('✅ QR Code berhasil dibuat! Scan untuk membuka halaman absensi.', 'success');
+                    document.getElementById('statusText').textContent = '✅ QR Code siap digunakan. Scan untuk membuka halaman absensi.';
+                    
+                    // Simpan cookie
+                    saveCookie();
+                    
+                    // Update info QR
+                    document.getElementById('qrInfo').textContent = '📱 Scan QR untuk membuka halaman absensi';
+                    
+                } else {
+                    showStatus('❌ Gagal mengambil screenshot', 'error');
+                    document.getElementById('statusText').textContent = '❌ Gagal mengambil screenshot. Coba lagi.';
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                let errorMsg = '❌ Gagal mengambil screenshot. ';
+                if (error.response) {
+                    errorMsg += `Server error: ${error.response.status}`;
+                } else if (error.request) {
+                    errorMsg += 'Tidak ada response dari server. Cek koneksi internet.';
+                } else {
+                    errorMsg += error.message;
+                }
+                showStatus(errorMsg, 'error');
+                document.getElementById('statusText').textContent = errorMsg;
+            }
+        }
+
+        // Generate QR Code
+        function generateQRCode(text) {
+            const qrContainer = document.getElementById('qrcode');
+            
+            // Clear previous QR
+            qrContainer.innerHTML = '';
+            
+            try {
+                qrInstance = new QRCode(qrContainer, {
+                    text: text,
+                    width: 220,
+                    height: 220,
+                    colorDark: '#1a202c',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                
+                // Tambahkan label di bawah QR
+                const label = document.createElement('p');
+                label.style.cssText = 'margin-top: 12px; font-size: 13px; color: #4a5568; text-align: center; font-weight: 500;';
+                label.textContent = '📱 Scan untuk absen otomatis';
+                qrContainer.appendChild(label);
+
+                // Tambahan info
+                const subLabel = document.createElement('p');
+                subLabel.style.cssText = 'margin-top: 4px; font-size: 11px; color: #a0aec0; text-align: center;';
+                subLabel.textContent = 'QR berisi URL screenshot halaman absensi';
+                qrContainer.appendChild(subLabel);
+
+            } catch (e) {
+                qrContainer.innerHTML = `<div style="color: red; text-align: center;">❌ Gagal generate QR: ${e.message}</div>`;
+            }
+        }
+
+        // Buka URL absensi di tab baru dan auto absen
+        function openAbsenUrl() {
+            const url = document.getElementById('urlInput').value.trim();
+            
+            if (!url) {
+                showStatus('⚠️ Masukkan URL absensi terlebih dahulu!', 'error');
+                return;
+            }
+
+            // Buka tab baru dengan URL absensi
+            const newWindow = window.open(url, '_blank');
+            
+            if (newWindow) {
+                showStatus('✅ Halaman absensi dibuka di tab baru!', 'success');
+                document.getElementById('statusText').textContent = '✅ Halaman absensi terbuka. Login dengan cookie tersimpan.';
+                
+                // Tunggu sebentar lalu inject cookie ke tab baru
+                setTimeout(() => {
+                    try {
+                        // Inject cookie ke tab baru
+                        const cookie = loadCookie() || COOKIE_DATA;
+                        // Kirim cookie ke tab baru
+                        newWindow.postMessage({
+                            type: 'SET_COOKIE',
+                            cookie: cookie,
+                            url: url
+                        }, '*');
+                        
+                        showStatus('✅ Cookie dikirim ke halaman absensi!', 'success');
+                    } catch (e) {
+                        console.log('Gagal inject cookie:', e);
+                    }
+                }, 1000);
+                
+                // Simpan cookie
+                saveCookie();
+            } else {
+                showStatus('⚠️ Popup diblokir. Izinkan popup untuk membuka tab baru.', 'error');
+            }
+        }
+
+        // Tampilkan status
+        function showStatus(message, type = 'info') {
+            const statusEl = document.getElementById('status');
+            
+            statusEl.className = 'status';
+            statusEl.textContent = message;
+            
+            if (type === 'success') {
+                statusEl.className = 'status success';
+            } else if (type === 'error') {
+                statusEl.className = 'status error';
+            } else if (type === 'loading') {
+                statusEl.className = 'status loading';
+            } else {
+                statusEl.className = 'status info';
+            }
+            
+            // Auto hide after 5 seconds for success/error
+            if (type === 'success' || type === 'error') {
+                setTimeout(() => {
+                    if (statusEl.className !== 'status loading') {
+                        statusEl.style.display = 'none';
+                    }
+                }, 6000);
+            }
+        }
+
+        // Clear semua data
+        function clearAll() {
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = '<div class="qr-placeholder">📷 Scan untuk absen otomatis</div>';
+            
+            document.getElementById('previewContainer').style.display = 'none';
+            document.getElementById('resultUrlDisplay').style.display = 'none';
+            document.getElementById('qrInfo').textContent = '';
+            
+            localStorage.removeItem(COOKIE_KEY);
+            
+            showStatus('🗑️ Semua data telah dibersihkan', 'success');
+            document.getElementById('statusText').textContent = 'Siap untuk generate QR Code';
+        }
+
+        // Auto generate QR saat halaman dimuat
+        window.onload = function() {
+            // Simpan cookie default
+            saveCookie();
+            
+            // Auto generate QR dengan URL default
+            setTimeout(() => {
+                generateScreenshotQR();
+            }, 500);
+        };
+
+        // Event listener untuk enter key
+        document.getElementById('urlInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                generateScreenshotQR();
+            }
+        });
+
+        // Listener untuk pesan dari tab baru
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'SET_COOKIE') {
+                console.log('Cookie diterima di halaman absensi');
+                // Cookie sudah di-set di halaman baru
+            }
+        });
+    </script>
+</body>
+</html>
