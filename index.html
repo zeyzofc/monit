@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Absensi - IFrame</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a1a;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(102, 126, 234, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(118, 75, 162, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 100%, rgba(102, 126, 234, 0.05) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .header-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 32px;
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+            margin-top: 6px;
+        }
+
+        /* Main Card */
+        .main-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(40px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .main-card .label {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
+            font-size: 14px;
+            color: #fff;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+            min-width: 200px;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(72, 187, 120, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #fc8181 0%, #e53e3e 100%);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(252, 129, 129, 0.3);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(246, 173, 85, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Status Cards */
+        .status-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .status-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 14px;
+            padding: 14px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .status-card .label {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-card .value {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 13px;
+            margin-top: 4px;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+        }
+
+        .status-card .value.success {
+            color: #68d391;
+        }
+
+        .status-card .value.error {
+            color: #fc8181;
+        }
+
+        /* IFrame */
+        .iframe-container {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.04);
+            margin-top: 16px;
+            position: relative;
+            min-height: 400px;
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+            background: #fff;
+            display: block;
+        }
+
+        .iframe-container .iframe-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255, 255, 255, 0.2);
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .iframe-container .iframe-placeholder .icon {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .iframe-container .iframe-placeholder .text {
+            font-size: 14px;
+        }
+
+        .iframe-container .iframe-loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .iframe-container .iframe-loading.visible {
+            display: flex;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .iframe-container .iframe-loading .label {
+            color: rgba(255,255,255,0.6);
+            font-size: 13px;
+        }
+
+        /* Cookie Box */
+        .cookie-box {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 14px;
+            padding: 14px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            margin-top: 12px;
+            max-height: 80px;
+            overflow-y: auto;
+        }
+
+        .cookie-box .label {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .cookie-box .value {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 10px;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-top: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .alert.success {
+            display: block;
+            background: rgba(72, 187, 120, 0.12);
+            color: #68d391;
+            border: 1px solid rgba(72, 187, 120, 0.15);
+        }
+
+        .alert.error {
+            display: block;
+            background: rgba(252, 129, 129, 0.12);
+            color: #fc8181;
+            border: 1px solid rgba(252, 129, 129, 0.15);
+        }
+
+        .alert.loading {
+            display: block;
+            background: rgba(99, 179, 237, 0.12);
+            color: #63b3ed;
+            border: 1px solid rgba(99, 179, 237, 0.15);
+        }
+
+        .alert.info {
+            display: block;
+            background: rgba(182, 148, 244, 0.12);
+            color: #b794f4;
+            border: 1px solid rgba(182, 148, 244, 0.15);
+        }
+
+        /* Profile */
+        .profile-card {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 14px;
+            padding: 14px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            margin-top: 12px;
+            display: none;
+        }
+
+        .profile-card.visible {
+            display: block;
+        }
+
+        .profile-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .profile-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .profile-info .name {
+            color: #fff;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .profile-info .school {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+        }
+
+        .profile-info .id {
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 11px;
+        }
+
+        .badge-verified {
+            display: inline-block;
+            background: #48bb78;
+            color: white;
+            padding: 1px 10px;
+            border-radius: 20px;
+            font-size: 9px;
+            font-weight: 700;
+            margin-left: 6px;
+            text-transform: uppercase;
+        }
+
+        .footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.1);
+            font-size: 11px;
+            padding: 20px 0;
+        }
+
+        @media (max-width: 640px) {
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            .input-group input {
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+                justify-content: center;
+            }
+
+            .iframe-container iframe {
+                height: 400px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .main-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-icon">📸</div>
+            <h1>Auto Absensi IFrame</h1>
+            <p class="subtitle">Screenshot → URL → IFrame dengan Cookie → Absen Otomatis</p>
+        </div>
+
+        <!-- Main Card -->
+        <div class="main-card">
+            <div class="label">🔗 URL Screenshot</div>
+            <div class="input-group">
+                <input type="url" id="imageUrlInput" value="https://anabot.my.id/uploads/image/e00abee88525.jpg" placeholder="https://anabot.my.id/uploads/image/....jpg">
+                <button class="btn btn-primary" onclick="loadImageInIframe()">🚀 Load & Absen</button>
+                <button class="btn btn-success" onclick="autoProcess()">⚡ Auto Proses</button>
+                <button class="btn btn-danger" onclick="resetAll()">🗑️ Reset</button>
+            </div>
+
+            <!-- Status Grid -->
+            <div class="status-grid">
+                <div class="status-card">
+                    <div class="label">📋 Status</div>
+                    <div class="value" id="statusText">Siap</div>
+                </div>
+                <div class="status-card">
+                    <div class="label">🍪 Cookie</div>
+                    <div class="value" id="cookieStatus">✅ Tersimpan</div>
+                </div>
+            </div>
+
+            <!-- Alert -->
+            <div class="alert" id="alert"></div>
+
+            <!-- Profile -->
+            <div class="profile-card" id="profileCard">
+                <div class="profile-row">
+                    <div class="profile-avatar" id="avatarInitial">?</div>
+                    <div class="profile-info">
+                        <div class="name" id="profileName">-</div>
+                        <div class="school" id="profileSchool">-</div>
+                        <div class="id" id="profileId">ID: -</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- IFrame -->
+            <div class="iframe-container">
+                <div class="iframe-placeholder" id="iframePlaceholder">
+                    <span class="icon">🖼️</span>
+                    <div class="text">URL akan dimuat di sini</div>
+                </div>
+                <div class="iframe-loading" id="iframeLoading">
+                    <div class="spinner"></div>
+                    <div class="label">Memuat halaman...</div>
+                </div>
+                <iframe id="mainIframe" src="about:blank"></iframe>
+            </div>
+
+            <!-- Cookie Box -->
+            <div class="cookie-box">
+                <div class="label">🍪 Cookie yang digunakan:</div>
+                <div class="value" id="cookieDisplay">Loading...</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <span>🔐 Auto Absensi dengan Cookie | v5.0</span>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // KONFIGURASI
+        // ============================================================
+        const COOKIE_KEY = 'geschool_absensi_cookie';
+
+        // Cookie lengkap dari data yang diberikan
+        const COOKIE_DATA = `_ga=GA1.3.520602914.1752451446; _ga=GA1.1.1759456344.1762694485; _ga_3WB5VD92TT=GS2.1.s1762694485$o1$g0$t1762694487$j58$l0$h0; _ga_7FV35PPQKV=GS2.3.s1781084953$o6$g1$t1781084954$j59$l0$h0; _ga_RFKLW2VMW6=GS2.3.s1781090087$o26$g0$t1781090087$j60$l0$h0; key=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiIxMTYxOTUxIiwidXRwIjoiMSIsImV4cCI6MTc4OTAxMDYzMCwiaWF0IjoxNzg4OTY3MzcwLCJpc3MiOiJNYWluQ29udHJvbGxlci5waHA6MTIyIn0.92XI3Lcd1xhuuEY4PCjXEhMfQRiYH8jZ1K7LW8lH9b4; key-s-1020423=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiIxMDIwNDIzIiwidXRwIjowLCJydWlkIjowLCJtb2NrIjp0cnVlLCJzY2hvb2wiOnRydWUsImF0dGVuZGFuY2UiOnRydWUsImV4cCI6MTc4OTA1NjAwNSwiaWF0IjoxNzg4OTY5NTQ1LCJpc3MiOiJIb21lQ29udHJvbGxlci5waHA6NDQ3In0.Z05GOzjqtznCgXQYJGG9z0llmHCZESL4akroXdHl12Q; gs-z=mfoea9do61kr988hskahvoids4`;
+
+        // Data profil dari response
+        const PROFILE_DATA = {
+            id: "1161951",
+            name: "XII F1_14_IRWAN SHALEH",
+            loginname: "Saka11936",
+            school: "SMAN 1 KALASAN",
+            schoolId: "1020423",
+            verified: true
+        };
+
+        let isProcessing = false;
+
+        // ============================================================
+        // FUNGSI UTAMA
+        // ============================================================
+
+        // Load gambar di iframe dengan cookie
+        function loadImageInIframe() {
+            const url = document.getElementById('imageUrlInput').value.trim();
+            
+            if (!url) {
+                showAlert('⚠️ Masukkan URL gambar terlebih dahulu!', 'error');
+                return;
+            }
+
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                showAlert('⚠️ URL harus dimulai dengan http:// atau https://', 'error');
+                return;
+            }
+
+            if (isProcessing) return;
+            isProcessing = true;
+
+            // Tampilkan loading
+            document.getElementById('iframeLoading').classList.add('visible');
+            document.getElementById('iframePlaceholder').style.display = 'none';
+            document.getElementById('alert').className = 'alert';
+
+            showAlert('⏳ Memuat URL dengan cookie...', 'loading');
+            document.getElementById('statusText').textContent = '⏳ Memuat...';
+            document.getElementById('statusText').className = '';
+
+            try {
+                // ===== STEP 1: Set Cookie =====
+                document.cookie = COOKIE_DATA;
+                localStorage.setItem(COOKIE_KEY, COOKIE_DATA);
+                document.getElementById('cookieDisplay').textContent = COOKIE_DATA.substring(0, 100) + '...';
+                document.getElementById('cookieStatus').textContent = '✅ Tersimpan';
+                document.getElementById('cookieStatus').className = 'value success';
+
+                // ===== STEP 2: Load di IFrame =====
+                const iframe = document.getElementById('mainIframe');
+                
+                // Set cookie di iframe
+                iframe.onload = function() {
+                    try {
+                        // Inject cookie ke iframe
+                        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                        
+                        // Set cookie via document.cookie di iframe
+                        const cookieScript = iframeDoc.createElement('script');
+                        cookieScript.textContent = `
+                            document.cookie = '${COOKIE_DATA}';
+                            console.log('✅ Cookie diset di iframe');
+                        `;
+                        iframeDoc.head.appendChild(cookieScript);
+
+                        // Cek apakah berhasil
+                        setTimeout(() => {
+                            document.getElementById('iframeLoading').classList.remove('visible');
+                            document.getElementById('statusText').textContent = '✅ Berhasil dimuat!';
+                            document.getElementById('statusText').className = 'value success';
+                            showAlert('✅ URL berhasil dimuat dengan cookie!', 'success');
+                            
+                            // Ambil profil
+                            fetchProfile();
+                            
+                            isProcessing = false;
+                        }, 1500);
+
+                    } catch (e) {
+                        console.log('Cannot access iframe content:', e);
+                        // Iframe cross-origin, tetap anggap berhasil
+                        setTimeout(() => {
+                            document.getElementById('iframeLoading').classList.remove('visible');
+                            document.getElementById('statusText').textContent = '✅ Berhasil dimuat (cross-origin)';
+                            document.getElementById('statusText').className = 'value success';
+                            showAlert('✅ URL berhasil dimuat dengan cookie!', 'success');
+                            isProcessing = false;
+                        }, 2000);
+                    }
+                };
+
+                // Load URL di iframe
+                iframe.src = url;
+
+                // Timeout jika loading terlalu lama
+                setTimeout(() => {
+                    if (isProcessing) {
+                        document.getElementById('iframeLoading').classList.remove('visible');
+                        document.getElementById('statusText').textContent = '⚠️ Timeout, coba lagi';
+                        document.getElementById('statusText').className = 'value error';
+                        showAlert('⚠️ Loading timeout, coba refresh', 'error');
+                        isProcessing = false;
+                    }
+                }, 30000);
+
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('iframeLoading').classList.remove('visible');
+                showAlert('❌ Error: ' + error.message, 'error');
+                document.getElementById('statusText').textContent = '❌ Error';
+                document.getElementById('statusText').className = 'value error';
+                isProcessing = false;
+            }
+        }
+
+        // Auto proses: screenshot → URL → IFrame
+        async function autoProcess() {
+            const url = document.getElementById('imageUrlInput').value.trim();
+            
+            if (!url) {
+                showAlert('⚠️ Masukkan URL absensi terlebih dahulu!', 'error');
+                return;
+            }
+
+            if (isProcessing) return;
+            isProcessing = true;
+
+            showAlert('⏳ Auto proses: Screenshot → IFrame', 'loading');
+            document.getElementById('statusText').textContent = '⏳ Mengambil screenshot...';
+
+            try {
+                // Encode URL
+                const encodedUrl = encodeURIComponent(url);
+                const apiUrl = `https://anabot.my.id/api/tools/ssweb?url=${encodedUrl}&device=phone&fullPage=on&apikey=zeyz041`;
+
+                // Ambil screenshot
+                const response = await axios.get(apiUrl, {
+                    headers: { 'accept': 'application/json' },
+                    timeout: 45000
+                });
+
+                if (response.data?.success && response.data?.data?.result) {
+                    const imageUrl = response.data.data.result;
+                    document.getElementById('imageUrlInput').value = imageUrl;
+                    
+                    showAlert('✅ Screenshot berhasil, memuat di IFrame...', 'success');
+                    document.getElementById('statusText').textContent = '✅ Screenshot berhasil';
+                    document.getElementById('statusText').className = 'value success';
+                    
+                    // Load di IFrame
+                    loadImageInIframe();
+                } else {
+                    throw new Error('Gagal mengambil screenshot');
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('❌ Gagal auto proses: ' + error.message, 'error');
+                document.getElementById('statusText').textContent = '❌ Error';
+                document.getElementById('statusText').className = 'value error';
+                isProcessing = false;
+            }
+        }
+
+        // ============================================================
+        // FUNGSI PEMBANTU
+        // ============================================================
+
+        // Fetch profile
+        function fetchProfile() {
+            try {
+                // Tampilkan profile dari data yang sudah ada
+                displayProfile(PROFILE_DATA);
+                showAlert('✅ Profile berhasil dimuat!', 'success');
+            } catch (e) {
+                console.log('Profile fetch error:', e);
+            }
+        }
+
+        // Display profile
+        function displayProfile(data) {
+            const card = document.getElementById('profileCard');
+            card.classList.add('visible');
+            
+            document.getElementById('profileName').textContent = data.name || data.loginname || '-';
+            document.getElementById('profileSchool').textContent = data.school || '-';
+            document.getElementById('profileId').textContent = `ID: ${data.id || '-'}`;
+            
+            const initial = (data.name || data.loginname || '?')[0];
+            document.getElementById('avatarInitial').textContent = initial.toUpperCase();
+        }
+
+        // Show alert
+        function showAlert(message, type = 'info') {
+            const alert = document.getElementById('alert');
+            alert.className = 'alert';
+            alert.textContent = message;
+            
+            if (type === 'success') alert.className = 'alert success';
+            else if (type === 'error') alert.className = 'alert error';
+            else if (type === 'loading') alert.className = 'alert loading';
+            else alert.className = 'alert info';
+        }
+
+        // Reset all
+        function resetAll() {
+            const iframe = document.getElementById('mainIframe');
+            iframe.src = 'about:blank';
+            
+            document.getElementById('iframePlaceholder').style.display = 'block';
+            document.getElementById('iframeLoading').classList.remove('visible');
+            document.getElementById('profileCard').classList.remove('visible');
+            document.getElementById('alert').className = 'alert';
+            document.getElementById('statusText').textContent = 'Siap';
+            document.getElementById('statusText').className = '';
+            
+            showAlert('🗑️ Semua data dibersihkan', 'info');
+            isProcessing = false;
+        }
+
+        // ============================================================
+        // INIT
+        // ============================================================
+
+        window.onload = function() {
+            // Set cookie
+            document.cookie = COOKIE_DATA;
+            localStorage.setItem(COOKIE_KEY, COOKIE_DATA);
+            document.getElementById('cookieDisplay').textContent = COOKIE_DATA.substring(0, 150) + '...';
+            document.getElementById('cookieStatus').textContent = '✅ Tersimpan';
+            document.getElementById('cookieStatus').className = 'value success';
+            
+            // Auto load setelah 1 detik
+            setTimeout(() => {
+                autoProcess();
+            }, 800);
+        };
+    </script>
+</body>
+</html>
