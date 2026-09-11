@@ -1,0 +1,2140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>HAPPY SWEET SEVENTEEN FANIA RAMADHANI 🕷️🏡</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&family=Fredoka:wght@400;600;700&family=Patrick+Hand&family=Short+Stack&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            spidey: {
+              red: '#e62429', darkred: '#991b1b', blue: '#0d5cd4', darkblue: '#1e3a8a',
+              sky: '#38bdf8', yellow: '#fbbf24', dark: '#0a0f1d', paper: '#fffdf5', card: '#162032',
+              web: '#e2e8f0', silver: '#cbd5e1'
+            }
+          },
+          fontFamily: {
+            comic: ['Bangers', 'cursive'], bubble: ['Fredoka', 'sans-serif'],
+            hand: ['Patrick Hand', 'Short Stack', 'cursive'], body: ['Comic Neue', 'sans-serif'],
+            script: ['Caveat', 'cursive']
+          },
+          keyframes: {
+            wiggle: { '0%, 100%': { transform: 'rotate(-3deg)' }, '50%': { transform: 'rotate(3deg)' } },
+            swing: { '0%, 100%': { transform: 'rotate(-12deg)' }, '50%': { transform: 'rotate(12deg)' } },
+            float: { '0%, 100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-10px)' } },
+            thwip: { '0%': { transform: 'scale(.8)', opacity: '0' }, '50%': { transform: 'scale(1.1)', opacity: '1' }, '100%': { transform: 'scale(1)', opacity: '1' } },
+            pulseSlow: { '0%, 100%': { opacity: '1' }, '50%': { opacity: '.6' } },
+            cinemaIn: { '0%': { opacity: '0', transform: 'scale(1.15)' }, '100%': { opacity: '1', transform: 'scale(1)' } },
+            spiderPulse: { '0%, 100%': { transform: 'scale(1)', boxShadow: '0 0 0 rgba(230,36,41,0)' }, '50%': { transform: 'scale(1.08)', boxShadow: '0 0 30px rgba(230,36,41,.7)' } }
+          },
+          animation: {
+            wiggle: 'wiggle 1s ease-in-out infinite', swing: 'swing 3s ease-in-out infinite',
+            float: 'float 3s ease-in-out infinite',
+            thwip: 'thwip .4s cubic-bezier(.175,.885,.32,1.275) forwards',
+            pulseSlow: 'pulseSlow 2s ease-in-out infinite', cinemaIn: 'cinemaIn 1s ease forwards',
+            spiderPulse: 'spiderPulse 2s ease-in-out infinite'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+    html, body { margin:0; padding:0; overflow-x:hidden; overflow-y:auto; min-height:100vh; }
+    body { font-family:'Comic Neue', sans-serif; background:#0a0f1d; color:#0f172a; }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0a0f1d; }
+    ::-webkit-scrollbar-thumb { background: #e62429; border-radius: 4px; }
+
+    .comic-border { border: 3.5px solid #000; box-shadow: 5px 5px 0 #000; }
+    .comic-border-lg { border: 4px solid #000; box-shadow: 8px 8px 0 #000; }
+    .comic-border-blue { border: 3.5px solid #000; box-shadow: 5px 5px 0 #0d5cd4; }
+    .comic-border-red { border: 3.5px solid #000; box-shadow: 5px 5px 0 #e62429; }
+    .text-stroke-black { -webkit-text-stroke: 1.5px #000; }
+    .text-stroke-thick { -webkit-text-stroke: 2.5px #000; }
+
+    /* ================= CITY NIGHT BACKGROUND ================= */
+    #cityBg {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+      background: linear-gradient(180deg, #0a0f1d 0%, #1a1f3a 40%, #2a1f3a 70%, #1a0f1d 100%);
+    }
+    #cityBg .moon-spidey {
+      position: absolute; top: 8%; right: 12%;
+      width: 60px; height: 60px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #fff8e6, #ffe9b8 60%, #e8c98a 100%);
+      box-shadow: 0 0 50px 12px rgba(255,233,184,.4);
+      animation: float 6s ease-in-out infinite;
+    }
+    #cityBg .building {
+      position: absolute; bottom: 0;
+      background: #0d0a1a;
+      border-top: 2px solid #1a1f3a;
+    }
+    #cityBg .building::after {
+      content: ''; position: absolute; inset: 10px 5px 10px 5px;
+      background-image: radial-gradient(circle, #fbbf24 1px, transparent 1.5px);
+      background-size: 12px 18px; opacity: .55;
+    }
+    .b1 { left: 0%; width: 12%; height: 28%; }
+    .b2 { left: 10%; width: 8%; height: 42%; }
+    .b3 { left: 17%; width: 14%; height: 34%; }
+    .b4 { left: 30%; width: 10%; height: 50%; }
+    .b5 { left: 39%; width: 13%; height: 30%; }
+    .b6 { left: 51%; width: 9%; height: 46%; }
+    .b7 { left: 59%; width: 15%; height: 38%; }
+    .b8 { left: 73%; width: 11%; height: 55%; }
+    .b9 { left: 83%; width: 9%; height: 32%; }
+    .b10 { left: 91%; width: 12%; height: 44%; }
+
+    /* ================= CINEMA INTRO ================= */
+    #cinemaIntro { position: fixed; inset: 0; z-index: 9999; background: #000; color: white; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .cinema-stars { position: absolute; inset: 0; background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,.5) 1px, transparent 2px), radial-gradient(circle at 80% 30%, rgba(255,255,255,.35) 1px, transparent 2px), radial-gradient(circle at 50% 70%, rgba(255,255,255,.4) 1px, transparent 2px); background-size: 180px 180px, 240px 240px, 200px 200px; opacity: .5; }
+    .cinema-content { position: relative; z-index: 2; text-align: center; padding: 20px; }
+    .cinema-small { font-family: 'Comic Neue', sans-serif; letter-spacing: 5px; color: #aaa; font-size: 12px; margin-bottom: 18px; }
+    .cinema-name { margin-top: 25px; font-family: 'Patrick Hand', cursive; font-size: clamp(24px, 6vw, 45px); color: #fbbf24; }
+    #countdownNumber { font-family: 'Bangers', cursive; font-size: clamp(80px, 25vw, 180px); line-height: 1; color: #e62429; text-shadow: 7px 7px 0 #fff; min-height: 180px; display: flex; justify-content: center; align-items: center; }
+    .cinema-button { margin-top: 25px; background: #e62429; border: 4px solid white; box-shadow: 7px 7px 0 #111; color: white; font-family: 'Fredoka', sans-serif; font-weight: 700; padding: 15px 28px; border-radius: 15px; font-size: 18px; cursor: pointer; transition: .2s; }
+    .cinema-button:hover { transform: translateY(-3px); background: #ff3035; }
+
+    /* ================= PIN SCREEN ================= */
+    #pinScreen { position: fixed; inset: 0; z-index: 10001; background: #000; color: white; display: flex; align-items: center; justify-content: center; }
+    .pin-content { position: relative; z-index: 2; text-align: center; padding: 30px 24px; max-width: 400px; width: 100%; }
+    .pin-title { font-family: 'Bangers', cursive; font-size: 36px; letter-spacing: 3px; color: #e62429; text-shadow: 4px 4px 0 #fff; margin-bottom: 8px; }
+    .pin-subtitle { font-family: 'Fredoka', sans-serif; font-size: 14px; color: #aaa; letter-spacing: 2px; margin-bottom: 25px; }
+    .pin-display { display: flex; justify-content: center; gap: 12px; margin-bottom: 28px; }
+    .pin-dot { width: 22px; height: 22px; border-radius: 50%; border: 3px solid #fff; background: transparent; transition: all .2s; }
+    .pin-dot.filled { background: #e62429; border-color: #e62429; transform: scale(1.1); box-shadow: 0 0 15px rgba(230,36,41,.7); }
+    .pin-keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 260px; margin: 0 auto; }
+    .pin-key {
+      background: rgba(255,255,255,.08); border: 2px solid rgba(255,255,255,.3);
+      color: white; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 24px;
+      padding: 16px; border-radius: 16px; cursor: pointer; transition: all .15s;
+      -webkit-user-select: none; user-select: none;
+    }
+    .pin-key:hover { background: rgba(230,36,41,.3); border-color: #e62429; }
+    .pin-key:active { transform: scale(.92); }
+    .pin-key.zero { grid-column: 2; }
+    .pin-key.clear { font-size: 18px; background: rgba(230,36,41,.3); }
+    .pin-key.enter { font-size: 18px; background: rgba(34,197,94,.3); }
+    .pin-error { color: #ff6b6b; font-family: 'Fredoka', sans-serif; font-size: 14px; margin-top: 18px; min-height: 20px; font-weight: 600; }
+    .pin-hint { color: #fbbf24; font-family: 'Fredoka', sans-serif; font-size: 12px; margin-top: 20px; opacity: .8; }
+    @keyframes pinShake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-12px)} 40%{transform:translateX(12px)} 60%{transform:translateX(-8px)} 80%{transform:translateX(8px)} }
+    .pin-content.shake { animation: pinShake .5s ease; }
+
+    /* ================= TRAILER ================= */
+    #trailerScreen { position: fixed; inset: 0; z-index: 10000; background: #000; display: none; align-items: center; justify-content: center; }
+    #trailerVideo { width: 100vw; height: 100vh; object-fit: contain; background: #000; }
+    .cinema-bar { position: fixed; left: 0; right: 0; height: 8vh; min-height: 45px; background: #000; z-index: 10002; pointer-events: none; }
+    .cinema-bar.top { top: 0; } .cinema-bar.bottom { bottom: 0; }
+    #trailerSkip { position: fixed; right: 18px; bottom: 12vh; z-index: 10004; background: rgba(0,0,0,.65); border: 2px solid rgba(255,255,255,.7); color: white; padding: 9px 14px; border-radius: 10px; font-family: 'Fredoka', sans-serif; font-size: 12px; cursor: pointer; }
+
+    /* ================= COMIC INTRO ================= */
+    #comicIntro { position: fixed; inset: 0; z-index: 10005; background: #0a0f1d; display: none; align-items: center; justify-content: center; padding: 20px; }
+    #comicIntro.active { display: flex; }
+    .comic-panel {
+      max-width: 500px; width: 100%; background: #fffdf5;
+      border: 5px solid #000; box-shadow: 10px 10px 0 #000;
+      border-radius: 8px; padding: 24px; position: relative;
+      animation: cinemaIn .6s ease;
+    }
+    .comic-panel .panel-num {
+      position: absolute; top: -18px; left: -18px;
+      width: 45px; height: 45px; background: #e62429; color: white;
+      border: 4px solid #000; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Bangers', cursive; font-size: 22px;
+      box-shadow: 3px 3px 0 #000;
+    }
+    .comic-panel .panel-emoji { font-size: 60px; text-align: center; display: block; margin: 8px 0 16px; }
+    .comic-panel .panel-text { font-family: 'Patrick Hand', cursive; font-size: 22px; line-height: 1.5; color: #1a1a2e; text-align: center; }
+    .comic-panel .panel-next {
+      display: block; margin: 22px auto 0;
+      background: #0d5cd4; color: white; border: 3px solid #000;
+      box-shadow: 4px 4px 0 #000; padding: 12px 26px; border-radius: 12px;
+      font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 16px; cursor: pointer; transition: .2s;
+    }
+    .comic-panel .panel-next:hover { transform: translateY(-2px); background: #1a6ee0; }
+
+    /* ================= MINI GAME ================= */
+    #miniGame { position: fixed; inset: 0; z-index: 9997; background: rgba(10,15,29,.96); display: none; cursor: crosshair; }
+    #miniGame.active { display: block; }
+    .mg-header {
+      position: absolute; top: 0; left: 0; right: 0;
+      padding: 16px; text-align: center;
+      background: linear-gradient(180deg, rgba(0,0,0,.6), transparent);
+      z-index: 5; pointer-events: none;
+    }
+    .mg-score {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: #fffdf5; border: 3px solid #000; box-shadow: 4px 4px 0 #000;
+      padding: 8px 18px; border-radius: 50px;
+      font-family: 'Bangers', cursive; font-size: 22px; color: #0a0f1d;
+    }
+    .mg-close {
+      position: absolute; top: 14px; right: 14px; z-index: 6;
+      background: #e62429; color: white; border: 3px solid #000;
+      box-shadow: 3px 3px 0 #000; width: 40px; height: 40px;
+      border-radius: 50%; font-size: 20px; font-weight: bold; cursor: pointer;
+    }
+    .mg-target {
+      position: absolute; width: 70px; height: 70px; border-radius: 50%;
+      background: radial-gradient(circle, #fbbf24 30%, #e62429 70%);
+      border: 3px solid #000; display: flex; align-items: center; justify-content: center;
+      font-size: 34px; cursor: pointer;
+      animation: mgPop .3s cubic-bezier(.34,1.56,.64,1), mgFloat 1.6s ease-in-out infinite;
+      transform-origin: center; z-index: 2;
+    }
+    @keyframes mgPop { 0%{ transform: scale(0); } 100%{ transform: scale(1); } }
+    @keyframes mgFloat { 0%,100%{ margin-top: 0; } 50%{ margin-top: -8px; } }
+    .mg-web {
+      position: absolute; width: 4px; height: 0;
+      background: linear-gradient(180deg, #fff, #e2e8f0);
+      transform-origin: bottom center; border-radius: 4px;
+      box-shadow: 0 0 8px rgba(255,255,255,.7);
+      animation: mgWebShoot .25s ease-out forwards; z-index: 1;
+    }
+    @keyframes mgWebShoot { to { height: var(--webLen, 400px); } }
+    .mg-spider-svg {
+      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+      width: 90px; height: 90px; z-index: 3;
+      animation: mgSpideyIdle 1s ease-in-out infinite;
+    }
+    @keyframes mgSpideyIdle { 0%,100%{ transform: translateX(-50%) translateY(0); } 50%{ transform: translateX(-50%) translateY(-6px); } }
+    .mg-instructions {
+      position: absolute; bottom: 130px; left: 50%; transform: translateX(-50%);
+      color: white; font-family: 'Fredoka', sans-serif;
+      font-size: 14px; text-align: center; opacity: .8; pointer-events: none;
+    }
+    .mg-win {
+      position: absolute; inset: 0; display: none; align-items: center; justify-content: center;
+      background: rgba(10,15,29,.9); z-index: 10;
+    }
+    .mg-win.active { display: flex; }
+    .mg-win-box { background: #fffdf5; border: 5px solid #000; box-shadow: 8px 8px 0 #000; border-radius: 20px; padding: 32px; text-align: center; max-width: 90vw; }
+
+    /* ================= SPIDEY-SENSE ================= */
+    .spidey-sense {
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
+      z-index: 9996; pointer-events: none;
+      background: linear-gradient(135deg, #ff3b40, #c81d22); color: white;
+      border: 4px solid #000; box-shadow: 8px 8px 0 #000;
+      border-radius: 20px; padding: 18px 26px;
+      font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 16px;
+      display: flex; align-items: center; gap: 12px; opacity: 0;
+    }
+    .spidey-sense.show { animation: sensePulse 2.5s ease-out; }
+    @keyframes sensePulse {
+      0% { transform: translate(-50%,-50%) scale(0); opacity: 0; }
+      15% { transform: translate(-50%,-50%) scale(1.15); opacity: 1; }
+      25% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+      75% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+      100% { transform: translate(-50%,-50%) scale(0); opacity: 0; }
+    }
+
+    /* ================= WEB-SWING ================= */
+    #webSwing {
+      position: fixed; inset: 0; z-index: 9995; pointer-events: none;
+      display: none; align-items: center; justify-content: center;
+      background: linear-gradient(90deg, rgba(10,15,29,0) 0%, rgba(10,15,29,.85) 50%, rgba(10,15,29,0) 100%);
+    }
+    #webSwing.active { display: flex; animation: swingBg 1s ease forwards; }
+    @keyframes swingBg { 0%{ opacity: 0; } 20%{ opacity: 1; } 80%{ opacity: 1; } 100%{ opacity: 0; } }
+    .swing-spidey { width: 140px; height: 140px; animation: swingPath 1s ease-in-out forwards; filter: drop-shadow(0 8px 12px rgba(0,0,0,.6)); }
+    @keyframes swingPath {
+      0%   { transform: translate(-60vw, 20vh) rotate(-25deg); }
+      50%  { transform: translate(0, -8vh) rotate(5deg); }
+      100% { transform: translate(60vw, -20vh) rotate(25deg); }
+    }
+    .swing-rope {
+      position: absolute; top: -10vh; left: 50%; width: 3px; height: 60vh;
+      background: linear-gradient(180deg, transparent, #fff);
+      transform-origin: top center; animation: swingRope 1s ease-in-out forwards;
+    }
+    @keyframes swingRope {
+      0%{ transform: rotate(35deg); opacity: 1; }
+      50%{ transform: rotate(-5deg); opacity: 1; }
+      100%{ transform: rotate(-35deg); opacity: 0; }
+    }
+
+    /* ================= MISSION ================= */
+    .mission-item {
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(255,255,255,.9); border: 3px solid #000; box-shadow: 4px 4px 0 #000;
+      border-radius: 14px; padding: 12px 16px;
+      font-family: 'Fredoka', sans-serif; font-weight: 600; transition: .25s;
+    }
+    .mission-item.done { background: linear-gradient(135deg, #d4f5d4, #a8e6a8); }
+    .mission-check {
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 3px solid #000; background: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .mission-item.done .mission-check { background: #22c55e; color: white; }
+    .mini-card-thumb {
+      width: 40px; height: 40px; border-radius: 8px;
+      background: linear-gradient(135deg, #e62429, #0d5cd4);
+      border: 2px solid #000; display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+
+    /* ================= CARDS ================= */
+    .spidey-card {
+      background: linear-gradient(135deg, #fffdf5, #f0e8d5);
+      border: 4px solid #000; box-shadow: 6px 6px 0 #000;
+      border-radius: 16px; padding: 16px; text-align: center;
+      position: relative; transition: .3s;
+      animation: cardFlip .6s ease;
+    }
+    @keyframes cardFlip { 0%{ transform: rotateY(90deg) scale(.6); opacity: 0; } 100%{ transform: rotateY(0) scale(1); opacity: 1; } }
+    .spidey-card:hover { transform: translateY(-6px) rotate(-2deg); }
+    .spidey-card .card-icon { font-size: 42px; margin-bottom: 8px; }
+    .spidey-card .card-title { font-family: 'Bangers', cursive; font-size: 18px; letter-spacing: 1px; color: #e62429; }
+    .spidey-card .card-desc { font-family: 'Fredoka', sans-serif; font-size: 12px; color: #444; margin-top: 6px; }
+    .spidey-card.locked { opacity: .4; filter: grayscale(1); }
+
+    /* ================= AWARD ================= */
+    .award-cert {
+      background: linear-gradient(135deg, #fffdf5 0%, #fff5d5 100%);
+      border: 8px double #d4a017; padding: 30px 24px; border-radius: 12px;
+      text-align: center; position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,.5);
+    }
+    .award-cert::before, .award-cert::after { content: '🕷️'; position: absolute; font-size: 30px; }
+    .award-cert::before { top: 12px; left: 16px; }
+    .award-cert::after { bottom: 12px; right: 16px; }
+
+    /* ================= CUSTOMIZER ================= */
+    .customizer-bg { background: linear-gradient(180deg, #0a0f1d 0%, #1e3a8a 50%, #991b1b 100%); position: relative; overflow: hidden; }
+    .char-display {
+      background: rgba(255,255,255,0.08); backdrop-filter: blur(10px);
+      border: 2px solid rgba(255,255,255,.25); border-radius: 28px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.15);
+      position: relative;
+    }
+    .accessory-card {
+      background: rgba(255,255,255,0.08); backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(255,255,255,.2);
+      border-radius: 18px; cursor: pointer; transition: all .25s ease;
+      position: relative; overflow: hidden;
+    }
+    .accessory-card:hover { background: rgba(255,255,255,0.15); transform: translateY(-3px); }
+    .accessory-card.selected { background: rgba(230, 36, 41, 0.35); border-color: #fbbf24; box-shadow: 0 0 20px rgba(251, 191, 36, .6); }
+    .accessory-card.locked { opacity: .55; cursor: not-allowed; }
+    .accessory-card.locked:hover { transform: none; box-shadow: none; }
+    .accessory-card .lock-icon { position: absolute; top: 6px; right: 8px; font-size: 14px; opacity: .8; }
+    .sg-pop { animation: sgPop .35s cubic-bezier(.34,1.56,.64,1); transform-origin: center; }
+    @keyframes sgPop { 0%{ opacity: 0; transform: scale(.4) translateY(-8px); } 60%{ opacity: 1; transform: scale(1.15) translateY(2px); } 100%{ opacity: 1; transform: scale(1) translateY(0); } }
+    #spideyGirlSVG.bounce { animation: sgBounce .4s cubic-bezier(.34,1.56,.64,1); }
+    @keyframes sgBounce { 0%{transform:scale(1)} 40%{transform:scale(1.07) rotate(-1.5deg)} 70%{transform:scale(.98) rotate(1deg)} 100%{transform:scale(1)} }
+    .flower-counter {
+      background: rgba(255,255,255,.15); backdrop-filter: blur(10px);
+      border: 1.5px solid rgba(255,255,255,.25); border-radius: 50px;
+      padding: 6px 16px; display: inline-flex; align-items: center; gap: 8px;
+      color: white; font-family: 'Fredoka', sans-serif; font-size: 14px; font-weight: 600;
+    }
+    .btn-save-style {
+      background: linear-gradient(135deg, #e62429 0%, #991b1b 100%);
+      border: 2px solid #fff; border-radius: 50px; color: white;
+      font-family: 'Fredoka', sans-serif; font-weight: 700;
+      padding: 14px 32px; font-size: 16px;
+      box-shadow: 0 6px 20px rgba(230, 36, 41, .5);
+      transition: all .25s ease; cursor: pointer;
+    }
+    .btn-save-style:hover { transform: translateY(-2px); }
+    .btn-reset-style {
+      background: rgba(255,255,255,.15); border: 2px solid rgba(255,255,255,.4);
+      border-radius: 50px; color: white;
+      font-family: 'Fredoka', sans-serif; font-weight: 700;
+      padding: 14px 24px; font-size: 15px;
+      transition: all .25s ease; cursor: pointer;
+    }
+    .btn-reset-style:hover { background: rgba(255,255,255,.25); }
+
+    /* ================= GIFT ================= */
+    .gift-box { cursor: pointer; transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s; }
+    .gift-box:hover { transform: translateY(-6px) rotate(-2deg) scale(1.05); box-shadow: 0 12px 28px rgba(0,0,0,.4); }
+    .gift-box:active { transform: translateY(0) scale(.95); }
+
+    /* ================= LOVE LETTER ================= */
+    .love-letter-overlay {
+      position: fixed; inset: 0; z-index: 10010;
+      background: rgba(10,15,29,.92); backdrop-filter: blur(12px);
+      display: none; align-items: center; justify-content: center;
+      padding: 20px; opacity: 0; transition: opacity .4s;
+    }
+    .love-letter-overlay.active { display: flex; opacity: 1; }
+    .love-letter-paper {
+      max-width: 560px; width: 100%; max-height: 85vh;
+      background: linear-gradient(160deg, #fdfaff 0%, #f6ecff 100%);
+      border: 5px solid #000; box-shadow: 10px 10px 0 #000;
+      border-radius: 16px; padding: 30px 26px;
+      position: relative; overflow-y: auto;
+      animation: letterPop .6s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes letterPop { 0% { transform: scale(.6) rotate(-4deg); opacity: 0; } 100% { transform: scale(1) rotate(0); opacity: 1; } }
+    .letter-stamp { position: absolute; top: -22px; right: 20px; font-size: 40px; transform: rotate(15deg); filter: drop-shadow(0 4px 8px rgba(0,0,0,.3)); }
+    .letter-title { font-family: 'Bangers', cursive; letter-spacing: 2px; font-size: 28px; color: #e62429; text-align: center; margin-bottom: 20px; }
+    .letter-content { font-family: 'Caveat', cursive; font-size: 22px; line-height: 1.6; color: #3a2a5c; white-space: pre-wrap; min-height: 200px; }
+    .letter-content::after { content: '|'; animation: letterCursor 1s step-end infinite; color: #e62429; font-weight: bold; }
+    .letter-content.typing-done::after { display: none; }
+    @keyframes letterCursor { 50% { opacity: 0; } }
+    .letter-actions { display: flex; gap: 12px; justify-content: center; margin-top: 22px; flex-wrap: wrap; }
+    .btn-skip-letter { background: #fbbf24; color: #0a0f1d; border: 3px solid #000; box-shadow: 3px 3px 0 #000; border-radius: 12px; padding: 10px 20px; font-family: 'Fredoka', sans-serif; font-weight: 700; cursor: pointer; }
+    .btn-close-letter { background: #e62429; color: white; border: 3px solid #000; box-shadow: 3px 3px 0 #000; border-radius: 12px; padding: 10px 22px; font-family: 'Fredoka', sans-serif; font-weight: 700; cursor: pointer; }
+
+    /* ================= ENDING CREDIT ================= */
+    .ending-credit { position: fixed; inset: 0; z-index: 10011; background: #000; color: white; display: none; overflow: hidden; }
+    .ending-credit.active { display: block; }
+    .credit-scroll { position: absolute; left: 0; right: 0; top: 100%; text-align: center; padding: 40px 20px; animation: creditRoll 40s linear forwards; }
+    @keyframes creditRoll { 0% { top: 100%; } 100% { top: -180%; } }
+    .credit-block { margin-bottom: 60px; }
+    .credit-title { font-family: 'Bangers', cursive; letter-spacing: 6px; font-size: 32px; color: #fbbf24; text-shadow: 3px 3px 0 #e62429; }
+    .credit-label { font-family: 'Fredoka', sans-serif; font-size: 12px; letter-spacing: 4px; color: #888; text-transform: uppercase; margin-bottom: 8px; }
+    .credit-value { font-family: 'Patrick Hand', cursive; font-size: 24px; color: #fff; line-height: 1.5; }
+    .credit-big { font-family: 'Bangers', cursive; font-size: 46px; letter-spacing: 4px; color: #e62429; text-shadow: 4px 4px 0 #fbbf24; }
+    .credit-end { font-family: 'Bangers', cursive; font-size: 38px; letter-spacing: 8px; color: #fff; }
+    .btn-close-credit { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 5; background: rgba(255,255,255,.1); color: white; border: 2px solid rgba(255,255,255,.4); border-radius: 50px; padding: 10px 22px; font-family: 'Fredoka', sans-serif; cursor: pointer; }
+
+    /* ================= PHOTO MODE ================= */
+    .photo-mode-overlay { position: fixed; inset: 0; z-index: 10012; background: rgba(10,15,29,.95); backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; padding: 16px; }
+    .photo-mode-overlay.active { display: flex; }
+    .photo-mode-panel { background: #162032; border: 4px solid #000; box-shadow: 8px 8px 0 #000; border-radius: 24px; padding: 20px; max-width: 480px; width: 100%; max-height: 92vh; overflow-y: auto; }
+    .photo-mode-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .photo-close { background: #e62429; color: white; border: 3px solid #000; width: 36px; height: 36px; border-radius: 50%; font-size: 20px; font-weight: bold; cursor: pointer; }
+    .photo-preview-wrap { display: flex; justify-content: center; margin-bottom: 14px; }
+    .photo-preview { width: 100%; max-width: 320px; aspect-ratio: 3/4; border: 4px solid #000; box-shadow: 6px 6px 0 #000; border-radius: 16px; position: relative; overflow: hidden; }
+    .photo-bg { position: absolute; inset: 0; transition: background .3s; }
+    .bg-city { background: linear-gradient(180deg, #0a0f1d 0%, #1e3a8a 50%, #991b1b 100%); }
+    .bg-web  { background: repeating-linear-gradient(0deg, transparent 0 20px, rgba(255,255,255,.15) 20px 21px), repeating-linear-gradient(90deg, transparent 0 20px, rgba(255,255,255,.15) 20px 21px), linear-gradient(135deg, #0a0f1d, #1e3a8a); }
+    .bg-heart { background: radial-gradient(circle at 25% 25%, #ff9fc8 8px, transparent 9px), radial-gradient(circle at 75% 75%, #ff9fc8 8px, transparent 9px), linear-gradient(135deg, #ffd9eb, #ed9bc7); }
+    .bg-moon { background: radial-gradient(circle at 70% 25%, #ffe9b8 40px, transparent 42px), linear-gradient(180deg, #1a1a4a 0%, #3a2a5c 100%); }
+    .photo-character { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 75%; display: flex; justify-content: center; }
+    .photo-character svg { width: 100%; height: auto; }
+    .photo-bg-choices { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
+    .photo-bg-btn { background: rgba(255,255,255,.1); color: white; border: 2px solid rgba(255,255,255,.3); border-radius: 12px; padding: 8px 4px; font-family: 'Fredoka', sans-serif; font-size: 12px; cursor: pointer; transition: .2s; }
+    .photo-bg-btn.active { background: rgba(230,36,41,.4); border-color: #fbbf24; box-shadow: 0 0 12px rgba(251,191,36,.5); }
+    .photo-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+    /* ================= SHARE TOAST ================= */
+    .share-toast { position: fixed; top: 80px; right: 20px; z-index: 10020; background: #22c55e; color: white; border: 3px solid #000; box-shadow: 5px 5px 0 #000; border-radius: 14px; padding: 12px 18px; font-family: 'Fredoka', sans-serif; font-weight: 600; transform: translateX(120%); transition: transform .4s cubic-bezier(.34,1.56,.64,1); }
+    .share-toast.show { transform: translateX(0); }
+
+    .hidden { display: none !important; }
+
+    /* ================= MOBILE ================= */
+    @media (max-width: 640px) {
+      .cinema-bar { height: 6vh; }
+      #trailerSkip { bottom: 9vh; }
+      .comic-panel .panel-text { font-size: 18px; }
+      .comic-panel .panel-emoji { font-size: 46px; }
+    }
+  </style>
+</head>
+
+<body class="font-body">
+
+  <!-- CITY BG -->
+  <div id="cityBg">
+    <div class="moon-spidey"></div>
+    <div class="building b1"></div><div class="building b2"></div><div class="building b3"></div>
+    <div class="building b4"></div><div class="building b5"></div><div class="building b6"></div>
+    <div class="building b7"></div><div class="building b8"></div><div class="building b9"></div>
+    <div class="building b10"></div>
+  </div>
+
+  <!-- PIN SCREEN (NEW) -->
+  <div id="pinScreen">
+    <div class="cinema-stars"></div>
+    <div class="pin-content" id="pinContent">
+      <div class="text-5xl mb-4">🕷️</div>
+      <h2 class="pin-title">TICKET BOX</h2>
+      <p class="pin-subtitle">MASUKKAN PIN UNTUK MEMBUKA</p>
+      <div class="pin-display">
+        <div class="pin-dot" id="pinDot0"></div>
+        <div class="pin-dot" id="pinDot1"></div>
+        <div class="pin-dot" id="pinDot2"></div>
+        <div class="pin-dot" id="pinDot3"></div>
+      </div>
+      <div class="pin-keypad">
+        <button class="pin-key" onclick="enterPin('1')">1</button>
+        <button class="pin-key" onclick="enterPin('2')">2</button>
+        <button class="pin-key" onclick="enterPin('3')">3</button>
+        <button class="pin-key" onclick="enterPin('4')">4</button>
+        <button class="pin-key" onclick="enterPin('5')">5</button>
+        <button class="pin-key" onclick="enterPin('6')">6</button>
+        <button class="pin-key" onclick="enterPin('7')">7</button>
+        <button class="pin-key" onclick="enterPin('8')">8</button>
+        <button class="pin-key" onclick="enterPin('9')">9</button>
+        <button class="pin-key clear" onclick="clearPin()">CLR</button>
+        <button class="pin-key zero" onclick="enterPin('0')">0</button>
+        <button class="pin-key enter" onclick="submitPin()">OK</button>
+      </div>
+      <div class="pin-error" id="pinError"></div>
+      <p class="pin-hint">💡 PIN: tanggal spesial (4 digit)</p>
+    </div>
+  </div>
+
+  <!-- CINEMA INTRO -->
+  <div id="cinemaIntro" style="display:none;">
+    <div class="cinema-stars"></div>
+    <div class="cinema-content">
+      <div class="cinema-small">A SPECIAL PRESENTATION</div>
+      <div class="font-comic text-2xl sm:text-4xl tracking-widest text-white mb-5">COMING SOON...</div>
+      <div id="countdownNumber">3</div>
+      <div class="cinema-small">A LITTLE STORY MADE JUST FOR</div>
+      <div class="cinema-name">FANIA RAMADHANI</div>
+      <button id="playTrailerButton" class="cinema-button hidden" onclick="startTrailer()">🎬 START TRAILER 🔊</button>
+    </div>
+  </div>
+
+  <!-- TRAILER -->
+  <div id="trailerScreen">
+    <div class="cinema-bar top"></div>
+    <div class="cinema-bar bottom"></div>
+    <video id="trailerVideo" playsinline preload="auto">
+      <source src="https://files.catbox.moe/ui68hl.mp4" type="video/mp4">
+    </video>
+    <button id="trailerSkip" onclick="finishTrailer()">SKIP TRAILER →</button>
+  </div>
+
+  <!-- COMIC INTRO -->
+  <div id="comicIntro">
+    <div class="comic-panel" id="comicPanel">
+      <div class="panel-num" id="panelNum">1</div>
+      <span class="panel-emoji" id="panelEmoji">🏙️</span>
+      <div class="panel-text" id="panelText"></div>
+      <button class="panel-next" id="panelNext" onclick="nextPanel()">Lanjut →</button>
+    </div>
+  </div>
+
+  <!-- MINI GAME -->
+  <div id="miniGame">
+    <div class="mg-header"><div class="mg-score"><span>🎯</span><span id="mgScoreText">0 / 5</span></div></div>
+    <button class="mg-close" onclick="closeMiniGame()">×</button>
+    <div class="mg-instructions">🕷️ Tap target buat nembak jaring!<br>Kumpulin <b>5 target</b> buat buka Star Girl ⭐</div>
+    <svg class="mg-spider-svg" viewBox="0 0 100 100">
+      <ellipse cx="50" cy="50" rx="18" ry="22" fill="#e62429" stroke="#000" stroke-width="2.5"/>
+      <polygon points="32,42 46,48 42,58 30,52" fill="#fff" stroke="#000" stroke-width="1.8"/>
+      <polygon points="68,42 54,48 58,58 70,52" fill="#fff" stroke="#000" stroke-width="1.8"/>
+      <path d="M42 70 L58 70 L54 88 L46 88 Z" fill="#0d5cd4" stroke="#000" stroke-width="2"/>
+    </svg>
+    <div class="mg-win" id="mgWin">
+      <div class="mg-win-box">
+        <div class="text-5xl mb-3">🏆</div>
+        <h3 class="font-comic text-3xl text-spidey-red mb-3">MISI SELESAI!</h3>
+        <p class="font-bubble text-slate-700 mb-4">Kamu berhasil nembak 5 target!<br>Aksesori <b>⭐ Star Girl</b> sekarang terbuka!</p>
+        <button onclick="closeMiniGame()" class="btn-save-style">Makasih Spidey! 🕷️</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEB-SWING -->
+  <div id="webSwing">
+    <div class="swing-rope"></div>
+    <svg class="swing-spidey" viewBox="0 0 100 100">
+      <g transform="rotate(-15 50 50)">
+        <ellipse cx="50" cy="48" rx="20" ry="24" fill="#e62429" stroke="#000" stroke-width="2.5"/>
+        <polygon points="33,40 47,46 43,56 31,50" fill="#fff" stroke="#000" stroke-width="1.8"/>
+        <polygon points="67,40 53,46 57,56 69,50" fill="#fff" stroke="#000" stroke-width="1.8"/>
+        <path d="M42 68 L58 68 L54 88 L46 88 Z" fill="#0d5cd4" stroke="#000" stroke-width="2"/>
+        <ellipse cx="30" cy="44" rx="6" ry="12" fill="#e62429" stroke="#000" stroke-width="2" transform="rotate(25 30 44)"/>
+        <ellipse cx="70" cy="44" rx="6" ry="12" fill="#e62429" stroke="#000" stroke-width="2" transform="rotate(-25 70 44)"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- SPIDEY-SENSE -->
+  <div class="spidey-sense" id="spideySense">
+    <span class="text-3xl">⚡</span>
+    <span id="spideySenseText">Spidey-sense bergetar!</span>
+  </div>
+
+  <!-- WEB CANVAS -->
+  <canvas id="webCanvas" class="fixed inset-0 pointer-events-none z-[1] opacity-25"></canvas>
+
+  <!-- LOVE LETTER -->
+  <div id="loveLetterOverlay" class="love-letter-overlay">
+    <div class="love-letter-paper">
+      <div class="letter-stamp">💌</div>
+      <h3 class="letter-title">Surat Kecil untuk Kamu</h3>
+      <div id="letterTypewriter" class="letter-content"></div>
+      <div class="letter-actions">
+        <button onclick="skipLetterTyping()" class="btn-skip-letter" id="btnSkipLetter">Skip ⏩</button>
+        <button onclick="closeLoveLetter()" class="btn-close-letter hidden" id="btnCloseLetter">Tutup Surat 💕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENDING CREDIT -->
+  <div id="endingCredit" class="ending-credit">
+    <div class="credit-scroll" id="creditScroll">
+      <div class="credit-block"><div class="credit-title">A LOVE STORY PRODUCTION</div></div>
+      <div class="credit-block"><div class="credit-label">Presented by</div><div class="credit-value">Someone who loves you deeply 🕷️</div></div>
+      <div class="credit-block"><div class="credit-label">Starring</div><div class="credit-value">Fania Ramadhani 🌟</div></div>
+      <div class="credit-block"><div class="credit-label">Directed by</div><div class="credit-value">Your Future 🏡</div></div>
+      <div class="credit-block"><div class="credit-label">Music</div><div class="credit-value">♫ Oh Yeah — Spiderman</div></div>
+      <div class="credit-block"><div class="credit-label">Special Thanks</div><div class="credit-value">King<br>Semua yang udah support<br>Dan kamu, yang selalu jadi rumah 🏡</div></div>
+      <div class="credit-block"><div class="credit-big">HAPPY SWEET SEVENTEEN</div></div>
+      <div class="credit-block"><div class="credit-end">THE END 🕸️</div></div>
+      <div style="height: 60vh;"></div>
+    </div>
+    <button onclick="closeEndingCredit()" class="btn-close-credit">Lewati ⏭</button>
+  </div>
+
+  <!-- PHOTO MODE -->
+  <div id="photoMode" class="photo-mode-overlay">
+    <div class="photo-mode-panel">
+      <div class="photo-mode-header">
+        <h3 class="font-comic text-2xl text-white">📸 PHOTO MODE</h3>
+        <button onclick="closePhotoMode()" class="photo-close">×</button>
+      </div>
+      <div class="photo-preview-wrap">
+        <div id="photoPreview" class="photo-preview">
+          <div id="photoBg" class="photo-bg bg-city"></div>
+          <div id="photoCharacter" class="photo-character"></div>
+        </div>
+      </div>
+      <div class="photo-bg-choices">
+        <button class="photo-bg-btn active" data-bg="bg-city" onclick="setPhotoBg('bg-city', this)">🏙️ Kota</button>
+        <button class="photo-bg-btn" data-bg="bg-web" onclick="setPhotoBg('bg-web', this)">🕸️ Jaring</button>
+        <button class="photo-bg-btn" data-bg="bg-heart" onclick="setPhotoBg('bg-heart', this)">💖 Hati</button>
+        <button class="photo-bg-btn" data-bg="bg-moon" onclick="setPhotoBg('bg-moon', this)">🌙 Bulan</button>
+      </div>
+      <div class="photo-actions">
+        <button onclick="downloadPhoto()" class="btn-save-style">📥 Download PNG</button>
+        <button onclick="closePhotoMode()" class="btn-reset-style">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div id="app" class="relative z-10">
+    <main class="flex flex-col items-center p-3 sm:p-6 w-full max-w-4xl mx-auto pb-32">
+
+      <!-- HOME -->
+      <section id="viewHome" class="w-full flex flex-col items-center text-center py-4 sm:py-8 space-y-6">
+        <div class="relative w-full max-w-md h-36 sm:h-44 flex items-center justify-center">
+          <div class="absolute top-0 w-1 bg-white/70 h-24 sm:h-28 animate-pulseSlow"></div>
+          <div class="absolute top-16 sm:top-20 animate-swing flex flex-col items-center cursor-pointer" onclick="triggerSpideyAction()">
+            <svg class="w-24 h-24 sm:w-28 sm:h-28" viewBox="0 0 100 100">
+              <circle cx="50" cy="5" r="3" fill="#fff"/>
+              <g transform="rotate(180 50 50)">
+                <ellipse cx="50" cy="40" rx="22" ry="26" fill="#e62429" stroke="#000" stroke-width="2.5"/>
+                <polygon points="32,32 46,38 42,48 30,42" fill="#fff" stroke="#000" stroke-width="2"/>
+                <polygon points="68,32 54,38 58,48 70,42" fill="#fff" stroke="#000" stroke-width="2"/>
+                <path d="M40 64 L60 64 L56 85 L44 85 Z" fill="#0d5cd4" stroke="#000" stroke-width="2"/>
+              </g>
+            </svg>
+            <span class="bg-spidey-yellow text-slate-900 font-comic text-xs px-2 py-0.5 rounded-full comic-border transform -rotate-6 -mt-2">THWIP! 🕸️</span>
+          </div>
+          <div class="absolute top-2 left-4 sm:left-10 bg-spidey-blue text-white font-comic text-sm sm:text-base px-3 py-1 rounded-lg comic-border transform -rotate-12 animate-float">POW! ⭐</div>
+          <div class="absolute top-6 right-4 sm:right-10 bg-spidey-yellow text-black font-comic text-sm sm:text-base px-3 py-1 rounded-lg comic-border transform rotate-12 animate-float" style="animation-delay:1s">17TH BDAY! 🎊</div>
+        </div>
+
+        <div class="space-y-3 max-w-2xl px-2">
+          <div class="inline-block transform -rotate-1 hover:rotate-0 transition-transform">
+            <h1 class="font-comic text-4xl sm:text-6xl md:text-7xl text-spidey-red tracking-wider uppercase drop-shadow-[0_4px_0_#000] text-stroke-black leading-none">HAPPY SWEET</h1>
+            <h1 class="font-comic text-5xl sm:text-7xl md:text-8xl text-spidey-blue tracking-wider uppercase drop-shadow-[0_5px_0_#000] text-stroke-black leading-none mt-1">SEVENTEEN</h1>
+          </div>
+          <div class="transform rotate-2 pt-2">
+            <div class="inline-flex items-center gap-2 bg-spidey-paper px-6 py-2 rounded-2xl comic-border-red">
+              <span class="font-hand text-3xl sm:text-5xl font-bold text-slate-900 tracking-wide">FANIA RAMADHANI 🏡</span>
+            </div>
+          </div>
+          <p class="font-hand text-xl sm:text-2xl text-spidey-sky font-bold tracking-wide pt-2">"for the girl who makes every place feel like home 🏡"</p>
+        </div>
+
+        <div class="w-full max-w-md bg-black/40 backdrop-blur-md rounded-2xl border-2 border-white/20 p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="font-comic text-white text-xl tracking-wide">🕷️ MISI SPIDEY</h3>
+            <span class="text-white/70 font-bubble text-xs"><span id="missionCount">0</span> / 6 selesai</span>
+          </div>
+          <div class="space-y-2" id="missionList">
+            <div class="mission-item" data-mission="comic"><div class="mission-check">○</div><div class="mini-card-thumb">📖</div><div>Tonton komik intro</div></div>
+            <div class="mission-item" data-mission="story"><div class="mission-check">○</div><div class="mini-card-thumb">💌</div><div>Baca cerita hati</div></div>
+            <div class="mission-item" data-mission="memory"><div class="mission-check">○</div><div class="mini-card-thumb">📸</div><div>Lihat memory lane</div></div>
+            <div class="mission-item" data-mission="dressup"><div class="mission-check">○</div><div class="mini-card-thumb">🌸</div><div>Dress up Spidey Girl</div></div>
+            <div class="mission-item" data-mission="game"><div class="mission-check">○</div><div class="mini-card-thumb">🎯</div><div>Main web-shooter</div></div>
+            <div class="mission-item" data-mission="gift"><div class="mission-check">○</div><div class="mini-card-thumb">🎁</div><div>Buka kado spesial</div></div>
+          </div>
+        </div>
+
+        <div class="pt-2 flex flex-wrap gap-3 justify-center">
+          <button onclick="goToTypeSelector()" class="group relative inline-flex items-center justify-center gap-3 bg-spidey-red hover:bg-red-600 text-white font-bubble font-bold text-xl sm:text-2xl py-4 px-8 rounded-2xl comic-border-lg transform hover:-translate-y-1 transition-all shadow-xl">
+            <span>ENTER MY LITTLE UNIVERSE 🕷️</span>
+            <i class="fa-solid fa-arrow-right group-hover:translate-x-2 transition-transform"></i>
+          </button>
+          <button onclick="openCollection()" class="inline-flex items-center justify-center gap-2 bg-spidey-yellow text-slate-900 font-bubble font-bold text-lg py-4 px-6 rounded-2xl comic-border-lg transform hover:-translate-y-1 transition-all shadow-xl">🏆 KOLEKSI</button>
+          <button onclick="openPhotoMode()" class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-purple-400 to-pink-400 text-white font-bubble font-bold text-lg py-4 px-6 rounded-2xl comic-border-lg transform hover:-translate-y-1 transition-all shadow-xl">📸 PHOTO</button>
+        </div>
+      </section>
+
+      <!-- SELECTOR -->
+      <section id="viewSelector" class="w-full hidden flex-col items-center py-4 space-y-6">
+        <div class="text-center space-y-2">
+          <span class="bg-spidey-yellow text-slate-900 font-comic text-sm px-3 py-1 rounded-full comic-border inline-block transform -rotate-2">SELECT A STORY CHAPTER 📖</span>
+          <h2 class="font-comic text-4xl sm:text-5xl text-white tracking-wider uppercase text-stroke-black drop-shadow-[0_3px_0_#000]">CHOOSE YOUR STORY 🕷️</h2>
+        </div>
+        <div class="w-full max-w-md space-y-5 px-2">
+          <button onclick="openStory('type1',0)" class="w-full bg-spidey-paper rounded-2xl p-5 comic-border-lg text-left transform hover:-rotate-1 hover:scale-[1.02] transition-all flex flex-col justify-between min-h-[140px]">
+            <div class="flex justify-between items-start"><span class="bg-spidey-red text-white font-comic text-lg px-3 py-1 rounded-lg comic-border">🕷️ TYPE 01</span><span class="font-comic text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded border border-slate-300">8 CHAPTERS</span></div>
+            <div class="my-3"><h3 class="font-hand text-2xl sm:text-3xl font-bold text-slate-900">"the things i wanna tell you"</h3></div>
+            <div class="flex items-center justify-between text-xs font-bubble text-slate-600 border-t border-slate-200 pt-2"><span>READ PART 1 💌</span><span class="font-bold text-spidey-red">START →</span></div>
+          </button>
+          <button onclick="openStory('type2',0)" class="w-full bg-spidey-paper rounded-2xl p-5 comic-border-lg text-left transform hover:rotate-1 hover:scale-[1.02] transition-all flex flex-col justify-between min-h-[140px]">
+            <div class="flex justify-between items-start"><span class="bg-spidey-blue text-white font-comic text-lg px-3 py-1 rounded-lg comic-border">💗 TYPE 02</span><span class="font-comic text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded border border-slate-300">4 PHOTOS</span></div>
+            <div class="my-3"><h3 class="font-hand text-2xl sm:text-3xl font-bold text-slate-900">"our memory lane 📸"</h3></div>
+            <div class="flex items-center justify-between text-xs font-bubble text-slate-600 border-t border-slate-200 pt-2"><span>OPEN PHOTO ALBUM 📸</span><span class="font-bold text-spidey-blue">START →</span></div>
+          </button>
+          <button onclick="openStory('type3',0)" class="w-full bg-spidey-dark text-white rounded-2xl p-5 comic-border-lg text-left transform hover:-rotate-1 hover:scale-[1.02] transition-all flex flex-col justify-between min-h-[140px]">
+            <div class="flex justify-between items-start"><span class="bg-spidey-yellow text-slate-900 font-comic text-lg px-3 py-1 rounded-lg comic-border">🎶 TYPE 03</span><span class="font-comic text-xs bg-black/40 text-white px-2 py-1 rounded border border-white/20 font-bold">6 CHAPTERS</span></div>
+            <div class="my-3"><h3 class="font-hand text-2xl sm:text-3xl font-bold text-white">"a song for you 🎵"</h3></div>
+            <div class="flex items-center justify-between text-xs font-bubble text-slate-300 border-t border-white/20 pt-2 font-bold"><span>READ PART 3 🎤</span><span class="text-spidey-yellow">START →</span></div>
+          </button>
+          <button onclick="goToCustomizer()" class="w-full bg-pink-100 rounded-2xl p-5 comic-border-lg text-left transform hover:rotate-1 hover:scale-[1.02] transition-all flex flex-col justify-between min-h-[120px]">
+            <div class="flex justify-between items-start"><span class="bg-pink-500 text-white font-comic text-lg px-3 py-1 rounded-lg comic-border">🌸 BONUS</span></div>
+            <div class="my-2"><h3 class="font-hand text-xl sm:text-2xl font-bold text-slate-900">"Dress up your Spidey Girl 💕"</h3></div>
+            <div class="flex items-center justify-between text-xs font-bubble text-slate-900 border-t border-pink-200 pt-2 font-bold"><span>KUSTOMISASI KARAKTER 🎨</span><span>START →</span></div>
+          </button>
+          <button onclick="goToGift()" class="w-full bg-gradient-to-r from-yellow-100 to-pink-100 rounded-2xl p-5 comic-border-lg text-left transform hover:-rotate-1 hover:scale-[1.02] transition-all flex flex-col justify-between min-h-[120px]">
+            <div class="flex justify-between items-start"><span class="bg-spidey-yellow text-slate-900 font-comic text-lg px-3 py-1 rounded-lg comic-border">🎁 GIFT</span></div>
+            <div class="my-2"><h3 class="font-hand text-xl sm:text-2xl font-bold text-slate-900">"Pilih hadiah untukmu 💝"</h3></div>
+            <div class="flex items-center justify-between text-xs font-bubble text-slate-900 border-t border-yellow-200 pt-2 font-bold"><span>BUKA KADO SPESIAL 🎀</span><span>START →</span></div>
+          </button>
+          <button onclick="startMiniGame()" class="w-full bg-gradient-to-r from-red-500 to-blue-500 text-white rounded-2xl p-5 comic-border-lg text-left transform hover:rotate-1 hover:scale-[1.02] transition-all flex flex-col justify-between min-h-[120px]">
+            <div class="flex justify-between items-start"><span class="bg-black/40 text-white font-comic text-lg px-3 py-1 rounded-lg comic-border">🎯 GAME</span></div>
+            <div class="my-2"><h3 class="font-hand text-xl sm:text-2xl font-bold text-white">"Web-Shooter Challenge 🕸️"</h3></div>
+            <div class="flex items-center justify-between text-xs font-bubble text-white/90 border-t border-white/30 pt-2 font-bold"><span>NEMBAK JARING 🎯</span><span>PLAY →</span></div>
+          </button>
+        </div>
+        <button onclick="goToHome()" class="font-bubble text-sm text-slate-300 hover:text-white underline pt-2">← Back to Title Screen</button>
+      </section>
+
+      <!-- READER -->
+      <section id="viewReader" class="w-full hidden flex-col items-center py-2 space-y-4">
+        <div class="w-full flex items-center justify-between px-2 max-w-2xl">
+          <button onclick="goToTypeSelector()" class="bg-spidey-paper text-slate-900 font-bubble text-xs sm:text-sm px-3 py-1.5 rounded-xl comic-border hover:bg-slate-100 flex items-center gap-1.5 font-bold"><i class="fa-solid fa-list-ul"></i><span>TYPES</span></button>
+          <div id="typeHeaderBadge" class="bg-spidey-red text-white font-comic text-sm sm:text-base px-4 py-1 rounded-full comic-border">TYPE 01</div>
+          <div class="bg-spidey-yellow text-slate-900 font-comic text-xs sm:text-sm px-3 py-1 rounded-lg comic-border font-bold"><span id="chapterProgressBadge">01 / 08</span></div>
+        </div>
+        <div class="w-full max-w-2xl bg-spidey-paper rounded-3xl p-5 sm:p-8 comic-border-lg relative my-2 min-h-[360px] flex flex-col justify-between shadow-2xl">
+          <div class="mb-4"><span id="storyPartSubtitle" class="font-comic text-sm tracking-wider uppercase text-spidey-red bg-red-50 px-3 py-1 rounded-md border border-red-200 inline-block">THE FIRST SIDE OF THE STORY</span></div>
+          <div class="flex-grow flex flex-col items-center justify-center py-2">
+            <div id="chapterContent" class="w-full font-bubble text-slate-900 text-lg sm:text-xl md:text-2xl leading-relaxed whitespace-pre-line tracking-wide text-center"></div>
+            <div id="chapterImageContainer" class="hidden w-full mt-4 flex justify-center">
+              <img id="chapterImage" src="" alt="Memory" class="w-full max-w-md rounded-xl border-4 border-slate-900 shadow-[6px_6px_0_#000] object-cover">
+            </div>
+          </div>
+          <div class="flex items-center justify-between pt-6 border-t border-slate-200 mt-4 text-xs font-hand text-slate-500">
+            <div class="flex items-center gap-2"><span class="text-spidey-red text-lg">🕸️</span><span class="font-bold">CHAPTER NOTES</span></div>
+            <div class="bg-spidey-blue text-white font-comic text-xs px-2.5 py-0.5 rounded-full comic-border">THWIP! ✦</div>
+          </div>
+        </div>
+        <div class="w-full max-w-2xl flex items-center justify-between gap-3 px-2 pt-2">
+          <button id="btnPrevChapter" onclick="prevChapter()" class="flex-1 bg-spidey-paper hover:bg-slate-100 text-slate-900 font-bubble font-bold text-base sm:text-lg py-3 px-4 rounded-xl comic-border flex items-center justify-center gap-2 disabled:opacity-40 transition-all"><i class="fa-solid fa-chevron-left"></i><span>BACK</span></button>
+          <div class="font-comic text-white text-lg px-3 py-1 bg-black/40 rounded-lg border border-white/20"><span id="chapterCounterText">01/08</span></div>
+          <button id="btnNextChapter" onclick="nextChapter()" class="flex-1 bg-spidey-red hover:bg-red-600 text-white font-bubble font-bold text-base sm:text-lg py-3 px-4 rounded-xl comic-border flex items-center justify-center gap-2 transition-all"><span>NEXT</span><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+      </section>
+
+      <!-- CUSTOMIZER -->
+      <section id="viewCustomizer" class="w-full hidden flex-col items-center py-2">
+        <div class="w-full max-w-2xl flex items-center justify-between px-2 mb-3">
+          <button onclick="goToTypeSelector()" class="bg-white/20 backdrop-blur-md text-white font-bubble text-xs sm:text-sm px-3 py-1.5 rounded-xl border border-white/30 hover:bg-white/30 flex items-center gap-1.5 font-bold"><i class="fa-solid fa-arrow-left"></i><span>KEMBALI</span></button>
+          <div class="bg-white/20 backdrop-blur-md text-white font-comic text-sm px-4 py-1 rounded-full border border-white/30">🕷️ DRESS UP SPIDEY GIRL</div>
+          <div class="flower-counter"><span>🕸️</span><span id="flowerCount">0 / 2</span></div>
+        </div>
+        <div class="customizer-bg w-full max-w-2xl rounded-3xl p-4 sm:p-6 relative overflow-hidden border-2 border-white/20 shadow-2xl">
+          <div class="char-display p-6 sm:p-8 mb-5">
+            <div class="flex justify-center">
+              <svg id="spideyGirlSVG" viewBox="0 0 240 320" class="w-[200px] sm:w-[240px] h-auto" style="overflow:visible;">
+                <defs>
+                  <linearGradient id="sgSkin" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ffe4d4"/><stop offset="100%" stop-color="#f5c4a8"/></linearGradient>
+                  <linearGradient id="sgHair" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4a3a68"/><stop offset="100%" stop-color="#2a1f45"/></linearGradient>
+                  <linearGradient id="sgSuitRed" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff3b40"/><stop offset="100%" stop-color="#c81d22"/></linearGradient>
+                  <linearGradient id="sgSuitBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a6ee0"/><stop offset="100%" stop-color="#0d3f8f"/></linearGradient>
+                </defs>
+                <ellipse cx="120" cy="306" rx="58" ry="8" fill="#000" opacity=".25"/>
+                <g id="sgLayerAccBack"></g>
+                <g id="sgLayerBody">
+                  <path d="M78 168 Q120 152 162 168 L184 268 Q120 290 56 268 Z" fill="url(#sgSuitBlue)" stroke="#0a0f1d" stroke-width="3.5"/>
+                  <g stroke="#e2e8f0" stroke-width="1.2" opacity=".55" fill="none">
+                    <path d="M78 168 Q120 184 162 168"/><path d="M72 190 Q120 205 168 190"/>
+                    <path d="M66 214 Q120 228 174 214"/><path d="M62 238 Q120 250 178 238"/>
+                    <path d="M60 258 Q120 268 180 258"/>
+                    <path d="M96 168 L84 268 M120 172 L120 286 M144 168 L156 268"/>
+                  </g>
+                  <g transform="translate(120 210) scale(1.1)">
+                    <ellipse cx="0" cy="0" rx="4" ry="6" fill="#e62429"/>
+                    <path d="M0 0 L-10 -8 M0 0 L10 -8 M0 0 L-11 0 M0 0 L11 0 M0 0 L-9 8 M0 0 L9 8" stroke="#e62429" stroke-width="1.6" stroke-linecap="round"/>
+                    <circle cx="0" cy="0" r="1.6" fill="#fff"/>
+                  </g>
+                </g>
+                <g id="sgLayerArms">
+                  <ellipse cx="70" cy="200" rx="12" ry="34" fill="url(#sgSuitRed)" stroke="#0a0f1d" stroke-width="3" transform="rotate(14 70 200)"/>
+                  <ellipse cx="170" cy="200" rx="12" ry="34" fill="url(#sgSuitRed)" stroke="#0a0f1d" stroke-width="3" transform="rotate(-14 170 200)"/>
+                  <circle cx="58" cy="232" r="10" fill="url(#sgSkin)" stroke="#0a0f1d" stroke-width="2.5"/>
+                  <circle cx="182" cy="232" r="10" fill="url(#sgSkin)" stroke="#0a0f1d" stroke-width="2.5"/>
+                </g>
+                <g id="sgLayerHead">
+                  <rect x="110" y="150" width="20" height="18" fill="url(#sgSkin)" stroke="#0a0f1d" stroke-width="2.5"/>
+                  <path d="M62 105 Q55 45 120 40 Q185 45 178 105 L170 155 Q150 170 120 165 Q90 170 70 155 Z" fill="url(#sgHair)" stroke="#0a0f1d" stroke-width="3"/>
+                  <ellipse cx="120" cy="118" rx="50" ry="55" fill="url(#sgSkin)" stroke="#0a0f1d" stroke-width="3"/>
+                  <path d="M72 92 Q120 62 168 92 Q150 80 120 82 Q90 80 72 92 Z" fill="#3a2d52" stroke="#0a0f1d" stroke-width="2" opacity=".95"/>
+                  <ellipse cx="100" cy="118" rx="7" ry="10" fill="#1a1a2e"/>
+                  <ellipse cx="140" cy="118" rx="7" ry="10" fill="#1a1a2e"/>
+                  <circle cx="102" cy="114" r="2.5" fill="#fff"/>
+                  <circle cx="142" cy="114" r="2.5" fill="#fff"/>
+                  <ellipse cx="86" cy="134" rx="11" ry="5.5" fill="#ff96aa" opacity=".6"/>
+                  <ellipse cx="154" cy="134" rx="11" ry="5.5" fill="#ff96aa" opacity=".6"/>
+                  <path d="M113 142 Q120 149 127 142" fill="none" stroke="#5a2a3a" stroke-width="2.6" stroke-linecap="round"/>
+                </g>
+                <g id="sgMask" style="display:none;">
+                  <ellipse cx="120" cy="118" rx="50" ry="55" fill="url(#sgSuitRed)" stroke="#0a0f1d" stroke-width="3.5"/>
+                  <g stroke="#0a0f1d" stroke-width="1.4" fill="none" opacity=".85">
+                    <path d="M120 63 L120 173"/><path d="M70 118 L170 118"/>
+                    <path d="M82 84 Q120 104 158 84"/><path d="M74 104 Q120 122 166 104"/>
+                    <path d="M76 136 Q120 152 164 136"/><path d="M84 155 Q120 168 156 155"/>
+                    <path d="M82 84 Q100 132 82 155"/><path d="M158 84 Q140 132 158 155"/>
+                  </g>
+                  <path d="M80 108 Q94 96 108 106 Q110 122 100 130 Q86 126 80 108 Z" fill="#fff" stroke="#0a0f1d" stroke-width="3"/>
+                  <path d="M160 108 Q146 96 132 106 Q130 122 140 130 Q154 126 160 108 Z" fill="#fff" stroke="#0a0f1d" stroke-width="3"/>
+                </g>
+                <g id="sgLayerAccFront"></g>
+                <g opacity=".7">
+                  <text x="24" y="70" font-size="18" fill="#fbbf24">✦</text>
+                  <text x="205" y="90" font-size="14" fill="#38bdf8">✧</text>
+                  <text x="30" y="290" font-size="16" fill="#f9c5d5">♡</text>
+                  <text x="200" y="300" font-size="14" fill="#fbbf24">✦</text>
+                </g>
+              </svg>
+            </div>
+          </div>
+          <div class="text-center mb-4"><h3 class="font-bubble text-white text-lg sm:text-xl font-bold tracking-wide">Pilih Aksesori & Gaun:</h3></div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+            <button onclick="selectAccessory('crown')" id="card-crown" class="accessory-card p-4 flex flex-col items-center justify-center gap-2 min-h-[110px]"><span class="text-4xl">👑</span><span class="font-bubble text-white text-xs sm:text-sm font-semibold">Princess</span></button>
+            <button onclick="selectAccessory('ribbon')" id="card-ribbon" class="accessory-card p-4 flex flex-col items-center justify-center gap-2 min-h-[110px]"><span class="text-4xl">🎀</span><span class="font-bubble text-white text-xs sm:text-sm font-semibold">Ribbon</span></button>
+            <button onclick="selectAccessory('bouquet')" id="card-bouquet" class="accessory-card p-4 flex flex-col items-center justify-center gap-2 min-h-[110px]"><span class="text-4xl">💐</span><span class="font-bubble text-white text-xs sm:text-sm font-semibold">Bouquet</span></button>
+            <button onclick="selectAccessory('fairy')" id="card-fairy" class="accessory-card p-4 flex flex-col items-center justify-center gap-2 min-h-[110px]"><span class="text-4xl">🧚</span><span class="font-bubble text-white text-xs sm:text-sm font-semibold">Fairy</span></button>
+            <button onclick="selectAccessory('magic')" id="card-magic" class="accessory-card p-4 flex flex-col items-center justify-center gap-2 min-h-[110px]"><span class="text-4xl">🪄</span><span class="font-bubble text-white text-xs sm:text-sm font-semibold">Magic</span></button>
+            <button onclick="selectAccessory('heartbag')" id="card-heartbag" class="accessory-card p-4 flex flex-col items-center justify-center gap-2 min-h-[110px]"><span class="text-4xl">💖</span><span class="font-bubble text-white text-xs sm:text-sm font-semibold">Heart Bag</span></button>
+            <button onclick="selectAccessory('webwings')" id="card-webwings" class="accessory-card p-4 flex flex-col items-center justify-center gap-2 min-h-[110px]"><span class="text-4xl">🕸️</span><span class="font-bubble text-white text-xs sm:text-sm font-semibold">Web Wings</span></button>
+            <button onclick="toggleMask()" id="card-mask" class="accessory-card p-4 flex flex-col items-center justify-center gap-2 min-h-[110px]"><span class="text-4xl">🕷️</span><span class="font-bubble text-white text-xs sm:text-sm font-semibold">Spidey Mask</span></button>
+            <button id="card-stargirl" class="accessory-card locked p-4 flex flex-col items-center justify-center gap-2 min-h-[110px]" onclick="tryUnlockStarGirl()">
+              <span class="lock-icon" id="stargirlLock">🔒</span>
+              <span class="text-4xl opacity-90">⭐</span>
+              <span class="font-bubble text-white/90 text-xs sm:text-sm font-semibold">Star Girl</span>
+            </button>
+          </div>
+          <div class="flex flex-wrap justify-center gap-3 mt-6 mb-2">
+            <button onclick="saveStyle()" class="btn-save-style">Simpan Gaya Ini 📸</button>
+            <button onclick="openPhotoMode()" class="btn-save-style" style="background: linear-gradient(135deg, #a855f7, #ec4899);">📸 Photo Mode</button>
+            <button onclick="startMiniGame()" class="btn-save-style" style="background: linear-gradient(135deg, #0d5cd4, #1e3a8a);">🎯 Main Game</button>
+            <button onclick="resetStyle()" class="btn-reset-style">Reset 🔄</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- GIFT -->
+      <section id="viewGift" class="w-full hidden flex-col items-center py-4 space-y-6">
+        <div class="text-center space-y-2">
+          <span class="bg-spidey-yellow text-slate-900 font-comic text-sm px-3 py-1 rounded-full comic-border inline-block transform -rotate-2">🎁 A LITTLE PRESENT</span>
+          <h2 class="font-comic text-4xl sm:text-5xl text-white tracking-wider uppercase text-stroke-black drop-shadow-[0_3px_0_#000]">PILIH HADIAH 🎀</h2>
+        </div>
+        <div class="w-full max-w-md grid grid-cols-3 gap-3 sm:gap-4 px-2">
+          <button onclick="openGift(0)" class="gift-box bg-spidey-red rounded-2xl p-4 comic-border-lg flex flex-col items-center justify-center gap-2 aspect-square"><span class="text-4xl sm:text-5xl">🎁</span><span class="font-bubble text-white text-xs sm:text-sm font-bold text-center">Kado Pertama</span></button>
+          <button onclick="openGift(1)" class="gift-box bg-spidey-blue rounded-2xl p-4 comic-border-lg flex flex-col items-center justify-center gap-2 aspect-square"><span class="text-4xl sm:text-5xl">🎁</span><span class="font-bubble text-white text-xs sm:text-sm font-bold text-center">Kado Kedua</span></button>
+          <button onclick="openGift(2)" class="gift-box bg-spidey-yellow rounded-2xl p-4 comic-border-lg flex flex-col items-center justify-center gap-2 aspect-square"><span class="text-4xl sm:text-5xl">🎁</span><span class="font-bubble text-slate-900 text-xs sm:text-sm font-bold text-center">Kado Ketiga</span></button>
+        </div>
+        <button onclick="goToTypeSelector()" class="font-bubble text-sm text-slate-300 hover:text-white underline pt-2">← Kembali ke Menu</button>
+      </section>
+
+      <!-- COLLECTION -->
+      <section id="viewCollection" class="w-full hidden flex-col items-center py-4 space-y-6">
+        <div class="text-center space-y-2">
+          <span class="bg-spidey-yellow text-slate-900 font-comic text-sm px-3 py-1 rounded-full comic-border inline-block transform -rotate-2">🏆 SPIDEY CARD COLLECTION</span>
+          <h2 class="font-comic text-4xl sm:text-5xl text-white tracking-wider uppercase text-stroke-black drop-shadow-[0_3px_0_#000]">KOLEKSI KARTU 🕷️</h2>
+        </div>
+        <div id="cardGrid" class="w-full max-w-2xl grid grid-cols-2 sm:grid-cols-3 gap-4 px-2"></div>
+        <button onclick="goToHome()" class="font-bubble text-sm text-slate-300 hover:text-white underline pt-2">← Kembali ke Beranda</button>
+      </section>
+
+      <!-- AWARD -->
+      <section id="viewAward" class="w-full hidden flex-col items-center py-4 space-y-6">
+        <div class="award-cert max-w-md w-full">
+          <div class="text-5xl mb-3">🕷️</div>
+          <div class="font-comic text-3xl text-spidey-red tracking-wider mb-3">SPIDER-MAN AWARD</div>
+          <div class="font-hand text-xl text-slate-700 mb-3">Diberikan kepada</div>
+          <div class="font-comic text-4xl text-spidey-blue mb-4 tracking-wider">FANIA RAMADHANI</div>
+          <div class="font-hand text-base text-slate-700 leading-relaxed mb-4">Karena telah menyelesaikan <b>semua misi Spidey</b> dengan penuh semangat dan hati yang hangat. Kamu adalah pahlawan sehari-hari yang membuat dunia terasa lebih baik.</div>
+          <div class="flex justify-center gap-4 text-3xl"><span>⭐</span><span>🏆</span><span>💖</span><span>🕸️</span></div>
+          <div class="font-comic text-sm text-slate-500 mt-4 tracking-wider">HAPPY SWEET SEVENTEEN 🎉</div>
+        </div>
+        <div class="flex flex-wrap gap-3 justify-center">
+          <button onclick="openLoveLetter()" class="btn-save-style">💌 Baca Surat Spesial</button>
+          <button onclick="openEndingCredit()" class="btn-save-style" style="background: linear-gradient(135deg, #111, #444);">🎬 Lihat Credit</button>
+          <button onclick="openPhotoMode()" class="btn-save-style" style="background: linear-gradient(135deg, #a855f7, #ec4899);">📸 Photo Mode</button>
+          <button onclick="goToHome()" class="btn-reset-style">🏠 Beranda</button>
+        </div>
+      </section>
+
+      <!-- END -->
+      <section id="viewEnd" class="w-full hidden flex-col items-center py-4 text-center space-y-6">
+        <div class="relative w-full max-w-xs h-32 flex items-center justify-center">
+          <div class="absolute top-12 animate-bounce">
+            <div class="w-16 h-16 bg-spidey-red rounded-full comic-border flex items-center justify-center text-3xl shadow-lg">🕷️</div>
+          </div>
+        </div>
+        <div class="space-y-3 px-2">
+          <span class="bg-spidey-yellow text-black font-comic text-sm px-4 py-1 rounded-full comic-border inline-block transform -rotate-3">MISSION COMPLETE 🕷️</span>
+          <h2 class="font-comic text-4xl sm:text-6xl text-white tracking-wider uppercase text-stroke-black drop-shadow-[0_4px_0_#000]">17 looks good on you.</h2>
+          <p class="font-hand text-3xl sm:text-4xl text-spidey-yellow font-bold tracking-wide">happy birthday, Fania 🏡💞</p>
+        </div>
+        <div class="w-full max-w-sm space-y-3 px-2 pt-2">
+          <button onclick="goToHome()" class="w-full bg-spidey-paper text-slate-900 font-bubble font-bold text-lg py-3.5 px-6 rounded-2xl comic-border">🏠 BACK TO HOME</button>
+          <button onclick="openLoveLetter()" class="w-full bg-pink-400 text-white font-bubble font-bold text-lg py-3.5 px-6 rounded-2xl comic-border">💌 BACA SURAT SPESIAL</button>
+          <button onclick="openEndingCredit()" class="w-full bg-black text-white font-bubble font-bold text-lg py-3.5 px-6 rounded-2xl comic-border">🎬 LIHAT CREDIT</button>
+        </div>
+      </section>
+    </main>
+
+    <!-- GIFT MODAL -->
+    <div id="giftModal" class="fixed inset-0 z-[9998] hidden items-center justify-center p-4" style="background: rgba(10,15,29,.85); backdrop-filter: blur(10px);">
+      <div class="bg-spidey-paper comic-border-lg rounded-3xl p-6 sm:p-8 max-w-md w-full text-center relative">
+        <button onclick="closeGift()" class="absolute top-2 right-3 text-3xl font-bold text-slate-500 hover:text-spidey-red leading-none">×</button>
+        <div id="giftModalIcon" class="text-6xl mb-4">🎁</div>
+        <h3 id="giftModalTitle" class="font-comic text-2xl sm:text-3xl text-spidey-red mb-3">HADIAH SPESIAL</h3>
+        <p id="giftModalDesc" class="font-bubble text-slate-700 text-base leading-relaxed mb-5"></p>
+        <button onclick="closeGift()" class="btn-save-style">Makasih Dek Fania! 💕</button>
+      </div>
+    </div>
+
+    <!-- MUSIC PLAYER -->
+    <footer class="fixed bottom-3 right-3 sm:bottom-4 sm:right-4 z-40">
+      <div class="bg-spidey-paper/95 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 comic-border flex flex-col gap-2 shadow-2xl max-w-[300px] sm:max-w-xs">
+        <div class="flex items-center gap-3">
+          <button id="audioToggleBtn" onclick="toggleAudio()" class="w-10 h-10 bg-spidey-red text-white rounded-xl comic-border flex items-center justify-center text-lg hover:bg-red-600 active:scale-90 flex-shrink-0">
+            <i id="audioIcon" class="fa-solid fa-play"></i>
+          </button>
+          <div class="flex-grow min-w-0">
+            <div class="flex items-center justify-between text-[11px] font-comic tracking-wide text-slate-700 mb-1">
+              <span id="bgmStatusText" class="truncate font-bold text-spidey-red">♫ NOW PLAYING</span>
+              <span id="volumePercentText" class="text-slate-500 font-bold">30%</span>
+            </div>
+            <input id="volumeSlider" type="range" min="0" max="1" step="0.05" value="0.3" oninput="changeVolume(this.value)" class="w-full h-1.5 bg-slate-300 rounded-lg appearance-none cursor-pointer accent-spidey-red">
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- GLOBAL MUTE -->
+    <button id="globalMuteBtn" onclick="toggleGlobalMute()" class="fixed bottom-3 left-3 sm:bottom-4 sm:left-4 z-40 w-12 h-12 bg-spidey-paper comic-border rounded-2xl flex items-center justify-center text-xl shadow-xl" title="Mute semua suara">
+      <i id="globalMuteIcon" class="fa-solid fa-volume-high"></i>
+    </button>
+
+    <!-- SHARE -->
+    <button onclick="shareExperience()" class="fixed top-3 right-3 z-40 w-12 h-12 bg-spidey-blue text-white comic-border rounded-2xl flex items-center justify-center text-xl shadow-xl" title="Share ke Fania">
+      <i class="fa-solid fa-share-nodes"></i>
+    </button>
+
+    <audio id="bgMusic" loop preload="auto" crossorigin="anonymous" onerror="handleAudioError()">
+      <source id="audioSource" src="https://files.catbox.moe/a1ug2h.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="sfxWhoosh" preload="auto"><source src="https://files.catbox.moe/gt4u9s.mp3" type="audio/mpeg"></audio>
+    <audio id="sfxFunfare" preload="auto"><source src="https://files.catbox.moe/gt4u9s.mp3" type="audio/mpeg"></audio>
+    <audio id="sfxBuzz" preload="auto"><source src="https://files.catbox.moe/htcy9l.mp3" type="audio/mpeg"></audio>
+    <audio id="sfxCountdown" preload="auto"><source src="https://files.catbox.moe/gt4u9s.mp3" type="audio/mpeg"></audio>
+  </div>
+
+  <script>
+    /* =========================================================
+       STORY DATA (kata "sayang" → "dek Fania")
+    ========================================================== */
+    const STORIES = {
+  type1: {
+    title: "TYPE 01", subtitle: "THE FIRST SIDE OF THE STORY", themeColor: "spidey-red", images: [],
+    chapters: [
+      `happyy sweet seventeenn dek Fania‼️🎊💕`,
+      `maaciiii yaaa buat semuaa yang udaa kamu kasii ke akuu — barang, uang, waktu, perhatian kecil kamu. makasiii udaa bikin aku ngerasain hal yang aku pikir gaakann aku dapett darii siapapunn. semogaa semua keinginan dek Fania terwujud satu persatu, panjang umurr, sehatt selaluu, dimudahkann segala urusannya. aminnnn ⭐⭐`,
+      `harapan aku buat dek Fania kedepannya: solatt yang rajinn yaa, jangann tinggalin 5 waktunyaa. jangann sering begadang, gaa baik buat kesehatan. boboo yang cukup biarr besoknya segerr. kaloo dikelas jangan main hp muluu, perhatiin gurunyaa, catett yang pentingg. jangan males kalo dikasi tugas, langsung dikerjain biarr gaa numpukk😈`,
+      `kaloo dibilanginn tuu jangann ngeyelll‼️ akuu tu nasehatin dek Fania demi kebaikan dek Fania sendirii. kaloo lagii sakit jauhin es duluu, minum obatt, istirahat. jangann suka jajan sembarangan jugaa yaa, jaga pola makannya biarr sehatt terus. aku khawatir tau kaloo dek Fania sakit tuu‼️`,
+      `dek Fania haruss jadii dirii sendirii, jadi diri yang apa adanya. kaloo marah keluarinn, jangann dipendem. kaloo adaa sikap akuu yang bikin dek Fania bt, bilangg akuu biarr kita perbaikin bareng. kaloo lagii capee gapapaa dry text ke akuu, tapii kasii tauu duluu biarr akuu gaa bingungg yaaa 💕 tenangg ajaa, aku gapernaa ngerasaa risih atau cape samaa dek Fania. aku janji bakal selalu ada buat dek Fania. jangann pentingin orang lainn muluu, pentingin diri dek Fania duluu. istirahat kalo capee, bilang kalo butuh bantuann. akuu peduli samaa dek Fania apaa adanyaa.`,
+      `17 tahun itu umur yang spesial, semoga jadi awal dari banyak hal baik buat kamu.`,
+      `sekalii lagii happy birthdayyy dek Fania🎊💐🏡 wishhh uu all d besttt!!!`
+    ]
+  },
+      type2: {
+        title: "TYPE 02", subtitle: "OUR MEMORY LANE 📸", themeColor: "spidey-blue",
+        images: [
+          "https://i.ibb.co.com/MD2p422V/IMG-20260904-WA0018.jpg",
+          "https://i.ibb.co.com/5hRJjrDS/IMG-20260904-WA0027.jpg",
+          "https://i.ibb.co.com/N2wFr72P/IMG-20260904-WA0042.jpg",
+          "https://i.ibb.co.com/1tJP6cMS/IMG-20260908-WA0096.jpg"
+        ],
+        chapters: ["A moment to remember...","Another beautiful memory...","Every picture tells a story...","Forever in my heart..."]
+      },
+      type3: {
+        title: "TYPE 03", subtitle: "A SONG FOR YOU 🎵", themeColor: "spidey-dark", images: [],
+        chapters: [
+          `Dalam lelahnya mata\nNikmat dunia menjelma\nSejenak dia berharap\nMalam tanpa batas`,
+          `Bunda slalu tanamkan\nJangan pernah menyerah\nJalani dan panjatkan\nKelak syukur kau ucapkan pada diri Nya`,
+          `Kumohonkan mudahkan hidupnya hiasi dengan belai Mu\nSucikan tangan-tangan yang memegang erat harta\nTerangi harinya dengan lembut mentari Mu\nBuka genggaman yang tela teks h menjadi hak mereka`,
+          `Dalam lelahnya mata\nNikmat dunia menjelma\nSejenak dia berharap\nMalam tanpa batas`,
+          `Bunda slalu tanamkan\nJangan pernah menyerah\nJalani dan panjatkan\nKelak syukur kau ucapkan pada diri Nya`,
+          `Kumohonkan mudahkan hidupnya hiasi dengan belai Mu\nSucikan tangan-tangan yang memegang erat harta\nTerangi harinya dengan lembut mentari Mu\nBuka genggaman yang tela teks h menjadi hak mereka`
+        ]
+      }
+    };
+
+    /* =========================================================
+       PIN SYSTEM (NEW)
+    ========================================================== */
+    const CORRECT_PIN = '1209';
+    let currentPin = '';
+    const pinScreen = document.getElementById('pinScreen');
+    const pinContent = document.getElementById('pinContent');
+
+    function enterPin(digit) {
+      if (currentPin.length < 4) {
+        currentPin += digit;
+        updatePinDisplay();
+        playThwipSound();
+      }
+    }
+
+    function clearPin() {
+      currentPin = '';
+      updatePinDisplay();
+      playThwipSound();
+    }
+
+    function updatePinDisplay() {
+      for (let i = 0; i < 4; i++) {
+        const dot = document.getElementById('pinDot' + i);
+        if (i < currentPin.length) dot.classList.add('filled');
+        else dot.classList.remove('filled');
+      }
+    }
+
+    function submitPin() {
+      if (currentPin === CORRECT_PIN) {
+        playSfx('sfxFunfare');
+        pinScreen.style.display = 'none';
+        document.getElementById('cinemaIntro').style.display = 'flex';
+        // Mulai countdown setelah PIN benar
+        countdown = 3;
+        runCountdown();
+      } else {
+        playSfx('sfxBuzz');
+        pinContent.classList.add('shake');
+        document.getElementById('pinError').textContent = '❌ PIN SALAH! Coba lagi...';
+        setTimeout(() => {
+          pinContent.classList.remove('shake');
+          currentPin = '';
+          updatePinDisplay();
+          document.getElementById('pinError').textContent = '';
+        }, 800);
+        if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+      }
+    }
+
+    /* =========================================================
+       COMIC PANELS
+    ========================================================== */
+    const COMIC_PANELS = [
+      { emoji: "🏙️", text: "Di sebuah kota yang tenang, hiduplah seorang gadis biasa... yang ternyata punya kekuatan luar biasa." },
+      { emoji: "🕷️", text: "Kekuatannya bukan merayap di dinding atau menembak jaring. Tapi sesuatu yang jauh lebih hebat..." },
+      { emoji: "💖", text: "Kekuatannya adalah membuat orang di sekitarnya merasa nyaman, dicintai, dan selalu ingin pulang. Dia adalah rumah bagi banyak hati." },
+      { emoji: "🎂", text: "Dan hari ini... kekuatan itu berulang tahun yang ke-17! Selamat datang di dunianya, dek Fania Ramadhani! 🎉" }
+    ];
+    let currentPanelIdx = 0;
+
+    /* =========================================================
+       GIFTS
+    ========================================================== */
+    const GIFTS = [
+      { icon: "💐", title: "Buket Bunga Spesial", desc: "Ini buket pertama yang pernah aku bikin di hidup aku. Aku bener-bener bersyukur kalau orangnya itu kamu dek Fania 💐💕" },
+      { icon: "🎂", title: "Kue Ulang Tahun", desc: "Aku hadiahin kue warna kesukaan kamu. Semoga kamu suka dan menikmati kuenya yaaa dek Fania 🎂✨" },
+      { icon: "🎁", title: "Hadiah Kecil dari Aku", desc: "Aku juga siapin beberapa hadiah untuk kamu dek Fania. Engga seberapa, tapi aku harap kamu suka sama hadiah dari aku 💝" }
+    ];
+
+    /* =========================================================
+       SPIDEY CARDS
+    ========================================================== */
+    const SPIDEY_CARDS = [
+      { id: 'comic',  icon: '📖', title: 'COMIC READER',  desc: 'Tonton komik intro' },
+      { id: 'story',  icon: '💌', title: 'HEART READER',  desc: 'Baca cerita hati' },
+      { id: 'memory', icon: '📸', title: 'MEMORY KEEPER', desc: 'Lihat memory lane' },
+      { id: 'dressup',icon: '🌸', title: 'STYLE HERO',    desc: 'Dress up Spidey Girl' },
+      { id: 'game',   icon: '🎯', title: 'WEB-SHOOTER',   desc: 'Menangkan mini game' },
+      { id: 'gift',   icon: '🎁', title: 'GIFT OPENER',   desc: 'Buka kado spesial' }
+    ];
+
+    /* =========================================================
+       LOVE LETTER TEXT
+    ========================================================== */
+    const LOVE_LETTER_TEXT = `Hai dek Fania... 🕷️💕
+
+Kalau kamu baca surat ini, artinya kamu udah ngelewatin semua misi Spidey hari ini. Hebat bangetttt!
+
+Selamatt ulangg tahun yang ke-17, dek Fania. Semogaa semua yang kamuu impikann bisaa terwujud satu per satu. Semogaa kamuu selalu dikelilingii orang baikk, dilancarkann rezekinyaa, dimudahkann segala urusannyaa.
+
+From King. 👑🕷️🏡`;
+
+    /* =========================================================
+       STATE
+    ========================================================== */
+    let currentStoryKey = 'type1';
+    let currentChapterIndex = 0;
+    let trailerStarted = false;
+    let transitionStarted = false;
+    let audioContext = null;
+    const MAX_ACCESSORIES = 2;
+    let selectedAccessories = [];
+    let maskActive = false;
+
+    let miniGameActive = false;
+    let miniGameScore = 0;
+    const MINI_GAME_TARGET = 5;
+    let starGirlUnlocked = false;
+
+    let isGlobalMuted = false;
+    let letterTypingInterval = null;
+    let letterTypedCount = 0;
+
+    const missions = { comic: false, story: false, memory: false, dressup: false, game: false, gift: false };
+
+    /* =========================================================
+       AUDIO HELPERS
+    ========================================================== */
+    const bgMusic = document.getElementById('bgMusic');
+    const audioSource = document.getElementById('audioSource');
+    const audioIcon = document.getElementById('audioIcon');
+    const bgmStatusText = document.getElementById('bgmStatusText');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const volumePercentText = document.getElementById('volumePercentText');
+
+    function playSfx(id) {
+      if (isGlobalMuted) return;
+      const el = document.getElementById(id);
+      if (!el) return;
+      try {
+        el.currentTime = 0;
+        el.volume = 0.6;
+        el.play().catch(() => {});
+      } catch (e) {}
+    }
+
+    function playThwipSound() {
+      try {
+        if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioContext.state === 'suspended') audioContext.resume();
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(800, audioContext.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(150, audioContext.currentTime + .15);
+        gain.gain.setValueAtTime(.3, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(.01, audioContext.currentTime + .15);
+        osc.connect(gain); gain.connect(audioContext.destination);
+        osc.start(); osc.stop(audioContext.currentTime + .15);
+      } catch (e) {}
+    }
+
+    function handleAudioError() {
+      console.warn("Primary audio source blocked or invalid.");
+      if (bgmStatusText) bgmStatusText.innerText = '⚠️ Audio Error';
+    }
+
+    async function startBackgroundMusic() {
+      if (isGlobalMuted) return;
+      if (!bgMusic.paused) return;
+      bgMusic.volume = 0.3;
+      volumeSlider.value = 0.3;
+      volumePercentText.innerText = '30%';
+      try {
+        await bgMusic.play();
+        updateAudioButtonUI();
+        bgmStatusText.innerText = '♫ NOW PLAYING';
+      } catch (error) {
+        updateAudioButtonUI();
+      }
+    }
+
+    function toggleAudio() {
+      playThwipSound();
+      if (bgMusic.paused) {
+        bgMusic.play().then(() => {
+          updateAudioButtonUI();
+          bgmStatusText.innerText = '♫ NOW PLAYING';
+        }).catch(() => { updateAudioButtonUI(); });
+      } else {
+        bgMusic.pause();
+        updateAudioButtonUI();
+        bgmStatusText.innerText = '⏸ PAUSED';
+      }
+    }
+
+    function updateAudioButtonUI() {
+      if (bgMusic.paused) audioIcon.className = 'fa-solid fa-play';
+      else audioIcon.className = 'fa-solid fa-pause';
+    }
+
+    function changeVolume(val) {
+      bgMusic.volume = val;
+      volumePercentText.innerText = Math.round(val * 100) + '%';
+    }
+
+    function toggleGlobalMute() {
+      isGlobalMuted = !isGlobalMuted;
+      const icon = document.getElementById('globalMuteIcon');
+      if (isGlobalMuted) {
+        icon.className = 'fa-solid fa-volume-xmark';
+        bgMusic.pause();
+        updateAudioButtonUI();
+      } else {
+        icon.className = 'fa-solid fa-volume-high';
+        bgMusic.play().catch(()=>{});
+      }
+      showToast(isGlobalMuted ? '🔇 Semua suara dimute' : '🔊 Suara aktif kembali');
+    }
+
+    /* =========================================================
+       AUDIO UNLOCK — Browsers block autoplay until first gesture
+    ========================================================== */
+    function unlockAudioOnce() {
+      if (isGlobalMuted) return;
+      if (bgMusic.paused) {
+        bgMusic.volume = 0.3;
+        bgMusic.play().then(() => {
+          updateAudioButtonUI();
+          bgmStatusText.innerText = '♫ NOW PLAYING';
+        }).catch(() => {});
+      }
+      document.removeEventListener('click', unlockAudioOnce);
+      document.removeEventListener('touchstart', unlockAudioOnce);
+      document.removeEventListener('keydown', unlockAudioOnce);
+    }
+    document.addEventListener('click', unlockAudioOnce);
+    document.addEventListener('touchstart', unlockAudioOnce);
+    document.addEventListener('keydown', unlockAudioOnce);
+
+    /* =========================================================
+       VIEW NAVIGATION
+    ========================================================== */
+    const viewHome = document.getElementById('viewHome');
+    const viewSelector = document.getElementById('viewSelector');
+    const viewReader = document.getElementById('viewReader');
+    const viewCustomizer = document.getElementById('viewCustomizer');
+    const viewGift = document.getElementById('viewGift');
+    const viewCollection = document.getElementById('viewCollection');
+    const viewAward = document.getElementById('viewAward');
+    const viewEnd = document.getElementById('viewEnd');
+
+    function hideAllViews() {
+      [viewHome, viewSelector, viewReader, viewCustomizer, viewGift, viewCollection, viewAward, viewEnd]
+        .forEach(v => { v.classList.add('hidden'); v.classList.remove('flex'); });
+    }
+
+    function playWebSwing(callback) {
+      playSfx('sfxWhoosh');
+      const swing = document.getElementById('webSwing');
+      swing.classList.add('active');
+      setTimeout(() => {
+        swing.classList.remove('active');
+        if (callback) callback();
+      }, 1000);
+    }
+
+    function goToHome() { playThwipSound(); playWebSwing(() => { hideAllViews(); viewHome.classList.remove('hidden'); viewHome.classList.add('flex'); window.scrollTo({top:0,behavior:'smooth'}); }); }
+    function goToTypeSelector() { playThwipSound(); playWebSwing(() => { hideAllViews(); viewSelector.classList.remove('hidden'); viewSelector.classList.add('flex'); window.scrollTo({top:0,behavior:'smooth'}); }); }
+    function goToCustomizer() { playThwipSound(); markMission('dressup'); playWebSwing(() => { hideAllViews(); viewCustomizer.classList.remove('hidden'); viewCustomizer.classList.add('flex'); window.scrollTo({top:0,behavior:'smooth'}); }); }
+    function goToGift() { playThwipSound(); playWebSwing(() => { hideAllViews(); viewGift.classList.remove('hidden'); viewGift.classList.add('flex'); window.scrollTo({top:0,behavior:'smooth'}); }); }
+
+    function openCollection() {
+      playThwipSound();
+      renderCardCollection();
+      playWebSwing(() => {
+        hideAllViews();
+        viewCollection.classList.remove('hidden');
+        viewCollection.classList.add('flex');
+        window.scrollTo({top:0,behavior:'smooth'});
+      });
+    }
+
+    function openStory(typeKey, chapterIdx = 0) {
+      playThwipSound();
+      currentStoryKey = typeKey;
+      currentChapterIndex = chapterIdx;
+
+      if (typeKey === 'type2') {
+        audioSource.src = "https://files.catbox.moe/g7i65v.mp3";
+        bgMusic.load();
+        bgmStatusText.innerText = "♫ Long Live — Taylor Swift";
+        if (!isGlobalMuted) bgMusic.play().catch(()=>{});
+      } else {
+        if (audioSource.src !== "https://files.catbox.moe/a1ug2h.mp3") {
+          audioSource.src = "https://files.catbox.moe/a1ug2h.mp3";
+          bgMusic.load();
+          bgmStatusText.innerText = "♫ Oh Yeah — Spiderman";
+          if (!isGlobalMuted) bgMusic.play().catch(()=>{});
+        }
+      }
+
+      if (typeKey === 'type1') markMission('story');
+      if (typeKey === 'type2') markMission('memory');
+
+      playWebSwing(() => {
+        hideAllViews();
+        viewReader.classList.remove('hidden');
+        viewReader.classList.add('flex');
+        renderChapter();
+        window.scrollTo({top:0,behavior:'smooth'});
+      });
+    }
+
+    /* =========================================================
+       STORY RENDER
+    ========================================================== */
+    function renderChapter() {
+      const story = STORIES[currentStoryKey];
+      const chapterText = story.chapters[currentChapterIndex];
+      const total = story.chapters.length;
+
+      const headerBadge = document.getElementById('typeHeaderBadge');
+      headerBadge.innerText = story.title;
+      if (currentStoryKey === 'type1') headerBadge.className = 'bg-spidey-red text-white font-comic text-sm sm:text-base px-4 py-1 rounded-full comic-border';
+      else if (currentStoryKey === 'type2') headerBadge.className = 'bg-spidey-blue text-white font-comic text-sm sm:text-base px-4 py-1 rounded-full comic-border';
+      else headerBadge.className = 'bg-spidey-dark text-spidey-yellow font-comic text-sm sm:text-base px-4 py-1 rounded-full comic-border';
+
+      document.getElementById('storyPartSubtitle').innerText = story.subtitle;
+      document.getElementById('chapterProgressBadge').innerText = `${String(currentChapterIndex + 1).padStart(2,'0')} / ${String(total).padStart(2,'0')}`;
+      document.getElementById('chapterCounterText').innerText = `${String(currentChapterIndex + 1).padStart(2,'0')}/${String(total).padStart(2,'0')}`;
+      document.getElementById('chapterContent').innerText = chapterText;
+
+      const imgContainer = document.getElementById('chapterImageContainer');
+      const imgElement = document.getElementById('chapterImage');
+      const textContent = document.getElementById('chapterContent');
+
+      if (currentStoryKey === 'type2' && story.images && story.images[currentChapterIndex]) {
+        imgElement.src = story.images[currentChapterIndex];
+        imgContainer.classList.remove('hidden');
+        textContent.classList.add('hidden');
+      } else {
+        imgContainer.classList.add('hidden');
+        imgElement.src = '';
+        textContent.classList.remove('hidden');
+      }
+
+      document.getElementById('btnPrevChapter').disabled = currentChapterIndex === 0;
+
+      const btnNext = document.getElementById('btnNextChapter');
+      if (currentChapterIndex === total - 1) btnNext.innerHTML = `<span>FINISH 🎉</span> <i class="fa-solid fa-flag-checkered"></i>`;
+      else btnNext.innerHTML = `<span>NEXT</span> <i class="fa-solid fa-chevron-right"></i>`;
+    }
+
+    function nextChapter() {
+      playSfx('sfxCountdown');
+      const story = STORIES[currentStoryKey];
+      if (currentChapterIndex < story.chapters.length - 1) {
+        currentChapterIndex++;
+        renderChapter();
+      } else {
+        showEndScreen();
+      }
+    }
+
+    function prevChapter() {
+      playThwipSound();
+      if (currentChapterIndex > 0) {
+        currentChapterIndex--;
+        renderChapter();
+      }
+    }
+
+    function showEndScreen() {
+      playWebSwing(() => {
+        hideAllViews();
+        viewEnd.classList.remove('hidden');
+        viewEnd.classList.add('flex');
+        window.scrollTo({top:0,behavior:'smooth'});
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 120, spread: 80, origin: { y: .6 }, colors: ['#e62429','#0d5cd4','#fbbf24','#ffffff'] });
+        }
+      });
+    }
+
+    function triggerSpideyAction() {
+      playThwipSound();
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 40, spread: 60, origin: { y: .3 }, colors: ['#e62429','#ffffff','#0d5cd4'] });
+      }
+    }
+
+    /* =========================================================
+       MISSION SYSTEM (dengan localStorage)
+    ========================================================== */
+    function saveMissions() {
+      try { localStorage.setItem('fania_missions', JSON.stringify(missions)); } catch(e) {}
+    }
+    function loadMissions() {
+      try {
+        const saved = localStorage.getItem('fania_missions');
+        if (saved) {
+          const obj = JSON.parse(saved);
+          Object.keys(missions).forEach(k => { if (obj[k]) missions[k] = true; });
+        }
+        const starSaved = localStorage.getItem('fania_stargirl');
+        if (starSaved === '1') {
+          starGirlUnlocked = true;
+          const card = document.getElementById('card-stargirl');
+          if (card) {
+            card.classList.remove('locked');
+            const lockIcon = document.getElementById('stargirlLock');
+            if (lockIcon) lockIcon.remove();
+          }
+        }
+      } catch(e) {}
+    }
+
+    function markMission(id) {
+      if (missions[id]) return;
+      missions[id] = true;
+      saveMissions();
+      updateMissionBoard();
+
+      const remaining = Object.values(missions).filter(v => !v).length;
+      if (remaining === 0) {
+        setTimeout(() => {
+          playSfx('sfxFunfare');
+          playWebSwing(() => {
+            hideAllViews();
+            viewAward.classList.remove('hidden');
+            viewAward.classList.add('flex');
+            window.scrollTo({top:0,behavior:'smooth'});
+            if (typeof confetti === 'function') {
+              confetti({ particleCount: 300, spread: 120, origin: { y: .5 }, colors: ['#e62429','#0d5cd4','#fbbf24','#22c55e','#ffffff'] });
+            }
+          });
+        }, 1200);
+      }
+    }
+
+    function updateMissionBoard() {
+      const done = Object.values(missions).filter(v => v).length;
+      const counter = document.getElementById('missionCount');
+      if (counter) counter.textContent = done;
+      document.querySelectorAll('.mission-item').forEach(el => {
+        const id = el.dataset.mission;
+        if (missions[id]) {
+          el.classList.add('done');
+          el.querySelector('.mission-check').textContent = '✓';
+        } else {
+          el.classList.remove('done');
+          el.querySelector('.mission-check').textContent = '○';
+        }
+      });
+    }
+
+    /* =========================================================
+       CARD COLLECTION
+    ========================================================== */
+    function renderCardCollection() {
+      const grid = document.getElementById('cardGrid');
+      if (!grid) return;
+      grid.innerHTML = SPIDEY_CARDS.map(card => {
+        const unlocked = missions[card.id];
+        return `
+          <div class="spidey-card ${unlocked ? '' : 'locked'}">
+            <div class="card-icon">${unlocked ? card.icon : '🔒'}</div>
+            <div class="card-title">${card.title}</div>
+            <div class="card-desc">${card.desc}</div>
+          </div>`;
+      }).join('');
+    }
+
+    /* =========================================================
+       COMIC INTRO
+    ========================================================== */
+    function startComicIntro() {
+      currentPanelIdx = 0;
+      renderPanel();
+      document.getElementById('comicIntro').classList.add('active');
+      if (!isGlobalMuted && bgMusic.paused) {
+        bgMusic.volume = 0.3;
+        bgMusic.play().then(() => {
+          updateAudioButtonUI();
+          bgmStatusText.innerText = '♫ NOW PLAYING';
+        }).catch(() => {});
+      }
+    }
+
+    function renderPanel() {
+      const panel = COMIC_PANELS[currentPanelIdx];
+      document.getElementById('panelNum').textContent = currentPanelIdx + 1;
+      document.getElementById('panelEmoji').textContent = panel.emoji;
+      document.getElementById('panelText').textContent = panel.text;
+      const btn = document.getElementById('panelNext');
+      btn.textContent = currentPanelIdx === COMIC_PANELS.length - 1 ? 'Mulai Cerita! 🕷️' : 'Lanjut →';
+    }
+
+    function nextPanel() {
+      playThwipSound();
+      currentPanelIdx++;
+      if (currentPanelIdx >= COMIC_PANELS.length) {
+        document.getElementById('comicIntro').classList.remove('active');
+        markMission('comic');
+        showMainExperience();
+        return;
+      }
+      renderPanel();
+    }
+
+    /* =========================================================
+       MINI GAME
+    ========================================================== */
+    const miniGameEl = document.getElementById('miniGame');
+    const mgWinEl = document.getElementById('mgWin');
+
+    function startMiniGame() {
+      playThwipSound();
+      miniGameActive = true;
+      miniGameScore = 0;
+      mgWinEl.classList.remove('active');
+      document.getElementById('mgScoreText').textContent = `0 / ${MINI_GAME_TARGET}`;
+      miniGameEl.classList.add('active');
+      document.querySelectorAll('.mg-target').forEach(t => t.remove());
+      document.querySelectorAll('.mg-web').forEach(w => w.remove());
+      setTimeout(spawnTarget, 400);
+    }
+
+    function spawnTarget() {
+      if (!miniGameActive) return;
+      const existing = document.querySelector('.mg-target');
+      if (existing) existing.remove();
+
+      const t = document.createElement('div');
+      t.className = 'mg-target';
+      const emojis = ['🕷️', '🎯', '🕸️'];
+      t.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      const padX = 100, padY = 120;
+      const maxX = Math.max(100, window.innerWidth - 70 - padX);
+      const maxY = Math.max(100, window.innerHeight - 70 - padY);
+      t.style.left = (padX + Math.random() * maxX) + 'px';
+      t.style.top = (padY + Math.random() * maxY) + 'px';
+      t.addEventListener('click', (e) => { e.stopPropagation(); hitTarget(t); });
+      miniGameEl.appendChild(t);
+    }
+
+    function hitTarget(t) {
+      playThwipSound();
+      const rect = t.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      shootWeb(cx, cy);
+
+      t.style.transition = 'transform .3s, opacity .3s';
+      t.style.transform = 'scale(2)';
+      t.style.opacity = '0';
+      setTimeout(() => t.remove(), 300);
+
+      miniGameScore++;
+      document.getElementById('mgScoreText').textContent = `${miniGameScore} / ${MINI_GAME_TARGET}`;
+
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 20, spread: 50, origin: { x: cx / window.innerWidth, y: cy / window.innerHeight }, colors: ['#e62429', '#0d5cd4', '#fbbf24'] });
+      }
+
+      if (miniGameScore >= MINI_GAME_TARGET) setTimeout(winMiniGame, 400);
+      else setTimeout(spawnTarget, 500);
+    }
+
+    function shootWeb(targetX, targetY) {
+      const startX = window.innerWidth / 2;
+      const startY = window.innerHeight - 60;
+      const dx = targetX - startX;
+      const dy = targetY - startY;
+      const len = Math.sqrt(dx * dx + dy * dy);
+      const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+
+      const web = document.createElement('div');
+      web.className = 'mg-web';
+      web.style.left = startX + 'px';
+      web.style.bottom = '60px';
+      web.style.setProperty('--webLen', len + 'px');
+      web.style.transform = `rotate(${angle + 90}deg)`;
+      web.style.transformOrigin = 'bottom center';
+      miniGameEl.appendChild(web);
+      setTimeout(() => web.remove(), 400);
+    }
+
+    function winMiniGame() {
+      miniGameActive = false;
+      mgWinEl.classList.add('active');
+      starGirlUnlocked = true;
+      try { localStorage.setItem('fania_stargirl', '1'); } catch(e) {}
+      markMission('game');
+
+      const card = document.getElementById('card-stargirl');
+      if (card) {
+        card.classList.remove('locked');
+        const lockIcon = document.getElementById('stargirlLock');
+        if (lockIcon) lockIcon.remove();
+      }
+
+      playSfx('sfxFunfare');
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 200, spread: 100, origin: { y: .5 }, colors: ['#e62429','#0d5cd4','#fbbf24','#ffffff'] });
+      }
+    }
+
+    function closeMiniGame() {
+      playThwipSound();
+      miniGameActive = false;
+      miniGameEl.classList.remove('active');
+      document.querySelectorAll('.mg-target, .mg-web').forEach(el => el.remove());
+    }
+
+    function tryUnlockStarGirl() {
+      if (starGirlUnlocked) selectAccessory('stargirl');
+      else { playSfx('sfxBuzz'); showToast("🔒 Main Web-Shooter dulu untuk buka Star Girl! 🎯"); }
+    }
+
+    /* =========================================================
+       SPIDEY-SENSE
+    ========================================================== */
+    const SENSE_MESSAGES = [
+      "Spidey-sense bergetar! Ada easter egg di sekitar...",
+      "⚡ Sensasi aneh... coba cek menu lain!",
+      "🕸️ Ada yang mengintip! Coba scroll pelan-pelan...",
+      "⚡ Spidey-sense aktif! Ada kejutan kecil..."
+    ];
+
+    function triggerSpideySense(msg) {
+      const sense = document.getElementById('spideySense');
+      document.getElementById('spideySenseText').textContent = msg || SENSE_MESSAGES[Math.floor(Math.random() * SENSE_MESSAGES.length)];
+      sense.classList.remove('show');
+      void sense.offsetWidth;
+      sense.classList.add('show');
+    }
+
+    /* =========================================================
+       GIFTS
+    ========================================================== */
+    function openGift(idx) {
+      playThwipSound();
+      const gift = GIFTS[idx];
+      document.getElementById('giftModalIcon').textContent = gift.icon;
+      document.getElementById('giftModalTitle').textContent = gift.title;
+      document.getElementById('giftModalDesc').textContent = gift.desc;
+      const modal = document.getElementById('giftModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      markMission('gift');
+      playSfx('sfxFunfare');
+
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 100, spread: 80, origin: { y: .6 }, colors: ['#e62429', '#0d5cd4', '#fbbf24', '#f9c5d5', '#ffffff'] });
+      }
+    }
+
+    function closeGift() {
+      const modal = document.getElementById('giftModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    /* =========================================================
+       SPIDEY GIRL CUSTOMIZER
+    ========================================================== */
+    const ACCESSORY_SVG = {
+      crown: `<g class="sg-pop"><path d="M78 60 L88 30 L104 50 L120 24 L136 50 L152 30 L162 60 Z" fill="#ffd978" stroke="#d49b38" stroke-width="3"/><circle cx="120" cy="27" r="5" fill="#e62429"/><circle cx="88" cy="33" r="4" fill="#38bdf8"/><circle cx="152" cy="33" r="4" fill="#38bdf8"/></g>`,
+      ribbon: `<g class="sg-pop"><path d="M120 52 C104 34 82 50 100 66 L120 80 L140 66 C158 50 136 34 120 52Z" fill="#ff9ec8" stroke="#c81d22" stroke-width="3"/><circle cx="120" cy="62" r="5" fill="#c81d22"/></g>`,
+      bouquet: `<g class="sg-pop"><path d="M176 244 Q192 260 188 282" stroke="#3a8a4a" stroke-width="4" fill="none"/><circle cx="176" cy="232" r="11" fill="#e62429"/><circle cx="192" cy="231" r="11" fill="#ff6b8a"/><circle cx="184" cy="218" r="11" fill="#e62429"/><circle cx="184" cy="231" r="6" fill="#fbbf24"/></g>`,
+      heartbag: `<g class="sg-pop"><path d="M188 218 Q206 224 202 256" fill="none" stroke="#7a2a3a" stroke-width="4"/><path d="M188 232 C176 218 156 231 188 262 C220 231 200 218 188 232Z" fill="#e62429" stroke="#0a0f1d" stroke-width="3"/></g>`,
+      fairy: `<g class="sg-pop"><path d="M54 148 Q16 118 22 168 Q12 208 56 190 Q72 178 74 158 Z" fill="#b48ce8" stroke="#6b3fa0" stroke-width="3" opacity=".9"/><path d="M186 148 Q224 118 218 168 Q228 208 184 190 Q168 178 166 158 Z" fill="#b48ce8" stroke="#6b3fa0" stroke-width="3" opacity=".9"/></g>`,
+      magic: `<g class="sg-pop"><path d="M180 250 L208 214" stroke="#b28bd8" stroke-width="5" stroke-linecap="round"/><path d="M208 198 L213 210 L226 210 L215 218 L219 231 L208 223 L197 231 L201 218 L190 210 L203 210 Z" fill="#fbbf24" stroke="#d49b38" stroke-width="2"/></g>`,
+      webwings: `<g class="sg-pop" stroke="#e2e8f0" stroke-width="2.2" fill="none" opacity=".9"><path d="M50 180 Q18 150 30 200 M50 180 Q10 185 30 220 M50 180 Q25 220 55 240"/><path d="M190 180 Q222 150 210 200 M190 180 Q230 185 210 220 M190 180 Q215 220 185 240"/></g>`,
+      stargirl: `<g class="sg-pop"><path d="M120 30 L128 60 L160 60 L134 78 L144 108 L120 90 L96 108 L106 78 L80 60 L112 60 Z" fill="#ffe36d" stroke="#d49b38" stroke-width="3"/><circle cx="120" cy="70" r="5" fill="#fff"/></g>`
+    };
+
+    function renderAccessories() {
+      const backLayer = document.getElementById('sgLayerAccBack');
+      const frontLayer = document.getElementById('sgLayerAccFront');
+      if (!backLayer || !frontLayer) return;
+
+      const backTypes = ['webwings', 'fairy'];
+      let backHTML = '', frontHTML = '';
+      selectedAccessories.forEach(name => {
+        const svg = ACCESSORY_SVG[name];
+        if (!svg) return;
+        if (backTypes.includes(name)) backHTML += svg;
+        else frontHTML += svg;
+      });
+      backLayer.innerHTML = backHTML;
+      frontLayer.innerHTML = frontHTML;
+    }
+
+    function bounceCharacter() {
+      const svg = document.getElementById('spideyGirlSVG');
+      if (!svg) return;
+      svg.classList.remove('bounce');
+      void svg.offsetWidth;
+      svg.classList.add('bounce');
+      if (navigator.vibrate) navigator.vibrate(30);
+    }
+
+    function selectAccessory(name) {
+      const card = document.getElementById('card-' + name);
+      if (!card) return;
+
+      if (selectedAccessories.includes(name)) {
+        selectedAccessories = selectedAccessories.filter(a => a !== name);
+        card.classList.remove('selected');
+        showToast(`✖️ ${name} dilepas`);
+      } else {
+        if (selectedAccessories.length >= MAX_ACCESSORIES) {
+          const oldest = selectedAccessories.shift();
+          const oldCard = document.getElementById('card-' + oldest);
+          if (oldCard) oldCard.classList.remove('selected');
+          playSfx('sfxBuzz');
+          showToast(`🔄 ${oldest} diganti ${name}`);
+        } else {
+          showToast(`✨ ${name} dipakai!`);
+        }
+        selectedAccessories.push(name);
+        card.classList.add('selected');
+      }
+
+      renderAccessories();
+      bounceCharacter();
+      document.getElementById('flowerCount').innerText = `${selectedAccessories.length} / ${MAX_ACCESSORIES}`;
+      playThwipSound();
+
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 12, spread: 40, origin: { y: .5, x: .5 }, colors: ['#e62429', '#0d5cd4', '#fbbf24', '#38bdf8'] });
+      }
+    }
+
+    function toggleMask() {
+      playThwipSound();
+      maskActive = !maskActive;
+      const mask = document.getElementById('sgMask');
+      const card = document.getElementById('card-mask');
+      if (!mask || !card) return;
+
+      if (maskActive) {
+        mask.style.display = '';
+        card.classList.add('selected');
+        showToast("🕷️ Spidey Mask aktif!");
+      } else {
+        mask.style.display = 'none';
+        card.classList.remove('selected');
+        showToast("🎭 Mask dilepas");
+      }
+      bounceCharacter();
+    }
+
+    function resetStyle() {
+      playThwipSound();
+      selectedAccessories = [];
+      maskActive = false;
+      document.querySelectorAll('.accessory-card').forEach(c => c.classList.remove('selected'));
+      const mask = document.getElementById('sgMask');
+      if (mask) mask.style.display = 'none';
+      renderAccessories();
+      bounceCharacter();
+      document.getElementById('flowerCount').innerText = `0 / ${MAX_ACCESSORIES}`;
+      showToast("🔄 Gaya direset!");
+    }
+
+    function saveStyle() {
+      playThwipSound();
+      if (selectedAccessories.length === 0 && !maskActive) {
+        playSfx('sfxBuzz');
+        showToast("⚠️ Pilih minimal 1 aksesori dulu!");
+        return;
+      }
+
+      playSfx('sfxFunfare');
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 180, spread: 100, origin: { y: .6 }, colors: ['#e62429', '#0d5cd4', '#fbbf24', '#f9c5d5', '#ffffff'] });
+      }
+
+      const nama = [];
+      if (maskActive) nama.push('Spidey Mask');
+      nama.push(...selectedAccessories);
+
+      const toast = document.createElement('div');
+      toast.className = 'fixed top-1/2 left-1/2 z-50 bg-spidey-paper comic-border-lg rounded-2xl p-6 text-center';
+      toast.style.maxWidth = '90vw';
+      toast.style.transform = 'translate(-50%, -50%)';
+      toast.innerHTML = `
+        <div class="text-5xl mb-3">📸✨</div>
+        <h3 class="font-comic text-2xl text-spidey-red mb-2">GAYA TERSIMPAN!</h3>
+        <p class="font-bubble text-slate-700 text-sm mb-1">Spidey Girl kamu udah cantik banget!</p>
+        <p class="font-hand text-slate-500 text-xs">Aksesori: ${nama.join(', ')}</p>`;
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.transition = 'opacity .5s';
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 500);
+      }, 2500);
+    }
+
+    /* =========================================================
+       LOVE LETTER TYPEWRITER
+    ========================================================== */
+    function openLoveLetter() {
+      playThwipSound();
+      const overlay = document.getElementById('loveLetterOverlay');
+      overlay.classList.add('active');
+      const el = document.getElementById('letterTypewriter');
+      el.textContent = '';
+      el.classList.remove('typing-done');
+      document.getElementById('btnSkipLetter').classList.remove('hidden');
+      document.getElementById('btnCloseLetter').classList.add('hidden');
+
+      letterTypedCount = 0;
+      clearInterval(letterTypingInterval);
+      letterTypingInterval = setInterval(() => {
+        if (letterTypedCount >= LOVE_LETTER_TEXT.length) {
+          finishLetterTyping();
+          return;
+        }
+        el.textContent += LOVE_LETTER_TEXT.charAt(letterTypedCount);
+        letterTypedCount++;
+      }, 25);
+    }
+
+    function finishLetterTyping() {
+      clearInterval(letterTypingInterval);
+      const el = document.getElementById('letterTypewriter');
+      el.textContent = LOVE_LETTER_TEXT;
+      el.classList.add('typing-done');
+      document.getElementById('btnSkipLetter').classList.add('hidden');
+      document.getElementById('btnCloseLetter').classList.remove('hidden');
+    }
+
+    function skipLetterTyping() { finishLetterTyping(); }
+
+    function closeLoveLetter() {
+      playThwipSound();
+      document.getElementById('loveLetterOverlay').classList.remove('active');
+      clearInterval(letterTypingInterval);
+    }
+
+    /* =========================================================
+       ENDING CREDIT
+    ========================================================== */
+    function openEndingCredit() {
+      playThwipSound();
+      playSfx('sfxWhoosh');
+      const el = document.getElementById('endingCredit');
+      el.classList.add('active');
+      const scroll = document.getElementById('creditScroll');
+      scroll.style.animation = 'none';
+      void scroll.offsetWidth;
+      scroll.style.animation = 'creditRoll 40s linear forwards';
+    }
+
+    function closeEndingCredit() {
+      playThwipSound();
+      document.getElementById('endingCredit').classList.remove('active');
+    }
+
+    /* =========================================================
+       PHOTO MODE
+    ========================================================== */
+    function openPhotoMode() {
+      playThwipSound();
+      const overlay = document.getElementById('photoMode');
+      overlay.classList.add('active');
+      const charContainer = document.getElementById('photoCharacter');
+      const svg = document.getElementById('spideyGirlSVG');
+      if (svg) charContainer.innerHTML = svg.outerHTML;
+    }
+
+    function closePhotoMode() {
+      playThwipSound();
+      document.getElementById('photoMode').classList.remove('active');
+    }
+
+    function setPhotoBg(bgClass, btn) {
+      playThwipSound();
+      document.getElementById('photoBg').className = 'photo-bg ' + bgClass;
+      document.querySelectorAll('.photo-bg-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function downloadPhoto() {
+      playSfx('sfxFunfare');
+      const target = document.getElementById('photoPreview');
+      if (typeof html2canvas === 'undefined') {
+        showToast("⚠️ Library belum siap, coba lagi");
+        return;
+      }
+      html2canvas(target, { backgroundColor: null, scale: 2 }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'spidey-girl-fania.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        showToast("📥 Foto berhasil di-download!");
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 80, spread: 60, origin: { y: .7 }, colors: ['#e62429','#0d5cd4','#fbbf24'] });
+        }
+      }).catch(() => showToast("⚠️ Gagal download, coba lagi"));
+    }
+
+    /* =========================================================
+       SHARE
+    ========================================================== */
+    function shareExperience() {
+      playThwipSound();
+      const url = window.location.href;
+      const shareData = {
+        title: 'Happy Sweet Seventeen, Fania! 🕷️',
+        text: 'Ada kejutan spesial buat kamu! 🎂💕',
+        url: url
+      };
+      if (navigator.share) {
+        navigator.share(shareData).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(url).then(() => {
+          showShareToast("🔗 Link berhasil di-copy!");
+        }).catch(() => {
+          showShareToast("⚠️ Gagal copy link");
+        });
+      }
+    }
+
+    function showShareToast(msg) {
+      const t = document.createElement('div');
+      t.className = 'share-toast show';
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => {
+        t.classList.remove('show');
+        setTimeout(() => t.remove(), 500);
+      }, 2500);
+    }
+
+    /* =========================================================
+       TOAST
+    ========================================================== */
+    function showToast(msg) {
+      const t = document.createElement('div');
+      t.className = 'fixed bottom-24 left-1/2 z-50 bg-spidey-paper comic-border px-5 py-3 rounded-xl font-bubble font-bold text-slate-900 text-sm';
+      t.style.transform = 'translateX(-50%)';
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => {
+        t.style.transition = 'opacity .5s';
+        t.style.opacity = '0';
+        setTimeout(() => t.remove(), 500);
+      }, 2200);
+    }
+
+    /* =========================================================
+       SHOW MAIN EXPERIENCE
+    ========================================================== */
+    function showMainExperience() {
+      hideAllViews();
+      viewHome.classList.remove('hidden');
+      viewHome.classList.add('flex');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      startBackgroundMusic();
+      updateMissionBoard();
+      setTimeout(() => {
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 120, spread: 80, origin: { y: .6 }, colors: ['#e62429','#0d5cd4','#fbbf24','#ffffff'] });
+        }
+      }, 500);
+    }
+
+    /* =========================================================
+       COUNTDOWN & TRAILER
+    ========================================================== */
+    const cinemaIntro = document.getElementById('cinemaIntro');
+    const countdownNumber = document.getElementById('countdownNumber');
+    const playTrailerButton = document.getElementById('playTrailerButton');
+    const trailerScreen = document.getElementById('trailerScreen');
+    const trailerVideo = document.getElementById('trailerVideo');
+
+    let countdown = 3;
+
+    function runCountdown() {
+      countdownNumber.innerText = countdown;
+      countdownNumber.classList.remove('animate-pulse');
+      void countdownNumber.offsetWidth;
+      countdownNumber.classList.add('animate-pulse');
+      playSfx('sfxCountdown');
+
+      if (countdown > 0) {
+        setTimeout(() => { countdown--; runCountdown(); }, 1000);
+      } else {
+        countdownNumber.innerText = '🎬';
+        setTimeout(() => {
+          playTrailerButton.classList.remove('hidden');
+          playTrailerButton.classList.add('animate-bounce');
+        }, 500);
+        setTimeout(() => { attemptAutoplayTrailer(); }, 700);
+      }
+    }
+
+    async function attemptAutoplayTrailer() {
+      if (trailerStarted) return;
+      trailerStarted = true;
+      showTrailer();
+      trailerVideo.muted = false;
+      try { await trailerVideo.play(); }
+      catch (error) { trailerStarted = false; showManualTrailerButton(); }
+    }
+
+    function showManualTrailerButton() {
+      playTrailerButton.innerHTML = '🎬 PLAY TRAILER 🔊';
+      playTrailerButton.classList.remove('hidden');
+      playTrailerButton.classList.remove('animate-bounce');
+      playTrailerButton.classList.add('animate-pulse');
+    }
+
+    async function startTrailer() {
+      if (!isGlobalMuted && bgMusic.paused) {
+        bgMusic.volume = 0.3;
+        bgMusic.play().catch(()=>{});
+      }
+
+      trailerStarted = true;
+      playTrailerButton.classList.add('hidden');
+      showTrailer();
+      trailerVideo.currentTime = 0;
+      trailerVideo.muted = false;
+      try { await trailerVideo.play(); }
+      catch (error) {
+        trailerVideo.muted = true;
+        try { await trailerVideo.play(); }
+        catch (e) { trailerStarted = false; showManualTrailerButton(); }
+      }
+    }
+
+    function showTrailer() {
+      cinemaIntro.style.display = 'none';
+      trailerScreen.style.display = 'flex';
+      setTimeout(() => {
+        if (!document.fullscreenElement && trailerScreen.requestFullscreen) {
+          trailerScreen.requestFullscreen().catch(() => {});
+        }
+      }, 200);
+    }
+
+    trailerVideo.addEventListener('ended', finishTrailer);
+
+    function finishTrailer() {
+      if (transitionStarted) return;
+      transitionStarted = true;
+      trailerVideo.pause();
+      if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+      trailerScreen.style.display = 'none';
+
+      if (!isGlobalMuted) {
+        bgMusic.volume = 0.3;
+        bgMusic.play().catch(()=>{});
+      }
+
+      startComicIntro();
+    }
+
+    /* =========================================================
+       WEB CANVAS BACKGROUND
+    ========================================================== */
+    function initWebCanvas() {
+      const canvas = document.getElementById('webCanvas');
+      const ctx = canvas.getContext('2d');
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+
+      const nodes = [];
+      const nodeCount = Math.min(Math.floor(width / 40), 30);
+      for (let i = 0; i < nodeCount; i++) {
+        nodes.push({ x: Math.random() * width, y: Math.random() * height, vx: (Math.random() - .5) * .5, vy: (Math.random() - .5) * .5, radius: Math.random() * 1.8 + 1 });
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, width, height);
+        ctx.strokeStyle = 'rgba(230,36,41,.25)';
+        ctx.lineWidth = .8;
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            const dx = nodes[i].x - nodes[j].x;
+            const dy = nodes[i].y - nodes[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 140) {
+              ctx.beginPath();
+              ctx.moveTo(nodes[i].x, nodes[i].y);
+              ctx.lineTo(nodes[j].x, nodes[j].y);
+              ctx.stroke();
+            }
+          }
+        }
+        for (let i = 0; i < nodes.length; i++) {
+          const n = nodes[i];
+          ctx.fillStyle = i % 2 === 0 ? 'rgba(230,36,41,.6)' : 'rgba(13,92,212,.6)';
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
+          ctx.fill();
+          n.x += n.vx; n.y += n.vy;
+          if (n.x < 0 || n.x > width) n.vx *= -1;
+          if (n.y < 0 || n.y > height) n.vy *= -1;
+        }
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    /* =========================================================
+       SPIDEY-SENSE INTERVAL
+    ========================================================== */
+    setInterval(() => {
+      if (Math.random() < 0.4) triggerSpideySense();
+    }, 30000);
+
+    /* =========================================================
+       INITIALIZE
+    ========================================================== */
+    window.addEventListener('DOMContentLoaded', () => {
+      initWebCanvas();
+      renderAccessories();
+      loadMissions();
+      updateMissionBoard();
+      bgMusic.volume = 0.3;
+      
+      // Sembunyikan cinemaIntro dulu, tunggu PIN
+      document.getElementById('cinemaIntro').style.display = 'none';
+      pinScreen.style.display = 'flex';
+    });
+  </script>
+</body>
+</html>
