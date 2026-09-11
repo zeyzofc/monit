@@ -101,8 +101,42 @@
     .b9 { left: 83%; width: 9%; height: 32%; }
     .b10 { left: 91%; width: 12%; height: 44%; }
 
+    /* ================= SMOOTH OPEN/CLOSE ANIMATIONS ================= */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+    @keyframes slideUpIn { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes popIn { 0% { transform: scale(.7); opacity: 0; } 60% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+    @keyframes zoomFadeIn { from { transform: scale(1.1); opacity: 0; filter: blur(8px); } to { transform: scale(1); opacity: 1; filter: blur(0); } }
+    @keyframes shakeIt {
+      0%, 100% { transform: translateX(0) rotate(0); }
+      20% { transform: translateX(-6px) rotate(-3deg); }
+      40% { transform: translateX(6px) rotate(3deg); }
+      60% { transform: translateX(-4px) rotate(-2deg); }
+      80% { transform: translateX(4px) rotate(2deg); }
+    }
+    @keyframes rainbowGlow {
+      0% { box-shadow: 0 0 0 rgba(230,36,41,.7); }
+      25% { box-shadow: 0 0 30px rgba(251,191,36,.8); }
+      50% { box-shadow: 0 0 30px rgba(34,197,94,.8); }
+      75% { box-shadow: 0 0 30px rgba(13,92,212,.8); }
+      100% { box-shadow: 0 0 0 rgba(230,36,41,.7); }
+    }
+    .shake-it { animation: shakeIt .5s ease; }
+    .rainbow-glow { animation: rainbowGlow 2s linear infinite; }
+    .view-anim-in { animation: slideUpIn .5s cubic-bezier(.34,1.56,.64,1); }
+
     /* ================= CINEMA INTRO ================= */
-    #cinemaIntro { position: fixed; inset: 0; z-index: 9999; background: #000; color: white; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    #cinemaIntro {
+      position: fixed; inset: 0; z-index: 9999; background: #000; color: white;
+      display: none; align-items: center; justify-content: center; overflow: hidden;
+      opacity: 0; visibility: hidden;
+      transition: opacity .7s ease, visibility .7s ease;
+    }
+    #cinemaIntro.show {
+      display: flex;
+      opacity: 1; visibility: visible;
+      animation: zoomFadeIn .8s ease forwards;
+    }
     .cinema-stars { position: absolute; inset: 0; background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,.5) 1px, transparent 2px), radial-gradient(circle at 80% 30%, rgba(255,255,255,.35) 1px, transparent 2px), radial-gradient(circle at 50% 70%, rgba(255,255,255,.4) 1px, transparent 2px); background-size: 180px 180px, 240px 240px, 200px 200px; opacity: .5; }
     .cinema-content { position: relative; z-index: 2; text-align: center; padding: 20px; }
     .cinema-small { font-family: 'Comic Neue', sans-serif; letter-spacing: 5px; color: #aaa; font-size: 12px; margin-bottom: 18px; }
@@ -112,7 +146,13 @@
     .cinema-button:hover { transform: translateY(-3px); background: #ff3035; }
 
     /* ================= PIN SCREEN ================= */
-    #pinScreen { position: fixed; inset: 0; z-index: 10001; background: #000; color: white; display: flex; align-items: center; justify-content: center; }
+    #pinScreen {
+      position: fixed; inset: 0; z-index: 10001; background: #000; color: white;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity .6s ease, visibility .6s ease;
+      opacity: 1; visibility: visible;
+    }
+    #pinScreen.hide { opacity: 0; visibility: hidden; pointer-events: none; }
     .pin-content { position: relative; z-index: 2; text-align: center; padding: 30px 24px; max-width: 400px; width: 100%; }
     .pin-title { font-family: 'Bangers', cursive; font-size: 36px; letter-spacing: 3px; color: #e62429; text-shadow: 4px 4px 0 #fff; margin-bottom: 8px; }
     .pin-subtitle { font-family: 'Fredoka', sans-serif; font-size: 14px; color: #aaa; letter-spacing: 2px; margin-bottom: 25px; }
@@ -137,20 +177,30 @@
     .pin-content.shake { animation: pinShake .5s ease; }
 
     /* ================= TRAILER ================= */
-    #trailerScreen { position: fixed; inset: 0; z-index: 10000; background: #000; display: none; align-items: center; justify-content: center; }
+    #trailerScreen {
+      position: fixed; inset: 0; z-index: 10000; background: #000;
+      display: none; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .5s ease;
+    }
+    #trailerScreen.show { display: flex; opacity: 1; }
     #trailerVideo { width: 100vw; height: 100vh; object-fit: contain; background: #000; }
     .cinema-bar { position: fixed; left: 0; right: 0; height: 8vh; min-height: 45px; background: #000; z-index: 10002; pointer-events: none; }
     .cinema-bar.top { top: 0; } .cinema-bar.bottom { bottom: 0; }
     #trailerSkip { position: fixed; right: 18px; bottom: 12vh; z-index: 10004; background: rgba(0,0,0,.65); border: 2px solid rgba(255,255,255,.7); color: white; padding: 9px 14px; border-radius: 10px; font-family: 'Fredoka', sans-serif; font-size: 12px; cursor: pointer; }
 
     /* ================= COMIC INTRO ================= */
-    #comicIntro { position: fixed; inset: 0; z-index: 10005; background: #0a0f1d; display: none; align-items: center; justify-content: center; padding: 20px; }
-    #comicIntro.active { display: flex; }
+    #comicIntro {
+      position: fixed; inset: 0; z-index: 10005; background: #0a0f1d;
+      display: none; align-items: center; justify-content: center; padding: 20px;
+      opacity: 0; visibility: hidden;
+      transition: opacity .5s ease, visibility .5s ease;
+    }
+    #comicIntro.active { display: flex; opacity: 1; visibility: visible; }
     .comic-panel {
       max-width: 500px; width: 100%; background: #fffdf5;
       border: 5px solid #000; box-shadow: 10px 10px 0 #000;
       border-radius: 8px; padding: 24px; position: relative;
-      animation: cinemaIn .6s ease;
+      animation: popIn .5s cubic-bezier(.34,1.56,.64,1);
     }
     .comic-panel .panel-num {
       position: absolute; top: -18px; left: -18px;
@@ -171,8 +221,13 @@
     .comic-panel .panel-next:hover { transform: translateY(-2px); background: #1a6ee0; }
 
     /* ================= MINI GAME ================= */
-    #miniGame { position: fixed; inset: 0; z-index: 9997; background: rgba(10,15,29,.96); display: none; cursor: crosshair; }
-    #miniGame.active { display: block; }
+    #miniGame {
+      position: fixed; inset: 0; z-index: 9997; background: rgba(10,15,29,.96);
+      display: none; cursor: crosshair;
+      opacity: 0; visibility: hidden;
+      transition: opacity .4s ease, visibility .4s ease;
+    }
+    #miniGame.active { display: block; opacity: 1; visibility: visible; }
     .mg-header {
       position: absolute; top: 0; left: 0; right: 0;
       padding: 16px; text-align: center;
@@ -225,7 +280,7 @@
       background: rgba(10,15,29,.9); z-index: 10;
     }
     .mg-win.active { display: flex; }
-    .mg-win-box { background: #fffdf5; border: 5px solid #000; box-shadow: 8px 8px 0 #000; border-radius: 20px; padding: 32px; text-align: center; max-width: 90vw; }
+    .mg-win-box { background: #fffdf5; border: 5px solid #000; box-shadow: 8px 8px 0 #000; border-radius: 20px; padding: 32px; text-align: center; max-width: 90vw; animation: popIn .5s cubic-bezier(.34,1.56,.64,1); }
 
     /* ================= SPIDEY-SENSE ================= */
     .spidey-sense {
@@ -314,6 +369,7 @@
       border: 8px double #d4a017; padding: 30px 24px; border-radius: 12px;
       text-align: center; position: relative;
       box-shadow: 0 20px 60px rgba(0,0,0,.5);
+      animation: popIn .6s cubic-bezier(.34,1.56,.64,1);
     }
     .award-cert::before, .award-cert::after { content: '🕷️'; position: absolute; font-size: 30px; }
     .award-cert::before { top: 12px; left: 16px; }
@@ -376,18 +432,18 @@
       position: fixed; inset: 0; z-index: 10010;
       background: rgba(10,15,29,.92); backdrop-filter: blur(12px);
       display: none; align-items: center; justify-content: center;
-      padding: 20px; opacity: 0; transition: opacity .4s;
+      padding: 20px; opacity: 0; visibility: hidden;
+      transition: opacity .4s ease, visibility .4s ease;
     }
-    .love-letter-overlay.active { display: flex; opacity: 1; }
+    .love-letter-overlay.active { display: flex; opacity: 1; visibility: visible; }
     .love-letter-paper {
       max-width: 560px; width: 100%; max-height: 85vh;
       background: linear-gradient(160deg, #fdfaff 0%, #f6ecff 100%);
       border: 5px solid #000; box-shadow: 10px 10px 0 #000;
       border-radius: 16px; padding: 30px 26px;
       position: relative; overflow-y: auto;
-      animation: letterPop .6s cubic-bezier(.34,1.56,.64,1);
+      animation: popIn .6s cubic-bezier(.34,1.56,.64,1);
     }
-    @keyframes letterPop { 0% { transform: scale(.6) rotate(-4deg); opacity: 0; } 100% { transform: scale(1) rotate(0); opacity: 1; } }
     .letter-stamp { position: absolute; top: -22px; right: 20px; font-size: 40px; transform: rotate(15deg); filter: drop-shadow(0 4px 8px rgba(0,0,0,.3)); }
     .letter-title { font-family: 'Bangers', cursive; letter-spacing: 2px; font-size: 28px; color: #e62429; text-align: center; margin-bottom: 20px; }
     .letter-content { font-family: 'Caveat', cursive; font-size: 22px; line-height: 1.6; color: #3a2a5c; white-space: pre-wrap; min-height: 200px; }
@@ -399,8 +455,13 @@
     .btn-close-letter { background: #e62429; color: white; border: 3px solid #000; box-shadow: 3px 3px 0 #000; border-radius: 12px; padding: 10px 22px; font-family: 'Fredoka', sans-serif; font-weight: 700; cursor: pointer; }
 
     /* ================= ENDING CREDIT ================= */
-    .ending-credit { position: fixed; inset: 0; z-index: 10011; background: #000; color: white; display: none; overflow: hidden; }
-    .ending-credit.active { display: block; }
+    .ending-credit {
+      position: fixed; inset: 0; z-index: 10011; background: #000; color: white;
+      display: none; overflow: hidden;
+      opacity: 0; visibility: hidden;
+      transition: opacity .6s ease, visibility .6s ease;
+    }
+    .ending-credit.show { display: block; opacity: 1; visibility: visible; }
     .credit-scroll { position: absolute; left: 0; right: 0; top: 100%; text-align: center; padding: 40px 20px; animation: creditRoll 40s linear forwards; }
     @keyframes creditRoll { 0% { top: 100%; } 100% { top: -180%; } }
     .credit-block { margin-bottom: 60px; }
@@ -412,9 +473,20 @@
     .btn-close-credit { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 5; background: rgba(255,255,255,.1); color: white; border: 2px solid rgba(255,255,255,.4); border-radius: 50px; padding: 10px 22px; font-family: 'Fredoka', sans-serif; cursor: pointer; }
 
     /* ================= PHOTO MODE ================= */
-    .photo-mode-overlay { position: fixed; inset: 0; z-index: 10012; background: rgba(10,15,29,.95); backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; padding: 16px; }
-    .photo-mode-overlay.active { display: flex; }
-    .photo-mode-panel { background: #162032; border: 4px solid #000; box-shadow: 8px 8px 0 #000; border-radius: 24px; padding: 20px; max-width: 480px; width: 100%; max-height: 92vh; overflow-y: auto; }
+    .photo-mode-overlay {
+      position: fixed; inset: 0; z-index: 10012;
+      background: rgba(10,15,29,.95); backdrop-filter: blur(12px);
+      display: none; align-items: center; justify-content: center; padding: 16px;
+      opacity: 0; visibility: hidden;
+      transition: opacity .4s ease, visibility .4s ease;
+    }
+    .photo-mode-overlay.show { display: flex; opacity: 1; visibility: visible; }
+    .photo-mode-panel {
+      background: #162032; border: 4px solid #000; box-shadow: 8px 8px 0 #000;
+      border-radius: 24px; padding: 20px; max-width: 480px; width: 100%;
+      max-height: 92vh; overflow-y: auto;
+      animation: popIn .5s cubic-bezier(.34,1.56,.64,1);
+    }
     .photo-mode-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
     .photo-close { background: #e62429; color: white; border: 3px solid #000; width: 36px; height: 36px; border-radius: 50%; font-size: 20px; font-weight: bold; cursor: pointer; }
     .photo-preview-wrap { display: flex; justify-content: center; margin-bottom: 14px; }
@@ -435,9 +507,59 @@
     .share-toast { position: fixed; top: 80px; right: 20px; z-index: 10020; background: #22c55e; color: white; border: 3px solid #000; box-shadow: 5px 5px 0 #000; border-radius: 14px; padding: 12px 18px; font-family: 'Fredoka', sans-serif; font-weight: 600; transform: translateX(120%); transition: transform .4s cubic-bezier(.34,1.56,.64,1); }
     .share-toast.show { transform: translateX(0); }
 
+    /* ================= EASTER EGG ================= */
+    .easter-egg-overlay {
+      position: fixed; inset: 0; z-index: 10030;
+      display: none; align-items: center; justify-content: center;
+      background: radial-gradient(circle at center, rgba(10,15,29,.85) 0%, rgba(10,15,29,.97) 100%);
+      backdrop-filter: blur(14px);
+      padding: 20px; opacity: 0; visibility: hidden;
+      transition: opacity .5s ease, visibility .5s ease;
+    }
+    .easter-egg-overlay.show { display: flex; opacity: 1; visibility: visible; }
+    .easter-egg-box {
+      max-width: 480px; width: 100%;
+      background: linear-gradient(160deg, #fffdf5 0%, #fff5d5 100%);
+      border: 6px solid #000; box-shadow: 12px 12px 0 #000, 0 0 60px rgba(251,191,36,.5);
+      border-radius: 24px; padding: 30px 26px; text-align: center;
+      position: relative;
+      animation: popIn .55s cubic-bezier(.34,1.56,.64,1);
+    }
+    .easter-egg-close {
+      position: absolute; top: 10px; right: 12px;
+      background: #e62429; color: white;
+      border: 3px solid #000; box-shadow: 3px 3px 0 #000;
+      width: 38px; height: 38px; border-radius: 50%;
+      font-size: 20px; font-weight: bold; cursor: pointer;
+      transition: transform .2s;
+    }
+    .easter-egg-close:hover { transform: rotate(90deg) scale(1.1); }
+    .easter-egg-emoji {
+      font-size: 72px; display: block; margin-bottom: 12px;
+      animation: float 2.5s ease-in-out infinite;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,.3));
+    }
+    .easter-egg-title { font-family: 'Bangers', cursive; font-size: 28px; letter-spacing: 2px; color: #e62429; text-shadow: 2px 2px 0 #000; margin-bottom: 14px; }
+    .easter-egg-text { font-family: 'Patrick Hand', cursive; font-size: 20px; line-height: 1.55; color: #1a1a2e; margin-bottom: 18px; white-space: pre-wrap; }
+    .easter-egg-hint { font-family: 'Fredoka', sans-serif; font-size: 12px; color: #888; letter-spacing: 2px; margin-top: 12px; }
+
+    .egg-hint {
+      position: fixed; z-index: 9994;
+      width: 42px; height: 42px; border-radius: 50%;
+      background: linear-gradient(135deg, #fbbf24, #e62429);
+      border: 3px solid #000;
+      box-shadow: 3px 3px 0 #000, 0 0 18px rgba(251,191,36,.7);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; cursor: pointer;
+      animation: spiderPulse 2s ease-in-out infinite;
+      transition: transform .25s;
+      -webkit-user-select: none; user-select: none;
+    }
+    .egg-hint:hover { transform: scale(1.15) rotate(10deg); }
+    .egg-hint:active { transform: scale(.9); }
+
     .hidden { display: none !important; }
 
-    /* ================= MOBILE ================= */
     @media (max-width: 640px) {
       .cinema-bar { height: 6vh; }
       #trailerSkip { bottom: 9vh; }
@@ -458,7 +580,7 @@
     <div class="building b10"></div>
   </div>
 
-  <!-- PIN SCREEN (NEW) -->
+  <!-- PIN SCREEN -->
   <div id="pinScreen">
     <div class="cinema-stars"></div>
     <div class="pin-content" id="pinContent">
@@ -491,7 +613,7 @@
   </div>
 
   <!-- CINEMA INTRO -->
-  <div id="cinemaIntro" style="display:none;">
+  <div id="cinemaIntro">
     <div class="cinema-stars"></div>
     <div class="cinema-content">
       <div class="cinema-small">A SPECIAL PRESENTATION</div>
@@ -623,6 +745,19 @@
     </div>
   </div>
 
+  <!-- EASTER EGG MODAL -->
+  <div id="easterEggOverlay" class="easter-egg-overlay">
+    <div class="easter-egg-box">
+      <button class="easter-egg-close" onclick="closeEasterEgg()">×</button>
+      <span class="easter-egg-emoji" id="eggEmoji">🥚</span>
+      <h3 class="easter-egg-title" id="eggTitle">EASTER EGG!</h3>
+      <p class="easter-egg-text" id="eggText"></p>
+      <div class="easter-egg-hint" id="eggHint"></div>
+    </div>
+  </div>
+
+  <div id="eggHintContainer"></div>
+
   <!-- MAIN APP -->
   <div id="app" class="relative z-10">
     <main class="flex flex-col items-center p-3 sm:p-6 w-full max-w-4xl mx-auto pb-32">
@@ -631,7 +766,7 @@
       <section id="viewHome" class="w-full flex flex-col items-center text-center py-4 sm:py-8 space-y-6">
         <div class="relative w-full max-w-md h-36 sm:h-44 flex items-center justify-center">
           <div class="absolute top-0 w-1 bg-white/70 h-24 sm:h-28 animate-pulseSlow"></div>
-          <div class="absolute top-16 sm:top-20 animate-swing flex flex-col items-center cursor-pointer" onclick="triggerSpideyAction()">
+          <div id="spiderTapZone" class="absolute top-16 sm:top-20 animate-swing flex flex-col items-center cursor-pointer" onclick="triggerSpideyAction()">
             <svg class="w-24 h-24 sm:w-28 sm:h-28" viewBox="0 0 100 100">
               <circle cx="50" cy="5" r="3" fill="#fff"/>
               <g transform="rotate(180 50 50)">
@@ -657,7 +792,6 @@
               <span class="font-hand text-3xl sm:text-5xl font-bold text-slate-900 tracking-wide">FANIA RAMADHANI 🏡</span>
             </div>
           </div>
-          <p class="font-hand text-xl sm:text-2xl text-spidey-sky font-bold tracking-wide pt-2">"for the girl who makes every place feel like home 🏡"</p>
         </div>
 
         <div class="w-full max-w-md bg-black/40 backdrop-blur-md rounded-2xl border-2 border-white/20 p-4 space-y-3">
@@ -693,7 +827,7 @@
         </div>
         <div class="w-full max-w-md space-y-5 px-2">
           <button onclick="openStory('type1',0)" class="w-full bg-spidey-paper rounded-2xl p-5 comic-border-lg text-left transform hover:-rotate-1 hover:scale-[1.02] transition-all flex flex-col justify-between min-h-[140px]">
-            <div class="flex justify-between items-start"><span class="bg-spidey-red text-white font-comic text-lg px-3 py-1 rounded-lg comic-border">🕷️ TYPE 01</span><span class="font-comic text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded border border-slate-300">8 CHAPTERS</span></div>
+            <div class="flex justify-between items-start"><span class="bg-spidey-red text-white font-comic text-lg px-3 py-1 rounded-lg comic-border">🕷️ TYPE 01</span><span class="font-comic text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded border border-slate-300">7 CHAPTERS</span></div>
             <div class="my-3"><h3 class="font-hand text-2xl sm:text-3xl font-bold text-slate-900">"the things i wanna tell you"</h3></div>
             <div class="flex items-center justify-between text-xs font-bubble text-slate-600 border-t border-slate-200 pt-2"><span>READ PART 1 💌</span><span class="font-bold text-spidey-red">START →</span></div>
           </button>
@@ -953,33 +1087,51 @@
       <i class="fa-solid fa-share-nodes"></i>
     </button>
 
+    <!-- BGM UTAMA SPIDERMAN -->
     <audio id="bgMusic" loop preload="auto" crossorigin="anonymous" onerror="handleAudioError()">
       <source id="audioSource" src="https://files.catbox.moe/a1ug2h.mp3" type="audio/mpeg">
     </audio>
 
+    <!-- BGM MONOKROM (TYPE 1) -->
+    <audio id="bgmType1" loop preload="auto" crossorigin="anonymous">
+      <source src="https://files.catbox.moe/sjm7c3.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- BGM SHEILA ON 7 (TYPE 3) -->
+    <audio id="bgmType3" loop preload="auto" crossorigin="anonymous">
+      <source src="https://files.catbox.moe/ijcn5u.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- BGM COMIC INTRO -->
+    <audio id="bgmComic" loop preload="auto" crossorigin="anonymous">
+      <source src="https://files.catbox.moe/44fn8n.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- SFX -->
     <audio id="sfxWhoosh" preload="auto"><source src="https://files.catbox.moe/gt4u9s.mp3" type="audio/mpeg"></audio>
     <audio id="sfxFunfare" preload="auto"><source src="https://files.catbox.moe/gt4u9s.mp3" type="audio/mpeg"></audio>
     <audio id="sfxBuzz" preload="auto"><source src="https://files.catbox.moe/htcy9l.mp3" type="audio/mpeg"></audio>
     <audio id="sfxCountdown" preload="auto"><source src="https://files.catbox.moe/gt4u9s.mp3" type="audio/mpeg"></audio>
+    <audio id="sfxTing" preload="auto"><source src="https://files.catbox.moe/64wket.mp3" type="audio/mpeg"></audio>
   </div>
 
   <script>
     /* =========================================================
-       STORY DATA (kata "sayang" → "dek Fania")
+       STORY DATA
     ========================================================== */
     const STORIES = {
-  type1: {
-    title: "TYPE 01", subtitle: "THE FIRST SIDE OF THE STORY", themeColor: "spidey-red", images: [],
-    chapters: [
-      `happyy sweet seventeenn dek Fania‼️🎊💕`,
-      `maaciiii yaaa buat semuaa yang udaa kamu kasii ke akuu — barang, uang, waktu, perhatian kecil kamu. makasiii udaa bikin aku ngerasain hal yang aku pikir gaakann aku dapett darii siapapunn. semogaa semua keinginan dek Fania terwujud satu persatu, panjang umurr, sehatt selaluu, dimudahkann segala urusannya. aminnnn ⭐⭐`,
-      `harapan aku buat dek Fania kedepannya: solatt yang rajinn yaa, jangann tinggalin 5 waktunyaa. jangann sering begadang, gaa baik buat kesehatan. boboo yang cukup biarr besoknya segerr. kaloo dikelas jangan main hp muluu, perhatiin gurunyaa, catett yang pentingg. jangan males kalo dikasi tugas, langsung dikerjain biarr gaa numpukk😈`,
-      `kaloo dibilanginn tuu jangann ngeyelll‼️ akuu tu nasehatin dek Fania demi kebaikan dek Fania sendirii. kaloo lagii sakit jauhin es duluu, minum obatt, istirahat. jangann suka jajan sembarangan jugaa yaa, jaga pola makannya biarr sehatt terus. aku khawatir tau kaloo dek Fania sakit tuu‼️`,
-      `dek Fania haruss jadii dirii sendirii, jadi diri yang apa adanya. kaloo marah keluarinn, jangann dipendem. kaloo adaa sikap akuu yang bikin dek Fania bt, bilangg akuu biarr kita perbaikin bareng. kaloo lagii capee gapapaa dry text ke akuu, tapii kasii tauu duluu biarr akuu gaa bingungg yaaa 💕 tenangg ajaa, aku gapernaa ngerasaa risih atau cape samaa dek Fania. aku janji bakal selalu ada buat dek Fania. jangann pentingin orang lainn muluu, pentingin diri dek Fania duluu. istirahat kalo capee, bilang kalo butuh bantuann. akuu peduli samaa dek Fania apaa adanyaa.`,
-      `17 tahun itu umur yang spesial, semoga jadi awal dari banyak hal baik buat kamu.`,
-      `sekalii lagii happy birthdayyy dek Fania🎊💐🏡 wishhh uu all d besttt!!!`
-    ]
-  },
+      type1: {
+        title: "TYPE 01", subtitle: "THE FIRST SIDE OF THE STORY", themeColor: "spidey-red", images: [],
+        chapters: [
+          `happyy sweet seventeenn dek Fania‼️🎊💕`,
+          `maaciiii yaaa buat semuaa yang udaa kamu kasii ke akuu — barang, uang, waktu, perhatian kecil kamu. makasiii udaa bikin aku ngerasain hal yang aku pikir gaakann aku dapett darii siapapunn. semogaa semua keinginan dek Fania terwujud satu persatu, panjang umurr, sehatt selaluu, dimudahkann segala urusannya. aminnnn ⭐⭐`,
+          `harapan aku buat dek Fania kedepannya: solatt yang rajinn yaa, jangann tinggalin 5 waktunyaa. jangann sering begadang, gaa baik buat kesehatan. boboo yang cukup biarr besoknya segerr. kaloo dikelas jangan main hp muluu, perhatiin gurunyaa, catett yang pentingg. jangan males kalo dikasi tugas, langsung dikerjain biarr gaa numpukk😈`,
+          `kaloo dibilanginn tuu jangann ngeyelll‼️ akuu tu nasehatin dek Fania demi kebaikan dek Fania sendirii. kaloo lagii sakit jauhin es duluu, minum obatt, istirahat. jangann suka jajan sembarangan jugaa yaa, jaga pola makannya biarr sehatt terus. aku khawatir tau kaloo dek Fania sakit tuu‼️`,
+          `dek Fania haruss jadii dirii sendirii, jadi diri yang apa adanya. kaloo marah keluarinn, jangann dipendem. kaloo adaa sikap akuu yang bikin dek Fania bt, bilangg akuu biarr kita perbaikin bareng. kaloo lagii capee gapapaa dry text ke akuu, tapii kasii tauu duluu biarr akuu gaa bingungg yaaa 💕 tenangg ajaa, aku gapernaa ngerasaa risih atau cape samaa dek Fania. aku janji bakal selalu ada buat dek Fania. jangann pentingin orang lainn muluu, pentingin diri dek Fania duluu. istirahat kalo capee, bilang kalo butuh bantuann. akuu peduli samaa dek Fania apaa adanyaa.`,
+          `17 tahun itu umur yang spesial, semoga jadi awal dari banyak hal baik buat kamu.`,
+          `sekalii lagii happy birthdayyy dek Fania🎊💐🏡 wishhh uu all d besttt!!!`
+        ]
+      },
       type2: {
         title: "TYPE 02", subtitle: "OUR MEMORY LANE 📸", themeColor: "spidey-blue",
         images: [
@@ -1004,7 +1156,7 @@
     };
 
     /* =========================================================
-       PIN SYSTEM (NEW)
+       PIN SYSTEM
     ========================================================== */
     const CORRECT_PIN = '1209';
     let currentPin = '';
@@ -1036,11 +1188,13 @@
     function submitPin() {
       if (currentPin === CORRECT_PIN) {
         playSfx('sfxFunfare');
-        pinScreen.style.display = 'none';
-        document.getElementById('cinemaIntro').style.display = 'flex';
-        // Mulai countdown setelah PIN benar
-        countdown = 3;
-        runCountdown();
+        pinScreen.classList.add('hide');
+
+        const cinema = document.getElementById('cinemaIntro');
+        cinema.classList.add('show');
+
+        setTimeout(() => { showEasterEgg('egg1'); }, 1400);
+        setTimeout(() => { countdown = 3; runCountdown(); }, 2200);
       } else {
         playSfx('sfxBuzz');
         pinContent.classList.add('shake');
@@ -1131,6 +1285,55 @@ From King. 👑🕷️🏡`;
     const volumeSlider = document.getElementById('volumeSlider');
     const volumePercentText = document.getElementById('volumePercentText');
 
+    const bgmType1 = document.getElementById('bgmType1');
+    const bgmType3 = document.getElementById('bgmType3');
+    const bgmComic = document.getElementById('bgmComic');
+    const sfxTing = document.getElementById('sfxTing');
+
+    [bgmType1, bgmType3, bgmComic].forEach(a => { if (a) a.volume = 0.3; });
+
+    let activeBgm = null;
+
+    function switchBGM(newBgm, label = '♫ NOW PLAYING') {
+      if (!newBgm) return;
+      if (activeBgm === newBgm && !newBgm.paused) return;
+
+      [bgMusic, bgmType1, bgmType3, bgmComic].forEach(a => {
+        if (a && a !== newBgm && !a.paused) a.pause();
+      });
+
+      activeBgm = newBgm;
+
+      if (isGlobalMuted) {
+        bgmStatusText.innerText = '🔇 ' + label;
+        return;
+      }
+
+      newBgm.volume = bgMusic.volume;
+      newBgm.play().then(() => {
+        bgmStatusText.innerText = label;
+        updateAudioButtonUI();
+      }).catch(() => {
+        bgmStatusText.innerText = '⚠️ Tap untuk play';
+      });
+    }
+
+    function stopAllBGM() {
+      [bgMusic, bgmType1, bgmType3, bgmComic].forEach(a => {
+        if (a && !a.paused) a.pause();
+      });
+      activeBgm = null;
+    }
+
+    function playTingSound() {
+      if (isGlobalMuted || !sfxTing) return;
+      try {
+        sfxTing.currentTime = 0;
+        sfxTing.volume = 0.7;
+        sfxTing.play().catch(() => {});
+      } catch(e) {}
+    }
+
     function playSfx(id) {
       if (isGlobalMuted) return;
       const el = document.getElementById(id);
@@ -1163,42 +1366,31 @@ From King. 👑🕷️🏡`;
       if (bgmStatusText) bgmStatusText.innerText = '⚠️ Audio Error';
     }
 
-    async function startBackgroundMusic() {
-      if (isGlobalMuted) return;
-      if (!bgMusic.paused) return;
-      bgMusic.volume = 0.3;
-      volumeSlider.value = 0.3;
-      volumePercentText.innerText = '30%';
-      try {
-        await bgMusic.play();
-        updateAudioButtonUI();
-        bgmStatusText.innerText = '♫ NOW PLAYING';
-      } catch (error) {
-        updateAudioButtonUI();
-      }
-    }
-
     function toggleAudio() {
       playThwipSound();
-      if (bgMusic.paused) {
-        bgMusic.play().then(() => {
-          updateAudioButtonUI();
-          bgmStatusText.innerText = '♫ NOW PLAYING';
-        }).catch(() => { updateAudioButtonUI(); });
-      } else {
-        bgMusic.pause();
-        updateAudioButtonUI();
+      if (activeBgm && !activeBgm.paused) {
+        activeBgm.pause();
         bgmStatusText.innerText = '⏸ PAUSED';
+      } else {
+        const target = activeBgm || bgMusic;
+        target.play().then(() => {
+          activeBgm = target;
+          updateAudioButtonUI();
+        }).catch(() => {});
       }
+      updateAudioButtonUI();
     }
 
     function updateAudioButtonUI() {
-      if (bgMusic.paused) audioIcon.className = 'fa-solid fa-play';
-      else audioIcon.className = 'fa-solid fa-pause';
+      const isPlaying = (activeBgm && !activeBgm.paused) || (!bgMusic.paused);
+      if (isPlaying) audioIcon.className = 'fa-solid fa-pause';
+      else audioIcon.className = 'fa-solid fa-play';
     }
 
     function changeVolume(val) {
-      bgMusic.volume = val;
+      [bgMusic, bgmType1, bgmType3, bgmComic].forEach(a => {
+        if (a) a.volume = val;
+      });
       volumePercentText.innerText = Math.round(val * 100) + '%';
     }
 
@@ -1207,23 +1399,22 @@ From King. 👑🕷️🏡`;
       const icon = document.getElementById('globalMuteIcon');
       if (isGlobalMuted) {
         icon.className = 'fa-solid fa-volume-xmark';
-        bgMusic.pause();
-        updateAudioButtonUI();
+        stopAllBGM();
       } else {
         icon.className = 'fa-solid fa-volume-high';
-        bgMusic.play().catch(()=>{});
+        if (activeBgm) activeBgm.play().catch(()=>{});
+        else bgMusic.play().catch(()=>{});
       }
+      updateAudioButtonUI();
       showToast(isGlobalMuted ? '🔇 Semua suara dimute' : '🔊 Suara aktif kembali');
     }
 
-    /* =========================================================
-       AUDIO UNLOCK — Browsers block autoplay until first gesture
-    ========================================================== */
     function unlockAudioOnce() {
       if (isGlobalMuted) return;
-      if (bgMusic.paused) {
+      if (bgMusic.paused && (!activeBgm || activeBgm.paused)) {
         bgMusic.volume = 0.3;
         bgMusic.play().then(() => {
+          activeBgm = bgMusic;
           updateAudioButtonUI();
           bgmStatusText.innerText = '♫ NOW PLAYING';
         }).catch(() => {});
@@ -1250,7 +1441,15 @@ From King. 👑🕷️🏡`;
 
     function hideAllViews() {
       [viewHome, viewSelector, viewReader, viewCustomizer, viewGift, viewCollection, viewAward, viewEnd]
-        .forEach(v => { v.classList.add('hidden'); v.classList.remove('flex'); });
+        .forEach(v => { v.classList.add('hidden'); v.classList.remove('flex','view-anim-in'); });
+    }
+
+    function transitionView(target) {
+      hideAllViews();
+      target.classList.remove('hidden');
+      target.classList.add('flex');
+      void target.offsetWidth;
+      target.classList.add('view-anim-in');
     }
 
     function playWebSwing(callback) {
@@ -1263,19 +1462,47 @@ From King. 👑🕷️🏡`;
       }, 1000);
     }
 
-    function goToHome() { playThwipSound(); playWebSwing(() => { hideAllViews(); viewHome.classList.remove('hidden'); viewHome.classList.add('flex'); window.scrollTo({top:0,behavior:'smooth'}); }); }
-    function goToTypeSelector() { playThwipSound(); playWebSwing(() => { hideAllViews(); viewSelector.classList.remove('hidden'); viewSelector.classList.add('flex'); window.scrollTo({top:0,behavior:'smooth'}); }); }
-    function goToCustomizer() { playThwipSound(); markMission('dressup'); playWebSwing(() => { hideAllViews(); viewCustomizer.classList.remove('hidden'); viewCustomizer.classList.add('flex'); window.scrollTo({top:0,behavior:'smooth'}); }); }
-    function goToGift() { playThwipSound(); playWebSwing(() => { hideAllViews(); viewGift.classList.remove('hidden'); viewGift.classList.add('flex'); window.scrollTo({top:0,behavior:'smooth'}); }); }
+    function goToHome() {
+      playThwipSound();
+      playWebSwing(() => {
+        transitionView(viewHome);
+        switchBGM(bgMusic, '♫ Oh Yeah — Spiderman');
+        window.scrollTo({top:0, behavior:'smooth'});
+      });
+    }
+
+    function goToTypeSelector() {
+      playThwipSound();
+      playWebSwing(() => {
+        transitionView(viewSelector);
+        switchBGM(bgMusic, '♫ Oh Yeah — Spiderman');
+        window.scrollTo({top:0, behavior:'smooth'});
+      });
+    }
+
+    function goToCustomizer() {
+      playThwipSound();
+      markMission('dressup');
+      playWebSwing(() => {
+        transitionView(viewCustomizer);
+        window.scrollTo({top:0, behavior:'smooth'});
+      });
+    }
+
+    function goToGift() {
+      playThwipSound();
+      playWebSwing(() => {
+        transitionView(viewGift);
+        window.scrollTo({top:0, behavior:'smooth'});
+      });
+    }
 
     function openCollection() {
       playThwipSound();
       renderCardCollection();
       playWebSwing(() => {
-        hideAllViews();
-        viewCollection.classList.remove('hidden');
-        viewCollection.classList.add('flex');
-        window.scrollTo({top:0,behavior:'smooth'});
+        transitionView(viewCollection);
+        window.scrollTo({top:0, behavior:'smooth'});
       });
     }
 
@@ -1284,29 +1511,26 @@ From King. 👑🕷️🏡`;
       currentStoryKey = typeKey;
       currentChapterIndex = chapterIdx;
 
-      if (typeKey === 'type2') {
-        audioSource.src = "https://files.catbox.moe/g7i65v.mp3";
-        bgMusic.load();
-        bgmStatusText.innerText = "♫ Long Live — Taylor Swift";
-        if (!isGlobalMuted) bgMusic.play().catch(()=>{});
-      } else {
-        if (audioSource.src !== "https://files.catbox.moe/a1ug2h.mp3") {
-          audioSource.src = "https://files.catbox.moe/a1ug2h.mp3";
+      if (typeKey === 'type1') {
+        switchBGM(bgmType1, '♫ Monokrom — Tulus');
+      } else if (typeKey === 'type2') {
+        if (activeBgm !== bgMusic || audioSource.src !== "https://files.catbox.moe/g7i65v.mp3") {
+          [bgmType1, bgmType3, bgmComic].forEach(a => a && a.pause());
+          audioSource.src = "https://files.catbox.moe/g7i65v.mp3";
           bgMusic.load();
-          bgmStatusText.innerText = "♫ Oh Yeah — Spiderman";
-          if (!isGlobalMuted) bgMusic.play().catch(()=>{});
+          switchBGM(bgMusic, '♫ Long Live — Taylor Swift');
         }
+      } else if (typeKey === 'type3') {
+        switchBGM(bgmType3, '♫ Lihat Dengar Rasakan — Sheila on 7');
       }
 
       if (typeKey === 'type1') markMission('story');
       if (typeKey === 'type2') markMission('memory');
 
       playWebSwing(() => {
-        hideAllViews();
-        viewReader.classList.remove('hidden');
-        viewReader.classList.add('flex');
+        transitionView(viewReader);
         renderChapter();
-        window.scrollTo({top:0,behavior:'smooth'});
+        window.scrollTo({top:0, behavior:'smooth'});
       });
     }
 
@@ -1371,10 +1595,8 @@ From King. 👑🕷️🏡`;
 
     function showEndScreen() {
       playWebSwing(() => {
-        hideAllViews();
-        viewEnd.classList.remove('hidden');
-        viewEnd.classList.add('flex');
-        window.scrollTo({top:0,behavior:'smooth'});
+        transitionView(viewEnd);
+        window.scrollTo({top:0, behavior:'smooth'});
         if (typeof confetti === 'function') {
           confetti({ particleCount: 120, spread: 80, origin: { y: .6 }, colors: ['#e62429','#0d5cd4','#fbbf24','#ffffff'] });
         }
@@ -1389,7 +1611,7 @@ From King. 👑🕷️🏡`;
     }
 
     /* =========================================================
-       MISSION SYSTEM (dengan localStorage)
+       MISSION SYSTEM
     ========================================================== */
     function saveMissions() {
       try { localStorage.setItem('fania_missions', JSON.stringify(missions)); } catch(e) {}
@@ -1425,10 +1647,8 @@ From King. 👑🕷️🏡`;
         setTimeout(() => {
           playSfx('sfxFunfare');
           playWebSwing(() => {
-            hideAllViews();
-            viewAward.classList.remove('hidden');
-            viewAward.classList.add('flex');
-            window.scrollTo({top:0,behavior:'smooth'});
+            transitionView(viewAward);
+            window.scrollTo({top:0, behavior:'smooth'});
             if (typeof confetti === 'function') {
               confetti({ particleCount: 300, spread: 120, origin: { y: .5 }, colors: ['#e62429','#0d5cd4','#fbbf24','#22c55e','#ffffff'] });
             }
@@ -1453,9 +1673,6 @@ From King. 👑🕷️🏡`;
       });
     }
 
-    /* =========================================================
-       CARD COLLECTION
-    ========================================================== */
     function renderCardCollection() {
       const grid = document.getElementById('cardGrid');
       if (!grid) return;
@@ -1477,13 +1694,7 @@ From King. 👑🕷️🏡`;
       currentPanelIdx = 0;
       renderPanel();
       document.getElementById('comicIntro').classList.add('active');
-      if (!isGlobalMuted && bgMusic.paused) {
-        bgMusic.volume = 0.3;
-        bgMusic.play().then(() => {
-          updateAudioButtonUI();
-          bgmStatusText.innerText = '♫ NOW PLAYING';
-        }).catch(() => {});
-      }
+      switchBGM(bgmComic, '♫ Comic Intro 🎬');
     }
 
     function renderPanel() {
@@ -1501,6 +1712,7 @@ From King. 👑🕷️🏡`;
       if (currentPanelIdx >= COMIC_PANELS.length) {
         document.getElementById('comicIntro').classList.remove('active');
         markMission('comic');
+        switchBGM(bgMusic, '♫ Oh Yeah — Spiderman');
         showMainExperience();
         return;
       }
@@ -1603,6 +1815,7 @@ From King. 👑🕷️🏡`;
       if (typeof confetti === 'function') {
         confetti({ particleCount: 200, spread: 100, origin: { y: .5 }, colors: ['#e62429','#0d5cd4','#fbbf24','#ffffff'] });
       }
+      setTimeout(() => showEasterEgg('egg4'), 1200);
     }
 
     function closeMiniGame() {
@@ -1610,6 +1823,7 @@ From King. 👑🕷️🏡`;
       miniGameActive = false;
       miniGameEl.classList.remove('active');
       document.querySelectorAll('.mg-target, .mg-web').forEach(el => el.remove());
+      if (typeof switchBGM === 'function') switchBGM(bgMusic, '♫ Oh Yeah — Spiderman');
     }
 
     function tryUnlockStarGirl() {
@@ -1640,6 +1854,7 @@ From King. 👑🕷️🏡`;
     ========================================================== */
     function openGift(idx) {
       playThwipSound();
+      playTingSound();
       const gift = GIFTS[idx];
       document.getElementById('giftModalIcon').textContent = gift.icon;
       document.getElementById('giftModalTitle').textContent = gift.title;
@@ -1648,7 +1863,7 @@ From King. 👑🕷️🏡`;
       modal.classList.remove('hidden');
       modal.classList.add('flex');
       markMission('gift');
-      playSfx('sfxFunfare');
+      setTimeout(() => playSfx('sfxFunfare'), 250);
 
       if (typeof confetti === 'function') {
         confetti({ particleCount: 100, spread: 80, origin: { y: .6 }, colors: ['#e62429', '#0d5cd4', '#fbbf24', '#f9c5d5', '#ffffff'] });
@@ -1662,7 +1877,7 @@ From King. 👑🕷️🏡`;
     }
 
     /* =========================================================
-       SPIDEY GIRL CUSTOMIZER
+       CUSTOMIZER
     ========================================================== */
     const ACCESSORY_SVG = {
       crown: `<g class="sg-pop"><path d="M78 60 L88 30 L104 50 L120 24 L136 50 L152 30 L162 60 Z" fill="#ffd978" stroke="#d49b38" stroke-width="3"/><circle cx="120" cy="27" r="5" fill="#e62429"/><circle cx="88" cy="33" r="4" fill="#38bdf8"/><circle cx="152" cy="33" r="4" fill="#38bdf8"/></g>`,
@@ -1786,6 +2001,7 @@ From King. 👑🕷️🏡`;
       toast.className = 'fixed top-1/2 left-1/2 z-50 bg-spidey-paper comic-border-lg rounded-2xl p-6 text-center';
       toast.style.maxWidth = '90vw';
       toast.style.transform = 'translate(-50%, -50%)';
+      toast.style.animation = 'popIn .5s cubic-bezier(.34,1.56,.64,1)';
       toast.innerHTML = `
         <div class="text-5xl mb-3">📸✨</div>
         <h3 class="font-comic text-2xl text-spidey-red mb-2">GAYA TERSIMPAN!</h3>
@@ -1801,7 +2017,7 @@ From King. 👑🕷️🏡`;
     }
 
     /* =========================================================
-       LOVE LETTER TYPEWRITER
+       LOVE LETTER
     ========================================================== */
     function openLoveLetter() {
       playThwipSound();
@@ -1849,7 +2065,7 @@ From King. 👑🕷️🏡`;
       playThwipSound();
       playSfx('sfxWhoosh');
       const el = document.getElementById('endingCredit');
-      el.classList.add('active');
+      el.classList.add('show');
       const scroll = document.getElementById('creditScroll');
       scroll.style.animation = 'none';
       void scroll.offsetWidth;
@@ -1858,7 +2074,7 @@ From King. 👑🕷️🏡`;
 
     function closeEndingCredit() {
       playThwipSound();
-      document.getElementById('endingCredit').classList.remove('active');
+      document.getElementById('endingCredit').classList.remove('show');
     }
 
     /* =========================================================
@@ -1867,7 +2083,7 @@ From King. 👑🕷️🏡`;
     function openPhotoMode() {
       playThwipSound();
       const overlay = document.getElementById('photoMode');
-      overlay.classList.add('active');
+      overlay.classList.add('show');
       const charContainer = document.getElementById('photoCharacter');
       const svg = document.getElementById('spideyGirlSVG');
       if (svg) charContainer.innerHTML = svg.outerHTML;
@@ -1875,7 +2091,7 @@ From King. 👑🕷️🏡`;
 
     function closePhotoMode() {
       playThwipSound();
-      document.getElementById('photoMode').classList.remove('active');
+      document.getElementById('photoMode').classList.remove('show');
     }
 
     function setPhotoBg(bgClass, btn) {
@@ -1886,7 +2102,8 @@ From King. 👑🕷️🏡`;
     }
 
     function downloadPhoto() {
-      playSfx('sfxFunfare');
+      playTingSound();
+      setTimeout(() => playSfx('sfxFunfare'), 250);
       const target = document.getElementById('photoPreview');
       if (typeof html2canvas === 'undefined') {
         showToast("⚠️ Library belum siap, coba lagi");
@@ -1937,13 +2154,11 @@ From King. 👑🕷️🏡`;
       }, 2500);
     }
 
-    /* =========================================================
-       TOAST
-    ========================================================== */
     function showToast(msg) {
       const t = document.createElement('div');
       t.className = 'fixed bottom-24 left-1/2 z-50 bg-spidey-paper comic-border px-5 py-3 rounded-xl font-bubble font-bold text-slate-900 text-sm';
       t.style.transform = 'translateX(-50%)';
+      t.style.animation = 'popIn .4s cubic-bezier(.34,1.56,.64,1)';
       t.textContent = msg;
       document.body.appendChild(t);
       setTimeout(() => {
@@ -1954,14 +2169,11 @@ From King. 👑🕷️🏡`;
     }
 
     /* =========================================================
-       SHOW MAIN EXPERIENCE
+       SHOW MAIN
     ========================================================== */
     function showMainExperience() {
-      hideAllViews();
-      viewHome.classList.remove('hidden');
-      viewHome.classList.add('flex');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      startBackgroundMusic();
+      transitionView(viewHome);
+      switchBGM(bgMusic, '♫ Oh Yeah — Spiderman');
       updateMissionBoard();
       setTimeout(() => {
         if (typeof confetti === 'function') {
@@ -2017,9 +2229,9 @@ From King. 👑🕷️🏡`;
     }
 
     async function startTrailer() {
-      if (!isGlobalMuted && bgMusic.paused) {
+      if (!isGlobalMuted && (!activeBgm || activeBgm.paused)) {
         bgMusic.volume = 0.3;
-        bgMusic.play().catch(()=>{});
+        bgMusic.play().then(() => { activeBgm = bgMusic; }).catch(()=>{});
       }
 
       trailerStarted = true;
@@ -2036,8 +2248,10 @@ From King. 👑🕷️🏡`;
     }
 
     function showTrailer() {
-      cinemaIntro.style.display = 'none';
+      cinemaIntro.classList.remove('show');
       trailerScreen.style.display = 'flex';
+      void trailerScreen.offsetWidth;
+      trailerScreen.classList.add('show');
       setTimeout(() => {
         if (!document.fullscreenElement && trailerScreen.requestFullscreen) {
           trailerScreen.requestFullscreen().catch(() => {});
@@ -2052,14 +2266,9 @@ From King. 👑🕷️🏡`;
       transitionStarted = true;
       trailerVideo.pause();
       if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
-      trailerScreen.style.display = 'none';
-
-      if (!isGlobalMuted) {
-        bgMusic.volume = 0.3;
-        bgMusic.play().catch(()=>{});
-      }
-
-      startComicIntro();
+      trailerScreen.classList.remove('show');
+      setTimeout(() => { trailerScreen.style.display = 'none'; }, 500);
+      setTimeout(startComicIntro, 500);
     }
 
     /* =========================================================
@@ -2115,6 +2324,134 @@ From King. 👑🕷️🏡`;
     }
 
     /* =========================================================
+       EASTER EGGS
+    ========================================================== */
+    const EASTER_EGGS = {
+      egg1: {
+        emoji: '🥚',
+        title: 'EGG #1 DITEMUKAN!',
+        text: 'Kamu nemuin telur pertama! 🎉\nFun fact: kode PIN yang kamu masukin tadi itu tanggal spesial loh. Semoga harimu seindah tanggal itu yaa, dek Fania! 💕',
+        hint: 'HINT: 1209 — ANGKA SPESIAL'
+      },
+      egg2: {
+        emoji: '🕷️',
+        title: 'EGG #2 DITEMUKAN!',
+        text: 'Spiderman suka nongkrong di gedung tinggi.\nCoba tap-tap gambar spiderman di halaman utama 5x, ada kejutan! 🕸️',
+        hint: 'HINT: TAP SPIDER 5X DI HOME'
+      },
+      egg3: {
+        emoji: '🎵',
+        title: 'EGG #3 DITEMUKAN!',
+        text: 'Lagu "Long Live" itu tentang momen yang gak akan pernah mati.\nSeperti momen kita, dek Fania. 💜',
+        hint: 'HINT: BUKA MEMORY LANE (TYPE 2)'
+      },
+      egg4: {
+        emoji: '⭐',
+        title: 'EGG #4 DITEMUKAN!',
+        text: 'Kamu udah buka Star Girl! 🌟\nDia bersinar kayak kamu — selalu jadi pusat perhatian tapi tetap rendah hati.',
+        hint: 'HINT: MAIN WEB-SHOOTER 5 TARGET'
+      },
+      egg5: {
+        emoji: '👑',
+        title: 'EGG #5 — RAHASIA!',
+        text: 'Kamu nge-tap 3 kali di credit. Selamat! 👑\nKamu adalah satu-satunya orang yang tahu bahwa di balik layar ini, ada seseorang yang bener-bener pengen bikin kamu bahagia hari ini.\n\nDari: King 👑',
+        hint: 'SECRET: TAP "Presented by" 3X DI CREDIT'
+      }
+    };
+
+    const foundEggs = new Set();
+    let spiderTapCount = 0;
+    let creditTapCount = 0;
+
+    function showEasterEgg(key) {
+      const egg = EASTER_EGGS[key];
+      if (!egg) return;
+
+      playTingSound();
+
+      const overlay = document.getElementById('easterEggOverlay');
+      document.getElementById('eggEmoji').textContent = egg.emoji;
+      document.getElementById('eggTitle').textContent = egg.title;
+      document.getElementById('eggText').textContent = egg.text;
+      document.getElementById('eggHint').textContent = egg.hint || '';
+
+      overlay.classList.add('show');
+
+      setTimeout(() => {
+        playSfx('sfxFunfare');
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 150, spread: 100, origin: { y: .5 },
+            colors: ['#e62429','#0d5cd4','#fbbf24','#22c55e','#a855f7','#ffffff']
+          });
+        }
+      }, 300);
+
+      if (!foundEggs.has(key)) {
+        foundEggs.add(key);
+        updateEggHints();
+        try { localStorage.setItem('fania_eggs', JSON.stringify([...foundEggs])); } catch(e){}
+      }
+    }
+
+    function closeEasterEgg() {
+      playThwipSound();
+      document.getElementById('easterEggOverlay').classList.remove('show');
+    }
+
+    function loadFoundEggs() {
+      try {
+        const saved = localStorage.getItem('fania_eggs');
+        if (saved) {
+          const arr = JSON.parse(saved);
+          arr.forEach(k => foundEggs.add(k));
+        }
+      } catch(e){}
+    }
+
+    function updateEggHints() {
+      const container = document.getElementById('eggHintContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const allKeys = Object.keys(EASTER_EGGS);
+      const remaining = allKeys.filter(k => !foundEggs.has(k));
+
+      remaining.forEach((key, i) => {
+        const btn = document.createElement('div');
+        btn.className = 'egg-hint';
+        btn.innerHTML = '🥚';
+        btn.title = EASTER_EGGS[key].hint || 'Ada easter egg!';
+
+        const positions = [
+          { top: '25%', left: '8%' },
+          { top: '55%', right: '8%' },
+          { bottom: '30%', left: '8%' },
+          { top: '35%', right: '8%' },
+          { bottom: '45%', right: '8%' }
+        ];
+        const pos = positions[i % positions.length];
+        Object.assign(btn.style, pos);
+
+        btn.addEventListener('click', () => {
+          playThwipSound();
+          showEasterEgg(key);
+        });
+
+        container.appendChild(btn);
+      });
+    }
+
+    /* Easter Egg Triggers */
+    const _origOpenStory = openStory;
+    openStory = function(typeKey, chapterIdx = 0) {
+      _origOpenStory(typeKey, chapterIdx);
+      if (typeKey === 'type2' && !foundEggs.has('egg3')) {
+        setTimeout(() => showEasterEgg('egg3'), 2000);
+      }
+    };
+
+    /* =========================================================
        SPIDEY-SENSE INTERVAL
     ========================================================== */
     setInterval(() => {
@@ -2122,18 +2459,49 @@ From King. 👑🕷️🏡`;
     }, 30000);
 
     /* =========================================================
-       INITIALIZE
+       INIT
     ========================================================== */
     window.addEventListener('DOMContentLoaded', () => {
       initWebCanvas();
       renderAccessories();
       loadMissions();
+      loadFoundEggs();
       updateMissionBoard();
       bgMusic.volume = 0.3;
-      
-      // Sembunyikan cinemaIntro dulu, tunggu PIN
-      document.getElementById('cinemaIntro').style.display = 'none';
-      pinScreen.style.display = 'flex';
+      setTimeout(updateEggHints, 500);
+
+      // Spider tap easter egg
+      const spider = document.getElementById('spiderTapZone');
+      if (spider) {
+        spider.addEventListener('click', () => {
+          spiderTapCount++;
+          spider.classList.remove('shake-it');
+          void spider.offsetWidth;
+          spider.classList.add('shake-it');
+          if (spiderTapCount === 5) {
+            spiderTapCount = 0;
+            setTimeout(() => showEasterEgg('egg2'), 400);
+          }
+        });
+      }
+
+      // Credit tap easter egg
+      const creditPresented = document.querySelector('#creditScroll .credit-block:nth-child(2) .credit-value');
+      if (creditPresented) {
+        creditPresented.style.cursor = 'pointer';
+        creditPresented.addEventListener('click', () => {
+          creditTapCount++;
+          creditPresented.classList.remove('rainbow-glow');
+          void creditPresented.offsetWidth;
+          if (creditTapCount < 3) {
+            creditPresented.classList.add('rainbow-glow');
+          }
+          if (creditTapCount === 3) {
+            creditTapCount = 0;
+            showEasterEgg('egg5');
+          }
+        });
+      }
     });
   </script>
 </body>
