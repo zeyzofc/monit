@@ -13,12 +13,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script>
 tailwind.config = {
-  theme: {
-    extend: {
-      colors: { spidey: { red:'#e62429', darkred:'#991b1b', blue:'#0d5cd4', darkblue:'#1e3a8a', sky:'#38bdf8', yellow:'#fbbf24', dark:'#0a0f1d', paper:'#fffdf5' } },
-      fontFamily: { comic:['Bangers','cursive'], bubble:['Fredoka','sans-serif'], hand:['Patrick Hand','Short Stack','cursive'], body:['Comic Neue','sans-serif'], script:['Caveat','cursive'] }
-    }
-  }
+  theme: { extend: {
+    colors: { spidey: { red:'#e62429', darkred:'#991b1b', blue:'#0d5cd4', darkblue:'#1e3a8a', sky:'#38bdf8', yellow:'#fbbf24', dark:'#0a0f1d', paper:'#fffdf5' } },
+    fontFamily: { comic:['Bangers','cursive'], bubble:['Fredoka','sans-serif'], hand:['Patrick Hand','Short Stack','cursive'], body:['Comic Neue','sans-serif'], script:['Caveat','cursive'] }
+  }}
 }
 </script>
 <style>
@@ -209,6 +207,7 @@ body { font-family:'Comic Neue', sans-serif; background:#0a0f1d; color:#0f172a; 
 .easter-egg-hint { font-family: 'Fredoka', sans-serif; font-size: 12px; color: #888; letter-spacing: 2px; margin-top: 12px; }
 .egg-hint { position: fixed; z-index: 9994; width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg,#fbbf24,#e62429); border: 3px solid #000; box-shadow: 3px 3px 0 #000, 0 0 18px rgba(251,191,36,.7); display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; animation: pulseSlow 2s ease-in-out infinite; transition: transform .25s; user-select: none; }
 
+/* ============ PHOTO BOOTH CAMERA ============ */
 .cambooth-overlay { position: fixed; inset: 0; z-index: 10015; background: #000; display: none; flex-direction: column; opacity: 0; visibility: hidden; transition: opacity .4s ease, visibility .4s ease; overflow: hidden; }
 .cambooth-overlay.show { display: flex; opacity: 1; visibility: visible; }
 .cambooth-header { position: absolute; top: 0; left: 0; right: 0; z-index: 20; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(180deg,rgba(0,0,0,.75),transparent); pointer-events: none; }
@@ -219,9 +218,25 @@ body { font-family:'Comic Neue', sans-serif; background:#0a0f1d; color:#0f172a; 
 #camboothVideo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); z-index: 1; }
 #camboothFrame { position: absolute; inset: 0; z-index: 5; pointer-events: none; display: flex; align-items: center; justify-content: center; }
 #camboothFrame .frame-inner { width: 100%; height: 100%; position: relative; }
-.cam-frame-spidey .frame-border { position: absolute; inset: 14px; border: 8px solid #e62429; border-radius: 20px; box-shadow: 0 0 0 4px #000, inset 0 0 0 4px #000, 0 0 40px rgba(230,36,41,.6); }
-.cam-frame-spidey .frame-corner { position: absolute; width: 60px; height: 60px; }
-.cam-frame-spidey .c-tl { top: 8px; left: 8px; } .cam-frame-spidey .c-tr { top: 8px; right: 8px; transform: scaleX(-1); } .cam-frame-spidey .c-bl { bottom: 8px; left: 8px; transform: scaleY(-1); } .cam-frame-spidey .c-br { bottom: 8px; right: 8px; transform: scale(-1,-1); }
+
+/* FRAME SPIDERMAN BRAND NEW DAY */
+.cam-frame-bnd { width: 100%; height: 100%; position: relative; display: flex; align-items: center; justify-content: center; padding: 8px; box-sizing: border-box; }
+.bnd-strip { width: 100%; max-width: 320px; height: 100%; max-height: 94%; aspect-ratio: 3.2 / 6.8; position: relative; background: #0a0a0a; border-radius: 4px; padding: 8px; box-shadow: 0 0 0 2px #000, 0 0 0 3px rgba(255,255,255,.15), 0 20px 60px rgba(0,0,0,.85); }
+.bnd-strip::before { content: ''; position: absolute; inset: 0; border-radius: 4px; background: repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 1px, transparent 1px 22px), repeating-linear-gradient(-45deg, rgba(255,255,255,.06) 0 1px, transparent 1px 22px); pointer-events: none; z-index: 1; }
+.bnd-inner { position: absolute; inset: 8px; border-radius: 3px; background: linear-gradient(180deg, #8b1a1f 0%, #a01820 50%, #6b1015 100%); border: 1px solid rgba(255,255,255,.15); box-shadow: inset 0 0 30px rgba(0,0,0,.5); display: flex; flex-direction: column; padding: 5px; z-index: 2; }
+.bnd-photos { flex: 1; display: flex; flex-direction: column; gap: 4px; padding: 2px; }
+.bnd-photo { flex: 1; border-radius: 2px; background: rgba(0,0,0,.3); border: 1.5px solid #000; box-shadow: inset 0 0 12px rgba(0,0,0,.7); position: relative; }
+.bnd-photo::after { content: attr(data-num); position: absolute; top: 3px; left: 5px; font-family: 'Bangers', cursive; font-size: 11px; color: rgba(255,255,255,.35); }
+.bnd-logo { padding: 5px 3px 3px; text-align: center; border-top: 1px solid rgba(255,255,255,.2); margin-top: 4px; }
+.bnd-logo-main { font-family: 'Bangers', cursive; font-style: italic; font-weight: 900; font-size: 18px; color: #fff; letter-spacing: 2px; -webkit-text-stroke: 1px #000; text-shadow: 2px 2px 0 #000, 0 0 8px rgba(255,220,100,.6); line-height: 1; }
+.bnd-logo-sub { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 7px; color: #ffd978; letter-spacing: 3px; margin-top: 2px; text-shadow: 1px 1px 0 #000; }
+.bnd-date { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 8px; color: rgba(255,255,255,.85); letter-spacing: 1.5px; margin-top: 2px; }
+.bnd-corner { position: absolute; font-size: 14px; filter: drop-shadow(0 1px 2px rgba(0,0,0,.8)); z-index: 5; }
+.bnd-corner.tl { top: 4px; left: 4px; }
+.bnd-corner.tr { top: 4px; right: 4px; }
+.bnd-corner.bl { bottom: 4px; left: 4px; }
+.bnd-corner.br { bottom: 4px; right: 4px; }
+
 .cam-frame-polaroid .frame-border { position: absolute; inset: 20px; border: 14px solid #fff; border-bottom-width: 90px; box-shadow: 0 20px 60px rgba(0,0,0,.7); }
 .cam-frame-polaroid .frame-caption { position: absolute; bottom: 30px; left: 30px; right: 30px; font-family: 'Caveat', cursive; font-size: 30px; font-weight: 700; color: #1a1a2e; text-align: center; }
 .cam-frame-comic .frame-border { position: absolute; inset: 0; box-shadow: inset 0 0 0 24px #000; }
@@ -234,20 +249,16 @@ body { font-family:'Comic Neue', sans-serif; background:#0a0f1d; color:#0f172a; 
 
 .cambooth-stickers { position: absolute; inset: 0; z-index: 6; pointer-events: none; }
 .cam-sticker { position: absolute; font-size: 48px; filter: drop-shadow(3px 3px 0 rgba(0,0,0,.6)); animation: float 3s ease-in-out infinite; }
-
 .cam-virtual-character { position: absolute; bottom: 0; z-index: 4; width: 30%; filter: drop-shadow(0 10px 20px rgba(0,0,0,.5)); transition: all .3s ease; pointer-events: none; }
 .cam-virtual-character.pos-left { left: 2%; } .cam-virtual-character.pos-right { right: 2%; transform: scaleX(-1); }
 .cam-virtual-character.small { width: 22%; } .cam-virtual-character.medium { width: 30%; } .cam-virtual-character.large { width: 42%; }
-
 .cam-countdown { position: absolute; inset: 0; z-index: 15; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,.35); pointer-events: none; }
 .cam-countdown.active { display: flex; }
 .cam-countdown-number { font-family: 'Bangers', cursive; font-size: clamp(100px,30vw,200px); color: #fbbf24; text-shadow: 8px 8px 0 #e62429, 0 0 60px rgba(251,191,36,.8); animation: countPulse .85s ease; }
-
 .cam-flash { position: absolute; inset: 0; background: white; opacity: 0; pointer-events: none; z-index: 20; }
 .cam-flash.fire { animation: shutterFlash .5s ease-out; }
 .cam-shutter-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0); font-family: 'Bangers', cursive; font-size: 80px; color: #fff; -webkit-text-stroke: 4px #000; text-shadow: 6px 6px 0 #e62429; z-index: 19; opacity: 0; pointer-events: none; }
 .cam-shutter-text.fire { animation: shutterText .8s ease-out; }
-
 .cam-web-effect { position: absolute; inset: 0; z-index: 30; pointer-events: none; overflow: hidden; display: none; }
 .cam-web-effect.active { display: block; }
 .cam-web-line { position: absolute; width: 4px; height: 0; background: linear-gradient(180deg,#fff,#e2e8f0,transparent); transform-origin: top center; box-shadow: 0 0 12px rgba(255,255,255,.9); animation: webShootAnim .5s ease-out forwards; }
@@ -304,7 +315,6 @@ body { font-family:'Comic Neue', sans-serif; background:#0a0f1d; color:#0f172a; 
 </style>
 </head>
 <body class="font-body">
-
 <div id="cityBg">
   <div class="moon-spidey"></div>
   <div class="building b1"></div><div class="building b2"></div><div class="building b3"></div>
@@ -320,21 +330,13 @@ body { font-family:'Comic Neue', sans-serif; background:#0a0f1d; color:#0f172a; 
     <h2 class="pin-title">TICKET BOX</h2>
     <p class="pin-subtitle">MASUKKAN PIN UNTUK MEMBUKA</p>
     <div class="pin-display">
-      <div class="pin-dot" id="pinDot0"></div>
-      <div class="pin-dot" id="pinDot1"></div>
-      <div class="pin-dot" id="pinDot2"></div>
-      <div class="pin-dot" id="pinDot3"></div>
+      <div class="pin-dot" id="pinDot0"></div><div class="pin-dot" id="pinDot1"></div>
+      <div class="pin-dot" id="pinDot2"></div><div class="pin-dot" id="pinDot3"></div>
     </div>
     <div class="pin-keypad">
-      <button class="pin-key" onclick="enterPin('1')">1</button>
-      <button class="pin-key" onclick="enterPin('2')">2</button>
-      <button class="pin-key" onclick="enterPin('3')">3</button>
-      <button class="pin-key" onclick="enterPin('4')">4</button>
-      <button class="pin-key" onclick="enterPin('5')">5</button>
-      <button class="pin-key" onclick="enterPin('6')">6</button>
-      <button class="pin-key" onclick="enterPin('7')">7</button>
-      <button class="pin-key" onclick="enterPin('8')">8</button>
-      <button class="pin-key" onclick="enterPin('9')">9</button>
+      <button class="pin-key" onclick="enterPin('1')">1</button><button class="pin-key" onclick="enterPin('2')">2</button><button class="pin-key" onclick="enterPin('3')">3</button>
+      <button class="pin-key" onclick="enterPin('4')">4</button><button class="pin-key" onclick="enterPin('5')">5</button><button class="pin-key" onclick="enterPin('6')">6</button>
+      <button class="pin-key" onclick="enterPin('7')">7</button><button class="pin-key" onclick="enterPin('8')">8</button><button class="pin-key" onclick="enterPin('9')">9</button>
       <button class="pin-key clear" onclick="clearPin()">CLR</button>
       <button class="pin-key zero" onclick="enterPin('0')">0</button>
       <button class="pin-key enter" onclick="submitPin()">OK</button>
@@ -466,6 +468,7 @@ body { font-family:'Comic Neue', sans-serif; background:#0a0f1d; color:#0f172a; 
 </div>
 <div id="eggHintContainer"></div>
 
+<!-- ============ PHOTO BOOTH CAMERA ============ -->
 <div id="cambooth" class="cambooth-overlay">
   <div class="cambooth-header">
     <div class="cambooth-title">📸 SPIDEY CAM 📸</div>
@@ -482,16 +485,14 @@ body { font-family:'Comic Neue', sans-serif; background:#0a0f1d; color:#0f172a; 
     <div id="camFlash" class="cam-flash"></div>
     <div id="camStripHint" class="cam-strip-hint">📸 FOTO KE-1 DARI 4</div>
     <div id="camStripProgress" class="cam-strip-progress">
-      <div class="cam-strip-dot" data-idx="0"></div>
-      <div class="cam-strip-dot" data-idx="1"></div>
-      <div class="cam-strip-dot" data-idx="2"></div>
-      <div class="cam-strip-dot" data-idx="3"></div>
+      <div class="cam-strip-dot" data-idx="0"></div><div class="cam-strip-dot" data-idx="1"></div>
+      <div class="cam-strip-dot" data-idx="2"></div><div class="cam-strip-dot" data-idx="3"></div>
     </div>
   </div>
   <div class="cambooth-controls">
     <div class="cam-mode-toggle">
-      <button class="cam-mode-btn active" id="camModeSingle" onclick="setCamMode('single')">📷 SINGLE</button>
-      <button class="cam-mode-btn" id="camModeStrip" onclick="setCamMode('strip')">🎞️ 4-FRAME</button>
+      <button class="cam-mode-btn" id="camModeSingle" onclick="setCamMode('single')">📷 SINGLE</button>
+      <button class="cam-mode-btn active" id="camModeStrip" onclick="setCamMode('strip')">🎞️ 4-FRAME</button>
     </div>
     <div class="cam-row-title">⏱️ JEDA COUNTDOWN</div>
     <div class="cam-row" id="camDelayRow">
@@ -501,7 +502,7 @@ body { font-family:'Comic Neue', sans-serif; background:#0a0f1d; color:#0f172a; 
     </div>
     <div class="cam-row-title">🖼️ FRAME</div>
     <div class="cam-row" id="camFrameRow">
-      <button class="cam-choice active" data-frame="spidey" onclick="setCamFrame('spidey', this)">🕷️<span class="cam-choice-label">SPIDEY</span></button>
+      <button class="cam-choice active" data-frame="spidey" onclick="setCamFrame('spidey', this)">🕷️<span class="cam-choice-label">BND</span></button>
       <button class="cam-choice" data-frame="polaroid" onclick="setCamFrame('polaroid', this)">📷<span class="cam-choice-label">POLAROID</span></button>
       <button class="cam-choice" data-frame="comic" onclick="setCamFrame('comic', this)">💥<span class="cam-choice-label">COMIC</span></button>
       <button class="cam-choice" data-frame="heart" onclick="setCamFrame('heart', this)">💖<span class="cam-choice-label">HEART</span></button>
@@ -854,11 +855,11 @@ body { font-family:'Comic Neue', sans-serif; background:#0a0f1d; color:#0f172a; 
 <audio id="sfxCountdown" preload="auto"><source src="https://files.catbox.moe/gt4u9s.mp3" type="audio/mpeg"></audio>
 <audio id="sfxTing" preload="auto"><source src="https://files.catbox.moe/64wket.mp3" type="audio/mpeg"></audio>
 </div>
+
 <script>
 /* ============ STORY DATA ============ */
 const STORIES = {
-  type1: {
-    title:"TYPE 01", subtitle:"THE FIRST SIDE OF THE STORY",
+  type1: { title:"TYPE 01", subtitle:"THE FIRST SIDE OF THE STORY",
     chapters:[
       `happyy sweet seventeenn dek Fania‼️🎊💕`,
       `maaciiii yaaa buat semuaa yang udaa kamu kasii ke akuu — barang, uang, waktu, perhatian kecil kamu. makasiii udaa bikin aku ngerasain hal yang aku pikir gaakann aku dapett darii siapapunn. semogaa semua keinginan dek Fania terwujud satu persatu, panjang umurr, sehatt selaluu, dimudahkann segala urusannya. aminnnn ⭐⭐`,
@@ -869,18 +870,11 @@ const STORIES = {
       `sekalii lagii happy birthdayyy dek Fania🎊💐🏡 wishhh uu all d besttt!!!`
     ]
   },
-  type2: {
-    title:"TYPE 02", subtitle:"OUR MEMORY LANE 📸",
-    images:[
-      "https://i.ibb.co.com/MD2p422V/IMG-20260904-WA0018.jpg",
-      "https://i.ibb.co.com/5hRJjrDS/IMG-20260904-WA0027.jpg",
-      "https://i.ibb.co.com/N2wFr72P/IMG-20260904-WA0042.jpg",
-      "https://i.ibb.co.com/1tJP6cMS/IMG-20260908-WA0096.jpg"
-    ],
+  type2: { title:"TYPE 02", subtitle:"OUR MEMORY LANE 📸",
+    images:["https://i.ibb.co.com/MD2p422V/IMG-20260904-WA0018.jpg","https://i.ibb.co.com/5hRJjrDS/IMG-20260904-WA0027.jpg","https://i.ibb.co.com/N2wFr72P/IMG-20260904-WA0042.jpg","https://i.ibb.co.com/1tJP6cMS/IMG-20260908-WA0096.jpg"],
     chapters:["A moment to remember...","Another beautiful memory...","Every picture tells a story...","Forever in my heart..."]
   },
-  type3: {
-    title:"TYPE 03", subtitle:"A SONG FOR YOU 🎵",
+  type3: { title:"TYPE 03", subtitle:"A SONG FOR YOU 🎵",
     chapters:[
       `Dalam lelahnya mata\nNikmat dunia menjelma\nSejenak dia berharap\nMalam tanpa batas`,
       `Bunda slalu tanamkan\nJangan pernah menyerah\nJalani dan panjatkan\nKelak syukur kau ucapkan pada diri Nya`,
@@ -947,40 +941,24 @@ const bgmComic = document.getElementById('bgmComic');
 const sfxTing = document.getElementById('sfxTing');
 [bgmType1, bgmType3, bgmComic].forEach(a => { if (a) a.volume = 0.3; });
 let activeBgm = null;
-
 function switchBGM(newBgm, label='♫ NOW PLAYING') {
   if (!newBgm) return;
   if (activeBgm === newBgm && !newBgm.paused) return;
-  [bgMusic, bgmType1, bgmType3, bgmComic].forEach(a => {
-    if (a && a !== newBgm && !a.paused) a.pause();
-  });
+  [bgMusic, bgmType1, bgmType3, bgmComic].forEach(a => { if (a && a !== newBgm && !a.paused) a.pause(); });
   activeBgm = newBgm;
   if (isGlobalMuted) { bgmStatusText.innerText = '🔇 ' + label; return; }
   newBgm.volume = bgMusic.volume;
   newBgm.play().then(() => { bgmStatusText.innerText = label; updateAudioButtonUI(); }).catch(() => { bgmStatusText.innerText = '⚠️ Tap untuk play'; });
 }
-function stopAllBGM() {
-  [bgMusic, bgmType1, bgmType3, bgmComic].forEach(a => { if (a && !a.paused) a.pause(); });
-  activeBgm = null;
-}
-function playTingSound() {
-  if (isGlobalMuted || !sfxTing) return;
-  try { sfxTing.currentTime = 0; sfxTing.volume = 0.7; sfxTing.play().catch(()=>{}); } catch(e){}
-}
-function playSfx(id) {
-  if (isGlobalMuted) return;
-  const el = document.getElementById(id);
-  if (!el) return;
-  try { el.currentTime = 0; el.volume = 0.6; el.play().catch(()=>{}); } catch(e){}
-}
+function stopAllBGM() { [bgMusic, bgmType1, bgmType3, bgmComic].forEach(a => { if (a && !a.paused) a.pause(); }); activeBgm = null; }
+function playTingSound() { if (isGlobalMuted || !sfxTing) return; try { sfxTing.currentTime = 0; sfxTing.volume = 0.7; sfxTing.play().catch(()=>{}); } catch(e){} }
+function playSfx(id) { if (isGlobalMuted) return; const el = document.getElementById(id); if (!el) return; try { el.currentTime = 0; el.volume = 0.6; el.play().catch(()=>{}); } catch(e){} }
 function playThwipSound() {
   try {
     if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
     if (audioContext.state === 'suspended') audioContext.resume();
-    const osc = audioContext.createOscillator();
-    const gain = audioContext.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(800, audioContext.currentTime);
+    const osc = audioContext.createOscillator(); const gain = audioContext.createGain();
+    osc.type = 'sine'; osc.frequency.setValueAtTime(800, audioContext.currentTime);
     osc.frequency.exponentialRampToValueAtTime(150, audioContext.currentTime + .15);
     gain.gain.setValueAtTime(.3, audioContext.currentTime);
     gain.gain.exponentialRampToValueAtTime(.01, audioContext.currentTime + .15);
@@ -994,14 +972,8 @@ function toggleAudio() {
   else { const t = activeBgm || bgMusic; t.play().then(() => { activeBgm = t; updateAudioButtonUI(); }).catch(()=>{}); }
   updateAudioButtonUI();
 }
-function updateAudioButtonUI() {
-  const isPlaying = (activeBgm && !activeBgm.paused) || (!bgMusic.paused);
-  audioIcon.className = isPlaying ? 'fa-solid fa-pause' : 'fa-solid fa-play';
-}
-function changeVolume(val) {
-  [bgMusic, bgmType1, bgmType3, bgmComic].forEach(a => { if (a) a.volume = val; });
-  volumePercentText.innerText = Math.round(val * 100) + '%';
-}
+function updateAudioButtonUI() { const isPlaying = (activeBgm && !activeBgm.paused) || (!bgMusic.paused); audioIcon.className = isPlaying ? 'fa-solid fa-pause' : 'fa-solid fa-play'; }
+function changeVolume(val) { [bgMusic, bgmType1, bgmType3, bgmComic].forEach(a => { if (a) a.volume = val; }); volumePercentText.innerText = Math.round(val * 100) + '%'; }
 function toggleGlobalMute() {
   isGlobalMuted = !isGlobalMuted;
   const icon = document.getElementById('globalMuteIcon');
@@ -1036,27 +1008,19 @@ function transitionView(target) {
   target.classList.remove('hidden'); target.classList.add('flex');
   void target.offsetWidth; target.classList.add('view-anim-in');
 }
-function playWebSwing(cb) {
-  playSfx('sfxWhoosh');
-  const sw = document.getElementById('webSwing');
-  sw.classList.add('active');
-  setTimeout(() => { sw.classList.remove('active'); if (cb) cb(); }, 1000);
-}
+function playWebSwing(cb) { playSfx('sfxWhoosh'); const sw = document.getElementById('webSwing'); sw.classList.add('active'); setTimeout(() => { sw.classList.remove('active'); if (cb) cb(); }, 1000); }
 function goToHome() { playThwipSound(); playWebSwing(() => { transitionView(viewHome); switchBGM(bgMusic,'♫ Oh Yeah — Spiderman'); window.scrollTo({top:0,behavior:'smooth'}); }); }
 function goToTypeSelector() { playThwipSound(); playWebSwing(() => { transitionView(viewSelector); switchBGM(bgMusic,'♫ Oh Yeah — Spiderman'); window.scrollTo({top:0,behavior:'smooth'}); }); }
 function goToCustomizer() { playThwipSound(); markMission('dressup'); playWebSwing(() => { transitionView(viewCustomizer); window.scrollTo({top:0,behavior:'smooth'}); }); }
 function goToGift() { playThwipSound(); playWebSwing(() => { transitionView(viewGift); window.scrollTo({top:0,behavior:'smooth'}); }); }
 function openCollection() { playThwipSound(); renderCardCollection(); playWebSwing(() => { transitionView(viewCollection); window.scrollTo({top:0,behavior:'smooth'}); }); }
-
 function openStory(typeKey, idx=0) {
   playThwipSound();
-  currentStoryKey = typeKey;
-  currentChapterIndex = idx;
+  currentStoryKey = typeKey; currentChapterIndex = idx;
   if (typeKey === 'type1') switchBGM(bgmType1, '♫ Monokrom — Tulus');
   else if (typeKey === 'type2') {
     [bgmType1, bgmType3, bgmComic].forEach(a => a && a.pause());
-    audioSource.src = "https://files.catbox.moe/g7i65v.mp3";
-    bgMusic.load();
+    audioSource.src = "https://files.catbox.moe/g7i65v.mp3"; bgMusic.load();
     switchBGM(bgMusic, '♫ Long Live — Taylor Swift');
   } else if (typeKey === 'type3') switchBGM(bgmType3, '♫ Lihat Dengar Rasakan — Sheila on 7');
   if (typeKey === 'type1') markMission('story');
@@ -1064,7 +1028,6 @@ function openStory(typeKey, idx=0) {
   playWebSwing(() => { transitionView(viewReader); renderChapter(); window.scrollTo({top:0,behavior:'smooth'}); });
   if (typeKey === 'type2' && !foundEggs.has('egg3')) setTimeout(() => showEasterEgg('egg3'), 2000);
 }
-
 function renderChapter() {
   const s = STORIES[currentStoryKey];
   const txt = s.chapters[currentChapterIndex];
@@ -1081,39 +1044,17 @@ function renderChapter() {
   const imgC = document.getElementById('chapterImageContainer');
   const imgE = document.getElementById('chapterImage');
   const txtC = document.getElementById('chapterContent');
-  if (currentStoryKey === 'type2' && s.images && s.images[currentChapterIndex]) {
-    imgE.src = s.images[currentChapterIndex];
-    imgC.classList.remove('hidden');
-    txtC.classList.add('hidden');
-  } else {
-    imgC.classList.add('hidden');
-    txtC.classList.remove('hidden');
-  }
+  if (currentStoryKey === 'type2' && s.images && s.images[currentChapterIndex]) { imgE.src = s.images[currentChapterIndex]; imgC.classList.remove('hidden'); txtC.classList.add('hidden'); }
+  else { imgC.classList.add('hidden'); txtC.classList.remove('hidden'); }
   document.getElementById('btnPrevChapter').disabled = currentChapterIndex === 0;
   const btnNext = document.getElementById('btnNextChapter');
   if (currentChapterIndex === total - 1) btnNext.innerHTML = `<span>FINISH 🎉</span> <i class="fa-solid fa-flag-checkered"></i>`;
   else btnNext.innerHTML = `<span>NEXT</span> <i class="fa-solid fa-chevron-right"></i>`;
 }
-function nextChapter() {
-  playSfx('sfxCountdown');
-  const s = STORIES[currentStoryKey];
-  if (currentChapterIndex < s.chapters.length - 1) { currentChapterIndex++; renderChapter(); }
-  else showEndScreen();
-}
-function prevChapter() {
-  playThwipSound();
-  if (currentChapterIndex > 0) { currentChapterIndex--; renderChapter(); }
-}
-function showEndScreen() {
-  playWebSwing(() => {
-    transitionView(viewEnd); window.scrollTo({top:0,behavior:'smooth'});
-    if (typeof confetti === 'function') confetti({ particleCount:120, spread:80, origin:{y:.6}, colors:['#e62429','#0d5cd4','#fbbf24','#fff'] });
-  });
-}
-function triggerSpideyAction() {
-  playThwipSound();
-  if (typeof confetti === 'function') confetti({ particleCount:40, spread:60, origin:{y:.3}, colors:['#e62429','#fff','#0d5cd4'] });
-}
+function nextChapter() { playSfx('sfxCountdown'); const s = STORIES[currentStoryKey]; if (currentChapterIndex < s.chapters.length - 1) { currentChapterIndex++; renderChapter(); } else showEndScreen(); }
+function prevChapter() { playThwipSound(); if (currentChapterIndex > 0) { currentChapterIndex--; renderChapter(); } }
+function showEndScreen() { playWebSwing(() => { transitionView(viewEnd); window.scrollTo({top:0,behavior:'smooth'}); if (typeof confetti === 'function') confetti({ particleCount:120, spread:80, origin:{y:.6}, colors:['#e62429','#0d5cd4','#fbbf24','#fff'] }); }); }
+function triggerSpideyAction() { playThwipSound(); if (typeof confetti === 'function') confetti({ particleCount:40, spread:60, origin:{y:.3}, colors:['#e62429','#fff','#0d5cd4'] }); }
 
 /* ============ MISSIONS ============ */
 function saveMissions() { try { localStorage.setItem('fania_missions', JSON.stringify(missions)); } catch(e){} }
@@ -1156,19 +1097,12 @@ function updateMissionBoard() {
 function renderCardCollection() {
   const grid = document.getElementById('cardGrid');
   if (!grid) return;
-  grid.innerHTML = SPIDEY_CARDS.map(c => {
-    const u = missions[c.id];
-    return `<div class="spidey-card ${u?'':'locked'}"><div class="card-icon">${u?c.icon:'🔒'}</div><div class="card-title">${c.title}</div><div class="card-desc">${c.desc}</div></div>`;
-  }).join('');
+  grid.innerHTML = SPIDEY_CARDS.map(c => { const u = missions[c.id]; return `<div class="spidey-card ${u?'':'locked'}"><div class="card-icon">${u?c.icon:'🔒'}</div><div class="card-title">${c.title}</div><div class="card-desc">${c.desc}</div></div>`; }).join('');
 }
 
 /* ============ COMIC ============ */
 let currentPanelIdx = 0;
-function startComicIntro() {
-  currentPanelIdx = 0; renderPanel();
-  document.getElementById('comicIntro').classList.add('active');
-  switchBGM(bgmComic, '♫ Comic Intro 🎬');
-}
+function startComicIntro() { currentPanelIdx = 0; renderPanel(); document.getElementById('comicIntro').classList.add('active'); switchBGM(bgmComic, '♫ Comic Intro 🎬'); }
 function renderPanel() {
   const p = COMIC_PANELS[currentPanelIdx];
   document.getElementById('panelNum').textContent = currentPanelIdx + 1;
@@ -1220,8 +1154,7 @@ function hitTarget(t) {
   const rect = t.getBoundingClientRect();
   shootWeb(rect.left + rect.width/2, rect.top + rect.height/2);
   t.style.transition = 'transform .3s, opacity .3s';
-  t.style.transform = 'scale(2)';
-  t.style.opacity = '0';
+  t.style.transform = 'scale(2)'; t.style.opacity = '0';
   setTimeout(() => t.remove(), 300);
   miniGameScore++;
   document.getElementById('mgScoreText').textContent = `${miniGameScore} / ${MINI_GAME_TARGET}`;
@@ -1255,17 +1188,8 @@ function winMiniGame() {
   if (typeof confetti === 'function') confetti({ particleCount:200, spread:100, origin:{y:.5}, colors:['#e62429','#0d5cd4','#fbbf24','#fff'] });
   setTimeout(() => showEasterEgg('egg4'), 1200);
 }
-function closeMiniGame() {
-  playThwipSound();
-  miniGameActive = false;
-  miniGameEl.classList.remove('active');
-  document.querySelectorAll('.mg-target, .mg-web').forEach(el => el.remove());
-  switchBGM(bgMusic, '♫ Oh Yeah — Spiderman');
-}
-function tryUnlockStarGirl() {
-  if (starGirlUnlocked) selectAccessory('stargirl');
-  else { playSfx('sfxBuzz'); showToast("🔒 Main Web-Shooter dulu!"); }
-}
+function closeMiniGame() { playThwipSound(); miniGameActive = false; miniGameEl.classList.remove('active'); document.querySelectorAll('.mg-target, .mg-web').forEach(el => el.remove()); switchBGM(bgMusic, '♫ Oh Yeah — Spiderman'); }
+function tryUnlockStarGirl() { if (starGirlUnlocked) selectAccessory('stargirl'); else { playSfx('sfxBuzz'); showToast("🔒 Main Web-Shooter dulu!"); } }
 
 /* ============ GIFTS ============ */
 function openGift(idx) {
@@ -1280,10 +1204,7 @@ function openGift(idx) {
   setTimeout(() => playSfx('sfxFunfare'), 250);
   if (typeof confetti === 'function') confetti({ particleCount:100, spread:80, origin:{y:.6}, colors:['#e62429','#0d5cd4','#fbbf24','#f9c5d5','#fff'] });
 }
-function closeGift() {
-  const m = document.getElementById('giftModal');
-  m.classList.add('hidden'); m.classList.remove('flex');
-}
+function closeGift() { const m = document.getElementById('giftModal'); m.classList.add('hidden'); m.classList.remove('flex'); }
 
 /* ============ CUSTOMIZER ============ */
 const ACCESSORY_SVG = {
@@ -1300,34 +1221,21 @@ function renderAccessories() {
   back.innerHTML = ''; front.innerHTML = '';
   selectedAccessories.forEach(n => { const svg = ACCESSORY_SVG[n]; if (svg) front.innerHTML += svg; });
 }
-function bounceCharacter() {
-  const svg = document.getElementById('spideyGirlSVG');
-  if (!svg) return;
-  svg.classList.remove('bounce'); void svg.offsetWidth; svg.classList.add('bounce');
-}
+function bounceCharacter() { const svg = document.getElementById('spideyGirlSVG'); if (!svg) return; svg.classList.remove('bounce'); void svg.offsetWidth; svg.classList.add('bounce'); }
 function selectAccessory(name) {
   const card = document.getElementById('card-' + name);
   if (!card) return;
-  if (selectedAccessories.includes(name)) {
-    selectedAccessories = selectedAccessories.filter(a => a !== name);
-    card.classList.remove('selected');
-    showToast(`✖️ ${name} dilepas`);
-  } else {
-    if (selectedAccessories.length >= MAX_ACCESSORIES) {
-      const old = selectedAccessories.shift();
-      document.getElementById('card-' + old)?.classList.remove('selected');
-    }
-    selectedAccessories.push(name);
-    card.classList.add('selected');
-    showToast(`✨ ${name} dipakai!`);
+  if (selectedAccessories.includes(name)) { selectedAccessories = selectedAccessories.filter(a => a !== name); card.classList.remove('selected'); showToast(`✖️ ${name} dilepas`); }
+  else {
+    if (selectedAccessories.length >= MAX_ACCESSORIES) { const old = selectedAccessories.shift(); document.getElementById('card-' + old)?.classList.remove('selected'); }
+    selectedAccessories.push(name); card.classList.add('selected'); showToast(`✨ ${name} dipakai!`);
   }
   renderAccessories(); bounceCharacter();
   document.getElementById('flowerCount').innerText = `${selectedAccessories.length} / ${MAX_ACCESSORIES}`;
   playThwipSound();
 }
 function toggleMask() {
-  playThwipSound();
-  maskActive = !maskActive;
+  playThwipSound(); maskActive = !maskActive;
   const m = document.getElementById('sgMask'); const c = document.getElementById('card-mask');
   if (!m || !c) return;
   if (maskActive) { m.style.display = ''; c.classList.add('selected'); showToast("🕷️ Mask aktif!"); }
@@ -1335,8 +1243,7 @@ function toggleMask() {
   bounceCharacter();
 }
 function resetStyle() {
-  playThwipSound();
-  selectedAccessories = []; maskActive = false;
+  playThwipSound(); selectedAccessories = []; maskActive = false;
   document.querySelectorAll('.accessory-card').forEach(c => c.classList.remove('selected'));
   const m = document.getElementById('sgMask'); if (m) m.style.display = 'none';
   renderAccessories(); bounceCharacter();
@@ -1354,8 +1261,7 @@ function saveStyle() {
 /* ============ LOVE LETTER ============ */
 function openLoveLetter() {
   playThwipSound();
-  const o = document.getElementById('loveLetterOverlay');
-  o.classList.add('active');
+  const o = document.getElementById('loveLetterOverlay'); o.classList.add('active');
   const el = document.getElementById('letterTypewriter');
   el.textContent = ''; el.classList.remove('typing-done');
   document.getElementById('btnSkipLetter').classList.remove('hidden');
@@ -1377,89 +1283,48 @@ function finishLetterTyping() {
   document.getElementById('btnCloseLetter').classList.remove('hidden');
 }
 function skipLetterTyping() { finishLetterTyping(); }
-function closeLoveLetter() {
-  playThwipSound();
-  document.getElementById('loveLetterOverlay').classList.remove('active');
-  clearInterval(letterTypingInterval);
-}
+function closeLoveLetter() { playThwipSound(); document.getElementById('loveLetterOverlay').classList.remove('active'); clearInterval(letterTypingInterval); }
 
 /* ============ ENDING CREDIT ============ */
 function openEndingCredit() {
   playThwipSound(); playSfx('sfxWhoosh');
-  const el = document.getElementById('endingCredit');
-  el.classList.add('show');
+  const el = document.getElementById('endingCredit'); el.classList.add('show');
   const s = document.getElementById('creditScroll');
   s.style.animation = 'none'; void s.offsetWidth;
   s.style.animation = 'creditRoll 40s linear forwards';
 }
-function closeEndingCredit() {
-  playThwipSound();
-  document.getElementById('endingCredit').classList.remove('show');
-}
+function closeEndingCredit() { playThwipSound(); document.getElementById('endingCredit').classList.remove('show'); }
 
 /* ============ PHOTO MODE ============ */
-function openPhotoMode() {
-  playThwipSound();
-  document.getElementById('photoMode').classList.add('show');
-  const c = document.getElementById('photoCharacter');
-  const svg = document.getElementById('spideyGirlSVG');
-  if (svg) c.innerHTML = svg.outerHTML;
-}
-function closePhotoMode() {
-  playThwipSound();
-  document.getElementById('photoMode').classList.remove('show');
-}
-function setPhotoBg(cls, btn) {
-  playThwipSound();
-  document.getElementById('photoBg').className = 'photo-bg ' + cls;
-  document.querySelectorAll('.photo-bg-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-}
+function openPhotoMode() { playThwipSound(); document.getElementById('photoMode').classList.add('show'); const c = document.getElementById('photoCharacter'); const svg = document.getElementById('spideyGirlSVG'); if (svg) c.innerHTML = svg.outerHTML; }
+function closePhotoMode() { playThwipSound(); document.getElementById('photoMode').classList.remove('show'); }
+function setPhotoBg(cls, btn) { playThwipSound(); document.getElementById('photoBg').className = 'photo-bg ' + cls; document.querySelectorAll('.photo-bg-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
 function downloadPhoto() {
   playTingSound(); setTimeout(() => playSfx('sfxFunfare'), 250);
   const t = document.getElementById('photoPreview');
   if (typeof html2canvas === 'undefined') { showToast("⚠️ Library belum siap"); return; }
   html2canvas(t, { backgroundColor: null, scale: 2 }).then(canvas => {
     const a = document.createElement('a');
-    a.download = 'spidey-girl-fania.png';
-    a.href = canvas.toDataURL('image/png');
-    a.click();
+    a.download = 'spidey-girl-fania.png'; a.href = canvas.toDataURL('image/png'); a.click();
     showToast("📥 Foto di-download!");
   });
 }
 
 /* ============ SHARE / TOAST ============ */
-function shareExperience() {
-  playThwipSound();
-  const url = window.location.href;
-  if (navigator.share) navigator.share({ title:'Happy Sweet Seventeen, Fania! 🕷️', text:'Ada kejutan!', url }).catch(()=>{});
-  else navigator.clipboard.writeText(url).then(() => showShareToast("🔗 Link di-copy!")).catch(()=>{});
-}
-function showShareToast(msg) {
-  const t = document.createElement('div');
-  t.className = 'share-toast show'; t.textContent = msg;
-  document.body.appendChild(t);
-  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 500); }, 2500);
-}
+function shareExperience() { playThwipSound(); const url = window.location.href; if (navigator.share) navigator.share({ title:'Happy Sweet Seventeen, Fania! 🕷️', text:'Ada kejutan!', url }).catch(()=>{}); else navigator.clipboard.writeText(url).then(() => showShareToast("🔗 Link di-copy!")).catch(()=>{}); }
+function showShareToast(msg) { const t = document.createElement('div'); t.className = 'share-toast show'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 500); }, 2500); }
 function showToast(msg) {
   const t = document.createElement('div');
   t.className = 'fixed bottom-24 left-1/2 z-50 bg-spidey-paper comic-border px-5 py-3 rounded-xl font-bubble font-bold text-slate-900 text-sm';
-  t.style.transform = 'translateX(-50%)';
-  t.style.animation = 'popIn .4s';
-  t.textContent = msg;
+  t.style.transform = 'translateX(-50%)'; t.style.animation = 'popIn .4s'; t.textContent = msg;
   document.body.appendChild(t);
   setTimeout(() => { t.style.transition = 'opacity .5s'; t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 2200);
 }
 
 /* ============ MAIN ============ */
-function showMainExperience() {
-  transitionView(viewHome);
-  switchBGM(bgMusic, '♫ Oh Yeah — Spiderman');
-  updateMissionBoard();
-  setTimeout(() => { if (typeof confetti === 'function') confetti({ particleCount:120, spread:80, origin:{y:.6}, colors:['#e62429','#0d5cd4','#fbbf24','#fff'] }); }, 500);
-}
+function showMainExperience() { transitionView(viewHome); switchBGM(bgMusic, '♫ Oh Yeah — Spiderman'); updateMissionBoard(); setTimeout(() => { if (typeof confetti === 'function') confetti({ particleCount:120, spread:80, origin:{y:.6}, colors:['#e62429','#0d5cd4','#fbbf24','#fff'] }); }, 500); }
 
-/* ============ COUNTDOWN (TANPA TRAILER) ============ */
+/* ============ COUNTDOWN ============ */
 let countdown = 3;
 function runCountdown() {
   const n = document.getElementById('countdownNumber');
@@ -1469,11 +1334,7 @@ function runCountdown() {
   if (countdown > 0) { setTimeout(() => { countdown--; runCountdown(); }, 1000); }
   else {
     n.innerText = '🎬';
-    setTimeout(() => {
-      const c = document.getElementById('cinemaIntro');
-      c.classList.remove('show');
-      setTimeout(() => { c.style.display = 'none'; }, 700);
-    }, 500);
+    setTimeout(() => { const c = document.getElementById('cinemaIntro'); c.classList.remove('show'); setTimeout(() => { c.style.display = 'none'; }, 700); }, 500);
     setTimeout(startComicIntro, 1200);
   }
 }
@@ -1483,13 +1344,7 @@ const CORRECT_PIN = '1209';
 let currentPin = '';
 function enterPin(d) { if (currentPin.length < 4) { currentPin += d; updatePinDisplay(); playThwipSound(); } }
 function clearPin() { currentPin = ''; updatePinDisplay(); playThwipSound(); }
-function updatePinDisplay() {
-  for (let i = 0; i < 4; i++) {
-    const d = document.getElementById('pinDot' + i);
-    if (i < currentPin.length) d.classList.add('filled');
-    else d.classList.remove('filled');
-  }
-}
+function updatePinDisplay() { for (let i = 0; i < 4; i++) { const d = document.getElementById('pinDot' + i); if (i < currentPin.length) d.classList.add('filled'); else d.classList.remove('filled'); } }
 function submitPin() {
   if (currentPin === CORRECT_PIN) {
     playSfx('sfxFunfare');
@@ -1499,8 +1354,7 @@ function submitPin() {
     setTimeout(() => { countdown = 3; runCountdown(); }, 2200);
   } else {
     playSfx('sfxBuzz');
-    const c = document.getElementById('pinContent');
-    c.classList.add('shake');
+    const c = document.getElementById('pinContent'); c.classList.add('shake');
     document.getElementById('pinError').textContent = '❌ PIN SALAH!';
     setTimeout(() => { c.classList.remove('shake'); currentPin = ''; updatePinDisplay(); document.getElementById('pinError').textContent = ''; }, 800);
     if (navigator.vibrate) navigator.vibrate([100,50,100]);
@@ -1514,8 +1368,7 @@ function initWebCanvas() {
   let w = canvas.width = window.innerWidth;
   let h = canvas.height = window.innerHeight;
   window.addEventListener('resize', () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; });
-  const nodes = [];
-  const count = Math.min(Math.floor(w/40), 30);
+  const nodes = []; const count = Math.min(Math.floor(w/40), 30);
   for (let i = 0; i < count; i++) nodes.push({ x:Math.random()*w, y:Math.random()*h, vx:(Math.random()-.5)*.5, vy:(Math.random()-.5)*.5, r:Math.random()*1.8+1 });
   function draw() {
     ctx.clearRect(0, 0, w, h);
@@ -1551,8 +1404,7 @@ const foundEggs = new Set();
 let spiderTapCount = 0;
 let creditTapCount = 0;
 function showEasterEgg(key) {
-  const egg = EASTER_EGGS[key];
-  if (!egg) return;
+  const egg = EASTER_EGGS[key]; if (!egg) return;
   playTingSound();
   const o = document.getElementById('easterEggOverlay');
   document.getElementById('eggEmoji').textContent = egg.emoji;
@@ -1560,38 +1412,25 @@ function showEasterEgg(key) {
   document.getElementById('eggText').textContent = egg.text;
   document.getElementById('eggHint').textContent = egg.hint;
   o.classList.add('show');
-  setTimeout(() => {
-    playSfx('sfxFunfare');
-    if (typeof confetti === 'function') confetti({ particleCount:150, spread:100, origin:{y:.5}, colors:['#e62429','#0d5cd4','#fbbf24','#22c55e','#a855f7','#fff'] });
-  }, 300);
-  if (!foundEggs.has(key)) {
-    foundEggs.add(key); updateEggHints();
-    try { localStorage.setItem('fania_eggs', JSON.stringify([...foundEggs])); } catch(e){}
-  }
+  setTimeout(() => { playSfx('sfxFunfare'); if (typeof confetti === 'function') confetti({ particleCount:150, spread:100, origin:{y:.5}, colors:['#e62429','#0d5cd4','#fbbf24','#22c55e','#a855f7','#fff'] }); }, 300);
+  if (!foundEggs.has(key)) { foundEggs.add(key); updateEggHints(); try { localStorage.setItem('fania_eggs', JSON.stringify([...foundEggs])); } catch(e){} }
 }
-function closeEasterEgg() {
-  playThwipSound();
-  document.getElementById('easterEggOverlay').classList.remove('show');
-}
-function loadFoundEggs() {
-  try { const s = localStorage.getItem('fania_eggs'); if (s) JSON.parse(s).forEach(k => foundEggs.add(k)); } catch(e){}
-}
+function closeEasterEgg() { playThwipSound(); document.getElementById('easterEggOverlay').classList.remove('show'); }
+function loadFoundEggs() { try { const s = localStorage.getItem('fania_eggs'); if (s) JSON.parse(s).forEach(k => foundEggs.add(k)); } catch(e){} }
 function updateEggHints() {
-  const c = document.getElementById('eggHintContainer');
-  if (!c) return;
+  const c = document.getElementById('eggHintContainer'); if (!c) return;
   c.innerHTML = '';
   const rem = Object.keys(EASTER_EGGS).filter(k => !foundEggs.has(k));
   const positions = [ { top:'25%', left:'8%' }, { top:'55%', right:'8%' }, { bottom:'30%', left:'8%' }, { top:'35%', right:'8%' }, { bottom:'45%', right:'8%' } ];
   rem.forEach((key, i) => {
-    const btn = document.createElement('div');
-    btn.className = 'egg-hint'; btn.innerHTML = '🥚';
+    const btn = document.createElement('div'); btn.className = 'egg-hint'; btn.innerHTML = '🥚';
     Object.assign(btn.style, positions[i % positions.length]);
     btn.addEventListener('click', () => { playThwipSound(); showEasterEgg(key); });
     c.appendChild(btn);
   });
 }
 
-/* ============ PHOTO BOOTH KAMERA ============ */
+/* ============ PHOTO BOOTH KAMERA (BND STYLE) ============ */
 let camStream = null;
 let camFacingMode = 'user';
 let camCurrentFrame = 'spidey';
@@ -1600,7 +1439,7 @@ let camCurrentSticker = 'none';
 let camCurrentDelay = 3;
 let camLastPhoto = null;
 let camCountdownActive = false;
-let camMode = 'single';
+let camMode = 'strip';
 let camStripPhotos = [];
 let camStripInProgress = false;
 const CAM_STRIP_TARGET = 4;
@@ -1613,8 +1452,6 @@ const CAM_STICKERS = {
   crown:['👑','✨','👑','✨','👑','✨'],
   balloon:['🎈','🎈','🎈','🎈','🎈','🎈']
 };
-const SPIDER_CORNER_SVG = `<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><path d="M8 8 L20 20 M8 15 L20 25 M15 8 L25 20 M8 22 L20 30 M22 8 L30 20" stroke="#000" stroke-width="3" stroke-linecap="round" fill="none"/><circle cx="8" cy="8" r="6" fill="#e62429" stroke="#000" stroke-width="3"/><circle cx="8" cy="8" r="2" fill="#fff"/></svg>`;
-
 const CAM_VIRTUAL_SVG = {
   girl: `<svg viewBox="0 0 200 260" style="overflow:visible;"><defs><linearGradient id="cgSkin" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ffe4d4"/><stop offset="100%" stop-color="#f5c4a8"/></linearGradient><linearGradient id="cgHair" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4a3a68"/><stop offset="100%" stop-color="#2a1f45"/></linearGradient><linearGradient id="cgRed" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff3b40"/><stop offset="100%" stop-color="#c81d22"/></linearGradient></defs><path d="M62 138 Q100 124 138 138 L152 232 Q100 252 48 232 Z" fill="url(#cgRed)" stroke="#0a0f1d" stroke-width="3"/><path d="M52 82 Q46 34 100 30 Q154 34 148 82 L140 128 Q120 140 100 138 Q80 140 60 128 Z" fill="url(#cgHair)" stroke="#0a0f1d" stroke-width="3"/><ellipse cx="100" cy="96" rx="42" ry="46" fill="url(#cgSkin)" stroke="#0a0f1d" stroke-width="3"/><ellipse cx="84" cy="96" rx="6" ry="8" fill="#1a1a2e"/><ellipse cx="116" cy="96" rx="6" ry="8" fill="#1a1a2e"/><path d="M94 118 Q100 124 106 118" fill="none" stroke="#5a2a3a" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="52" cy="165" rx="10" ry="28" fill="url(#cgRed)" stroke="#0a0f1d" stroke-width="3" transform="rotate(14 52 165)"/><ellipse cx="148" cy="165" rx="10" ry="28" fill="url(#cgRed)" stroke="#0a0f1d" stroke-width="3" transform="rotate(-14 148 165)"/></svg>`,
   boy: `<svg viewBox="0 0 200 260" style="overflow:visible;"><defs><linearGradient id="cbRed" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff3b40"/><stop offset="100%" stop-color="#c81d22"/></linearGradient><linearGradient id="cbBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a6ee0"/><stop offset="100%" stop-color="#0d3f8f"/></linearGradient></defs><path d="M62 138 Q100 124 138 138 L152 232 Q100 252 48 232 Z" fill="url(#cbBlue)" stroke="#0a0f1d" stroke-width="3"/><ellipse cx="52" cy="165" rx="10" ry="28" fill="url(#cbRed)" stroke="#0a0f1d" stroke-width="3" transform="rotate(14 52 165)"/><ellipse cx="148" cy="165" rx="10" ry="28" fill="url(#cbRed)" stroke="#0a0f1d" stroke-width="3" transform="rotate(-14 148 165)"/><ellipse cx="100" cy="96" rx="42" ry="46" fill="url(#cbRed)" stroke="#0a0f1d" stroke-width="3"/><path d="M66 88 Q82 78 94 86 Q96 100 88 108 Q76 104 66 88 Z" fill="#fff" stroke="#0a0f1d" stroke-width="2.5"/><path d="M134 88 Q118 78 106 86 Q104 100 112 108 Q124 104 134 88 Z" fill="#fff" stroke="#0a0f1d" stroke-width="2.5"/></svg>`
@@ -1627,8 +1464,7 @@ async function openCambooth() {
   await startCamera();
 }
 async function startCamera() {
-  const v = document.getElementById('camboothVideo');
-  if (!v) return;
+  const v = document.getElementById('camboothVideo'); if (!v) return;
   if (camStream) { camStream.getTracks().forEach(t => t.stop()); camStream = null; }
   try {
     camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: camFacingMode, width: { ideal: 1080 }, height: { ideal: 1440 } }, audio: false });
@@ -1650,32 +1486,53 @@ function setCamMode(mode) {
   camStripPhotos = []; updateStripProgress();
 }
 function setCamDelay(sec, btn) {
-  playThwipSound();
-  camCurrentDelay = sec;
+  playThwipSound(); camCurrentDelay = sec;
   document.querySelectorAll('#camDelayRow .cam-choice').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   showToast(`⏱️ Jeda: ${sec} detik`);
 }
 function setCamFrame(frame, btn) {
-  playThwipSound();
-  camCurrentFrame = frame; applyCamFrame();
+  playThwipSound(); camCurrentFrame = frame; applyCamFrame();
   document.querySelectorAll('#camFrameRow .cam-choice').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 }
 function applyCamFrame() {
-  const c = document.getElementById('camboothFrame');
-  if (!c) return;
-  let h = '';
-  if (camCurrentFrame === 'spidey') h = `<div class="frame-inner cam-frame-spidey"><div class="frame-border"></div><div class="frame-corner c-tl">${SPIDER_CORNER_SVG}</div><div class="frame-corner c-tr">${SPIDER_CORNER_SVG}</div><div class="frame-corner c-bl">${SPIDER_CORNER_SVG}</div><div class="frame-corner c-br">${SPIDER_CORNER_SVG}</div></div>`;
-  else if (camCurrentFrame === 'polaroid') h = `<div class="frame-inner cam-frame-polaroid"><div class="frame-border"></div><div class="frame-caption">Happy 17th, Fania! 🕷️</div></div>`;
-  else if (camCurrentFrame === 'comic') h = `<div class="frame-inner cam-frame-comic"><div class="frame-border"></div><div class="comic-pow">POW!</div><div class="comic-thwip">THWIP!</div></div>`;
-  else if (camCurrentFrame === 'heart') h = `<div class="frame-inner cam-frame-heart"><div class="frame-border"></div><div class="heart-floater hf1">💕</div><div class="heart-floater hf2">💖</div><div class="heart-floater hf3">💗</div><div class="heart-floater hf4">💓</div></div>`;
-  else if (camCurrentFrame === 'gold') h = `<div class="frame-inner cam-frame-gold"><div class="frame-border"></div></div>`;
-  c.innerHTML = h;
+  const c = document.getElementById('camboothFrame'); if (!c) return;
+  if (camCurrentFrame === 'spidey') {
+    const days = ['MINGGU','SENIN','SELASA','RABU','KAMIS','JUMAT','SABTU'];
+    const months = ['JANUARI','FEBRUARI','MARET','APRIL','MEI','JUNI','JULI','AGUSTUS','SEPTEMBER','OKTOBER','NOVEMBER','DESEMBER'];
+    const now = new Date();
+    const dateStr = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+    c.innerHTML = `
+      <div class="frame-inner cam-frame-bnd">
+        <div class="bnd-strip">
+          <div class="bnd-inner">
+            <div class="bnd-photos">
+              <div class="bnd-photo" data-num="1"></div><div class="bnd-photo" data-num="2"></div>
+              <div class="bnd-photo" data-num="3"></div><div class="bnd-photo" data-num="4"></div>
+            </div>
+            <div class="bnd-logo">
+              <div class="bnd-logo-main">SPIDERMAN</div>
+              <div class="bnd-logo-sub">BRAND NEW DAY</div>
+              <div class="bnd-date">${dateStr}</div>
+            </div>
+          </div>
+          <div class="bnd-corner tl">🕸️</div><div class="bnd-corner tr">🕷️</div>
+          <div class="bnd-corner bl">🕷️</div><div class="bnd-corner br">🕸️</div>
+        </div>
+      </div>`;
+  } else if (camCurrentFrame === 'polaroid') {
+    c.innerHTML = `<div class="frame-inner cam-frame-polaroid"><div class="frame-border"></div><div class="frame-caption">Happy 17th, Fania! 🕷️</div></div>`;
+  } else if (camCurrentFrame === 'comic') {
+    c.innerHTML = `<div class="frame-inner cam-frame-comic"><div class="frame-border"></div><div class="comic-pow">POW!</div><div class="comic-thwip">THWIP!</div></div>`;
+  } else if (camCurrentFrame === 'heart') {
+    c.innerHTML = `<div class="frame-inner cam-frame-heart"><div class="frame-border"></div><div class="heart-floater hf1">💕</div><div class="heart-floater hf2">💖</div><div class="heart-floater hf3">💗</div><div class="heart-floater hf4">💓</div></div>`;
+  } else if (camCurrentFrame === 'gold') {
+    c.innerHTML = `<div class="frame-inner cam-frame-gold"><div class="frame-border"></div></div>`;
+  } else { c.innerHTML = ''; }
 }
 function setCamFilter(filter, btn) {
-  playThwipSound();
-  camCurrentFilter = filter;
+  playThwipSound(); camCurrentFilter = filter;
   const v = document.getElementById('camboothVideo');
   v.style.filter = '';
   if (filter === 'spidey') v.style.filter = 'contrast(1.15) saturate(1.4) hue-rotate(-10deg) brightness(1.05)';
@@ -1687,8 +1544,7 @@ function setCamFilter(filter, btn) {
   btn.classList.add('active');
 }
 function setCamVirtualChar(type, btn) {
-  playThwipSound();
-  camVirtualChar = type;
+  playThwipSound(); camVirtualChar = type;
   const c = document.getElementById('camVirtualChar');
   const sizeRow = document.getElementById('camCharSizeRow');
   if (type === 'none') { c.innerHTML = ''; if (sizeRow) sizeRow.style.display = 'none'; }
@@ -1702,8 +1558,7 @@ function setCamVirtualChar(type, btn) {
   btn.classList.add('active');
 }
 function setCamCharSize(size, btn) {
-  playThwipSound();
-  camVirtualSize = size;
+  playThwipSound(); camVirtualSize = size;
   const c = document.querySelector('#camVirtualChar .cam-virtual-character');
   if (c) { c.classList.remove('small','medium','large'); c.classList.add(size); }
   document.querySelectorAll('#camCharSizeRow .cam-choice').forEach(b => b.classList.remove('active'));
@@ -1721,8 +1576,7 @@ function toggleCamStickers() {
   showToast(`✨ Sticker: ${camCurrentSticker === 'none' ? 'OFF' : camCurrentSticker.toUpperCase()}`);
 }
 function renderCamStickers() {
-  const l = document.getElementById('camboothStickers');
-  if (!l) return;
+  const l = document.getElementById('camboothStickers'); if (!l) return;
   l.innerHTML = '';
   if (camCurrentSticker === 'none') return;
   const em = CAM_STICKERS[camCurrentSticker] || [];
@@ -1800,10 +1654,8 @@ async function takeCamPhoto() {
   }, 800);
 }
 function playWebEffect() {
-  const eff = document.getElementById('camWebEffect');
-  if (!eff) return;
-  eff.innerHTML = '';
-  eff.classList.add('active');
+  const eff = document.getElementById('camWebEffect'); if (!eff) return;
+  eff.innerHTML = ''; eff.classList.add('active');
   const corners = [ { top:0, left:0, rot: 0 }, { top:0, right:0, rot: 90 }, { bottom:0, left:0, rot: 270 }, { bottom:0, right:0, rot: 180 } ];
   corners.forEach((c, i) => {
     const line = document.createElement('div');
@@ -1814,23 +1666,20 @@ function playWebEffect() {
     eff.appendChild(line);
   });
   const center = document.createElement('div');
-  center.className = 'cam-web-center';
-  center.textContent = '🕷️';
+  center.className = 'cam-web-center'; center.textContent = '🕷️';
   eff.appendChild(center);
   setTimeout(() => { eff.classList.remove('active'); eff.innerHTML = ''; }, 1500);
 }
 function captureSingleFrame() {
   const v = document.getElementById('camboothVideo');
   if (!v || v.readyState < 2) return null;
-  const vw = v.videoWidth || 1080;
-  const vh = v.videoHeight || 1440;
+  const vw = v.videoWidth || 1080; const vh = v.videoHeight || 1440;
   const canvas = document.createElement('canvas');
   canvas.width = 800; canvas.height = 1000;
   const ctx = canvas.getContext('2d');
   const tr = 800/1000, vr = vw/vh;
   let sx = 0, sy = 0, sw = vw, sh = vh;
-  if (vr < tr) { sh = vw/tr; sy = (vh-sh)/2; }
-  else { sw = vh*tr; sx = (vw-sw)/2; }
+  if (vr < tr) { sh = vw/tr; sy = (vh-sh)/2; } else { sw = vh*tr; sx = (vw-sw)/2; }
   if (camFacingMode === 'user') { ctx.save(); ctx.translate(canvas.width,0); ctx.scale(-1,1); ctx.drawImage(v, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height); ctx.restore(); }
   else { ctx.drawImage(v, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height); }
   applyFilterToCanvas(ctx, canvas.width, canvas.height);
@@ -1839,8 +1688,7 @@ function captureSingleFrame() {
 async function captureCameraPhoto() {
   const v = document.getElementById('camboothVideo');
   if (!v || v.readyState < 2) { showToast('⚠️ Kamera belum siap'); return; }
-  const vw = v.videoWidth || 1080;
-  const vh = v.videoHeight || 1440;
+  const vw = v.videoWidth || 1080; const vh = v.videoHeight || 1440;
   const canvas = document.createElement('canvas');
   canvas.width = vw; canvas.height = vh;
   const ctx = canvas.getContext('2d');
@@ -1858,13 +1706,11 @@ async function captureCameraPhoto() {
     const st = document.getElementById('camboothStickers').cloneNode(true);
     st.style.position = 'absolute'; st.style.inset = '0';
     temp.appendChild(st);
-    const vc = document.getElementById('camVirtualChar').cloneNode(true);
-    if (vc.innerHTML.trim()) { vc.style.position = 'absolute'; vc.style.inset = '0'; temp.appendChild(vc); }
     document.body.appendChild(temp);
     const oc = await html2canvas(temp, { backgroundColor: null, scale: 1, width: vw, height: vh, logging: false });
     document.body.removeChild(temp);
     ctx.drawImage(oc, 0, 0, vw, vh);
-  } catch(e) { drawSimpleFrame(ctx, vw, vh); }
+  } catch(e) {}
   const dataURL = canvas.toDataURL('image/jpeg', 0.92);
   camLastPhoto = dataURL;
   document.getElementById('camGalleryImg').src = dataURL;
@@ -1875,8 +1721,7 @@ async function captureCameraPhoto() {
 }
 function applyFilterToCanvas(ctx, w, h) {
   if (camCurrentFilter === 'none') return;
-  const img = ctx.getImageData(0, 0, w, h);
-  const d = img.data;
+  const img = ctx.getImageData(0, 0, w, h); const d = img.data;
   for (let i = 0; i < d.length; i += 4) {
     let r = d[i], g = d[i+1], b = d[i+2];
     if (camCurrentFilter === 'spidey') { r = Math.min(255, r*1.15); g = Math.min(255, g*1.02); b = Math.min(255, b*0.95); }
@@ -1888,73 +1733,142 @@ function applyFilterToCanvas(ctx, w, h) {
   }
   ctx.putImageData(img, 0, 0);
 }
-function drawSimpleFrame(ctx, w, h) {
-  ctx.strokeStyle = '#e62429'; ctx.lineWidth = Math.max(10, w*0.025);
-  ctx.strokeRect(0, 0, w, h);
-  ctx.strokeStyle = '#000'; ctx.lineWidth = Math.max(4, w*0.01);
-  ctx.strokeRect(0, 0, w, h);
-}
+
+/* ============ BUILD PHOTO STRIP — SPIDERMAN BRAND NEW DAY ============ */
 async function buildPhotoStrip() {
   if (camStripPhotos.length !== CAM_STRIP_TARGET) { showToast('⚠️ Foto kurang'); return null; }
-  const FW = 800, FH = 1000;
-  const PAD = 30, GAP = 20, HEAD = 180, FOOT = 140;
-  const SW = FW + PAD*2;
-  const SH = HEAD + FH*4 + GAP*3 + FOOT + PAD*2;
+
+  const FW = 720;   // lebar foto
+  const FH = 900;   // tinggi foto
+  const PAD = 40;
+  const GAP = 14;
+  const HEAD = 60;
+  const FOOT = 240;
+
+  const SW = FW + PAD * 2;
+  const SH = HEAD + (FH * 4) + (GAP * 3) + FOOT + PAD;
+
   const canvas = document.createElement('canvas');
   canvas.width = SW; canvas.height = SH;
   const ctx = canvas.getContext('2d');
-  const bg = ctx.createLinearGradient(0, 0, 0, SH);
-  bg.addColorStop(0, '#e62429'); bg.addColorStop(0.5, '#991b1b'); bg.addColorStop(0.5, '#1e3a8a'); bg.addColorStop(1, '#0d5cd4');
-  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, SW, SH);
-  ctx.fillStyle = bg; roundRect(ctx, 8, 8, SW-16, SH-16, 20); ctx.fill();
-  ctx.strokeStyle = 'rgba(255,255,255,.08)'; ctx.lineWidth = 1;
-  for (let i = 0; i < SW; i += 30) { ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,SH); ctx.stroke(); }
-  for (let i = 0; i < SH; i += 30) { ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(SW,i); ctx.stroke(); }
-  ctx.fillStyle = '#fffdf5'; ctx.strokeStyle = '#000'; ctx.lineWidth = 4;
-  roundRect(ctx, PAD, PAD, SW - PAD*2, HEAD - 40, 16); ctx.fill(); ctx.stroke();
-  ctx.fillStyle = '#e62429'; ctx.font = 'bold 48px Bangers, cursive, sans-serif';
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillText('🕷️ SPIDEY PHOTO BOOTH 🕷️', SW/2, PAD + (HEAD-40)/2 - 15);
-  ctx.fillStyle = '#0d5cd4'; ctx.font = 'bold 24px Fredoka, sans-serif';
-  ctx.fillText('FANIA · 17TH BIRTHDAY', SW/2, PAD + (HEAD-40)/2 + 25);
-  const startY = PAD + HEAD;
+
+  // ===== 1. BORDER HITAM =====
+  ctx.fillStyle = '#0a0a0a';
+  ctx.fillRect(0, 0, SW, SH);
+
+  // ===== 2. WEB PATTERN =====
+  ctx.strokeStyle = 'rgba(255,255,255,.07)';
+  ctx.lineWidth = 1;
+  for (let i = -SH; i < SW + SH; i += 45) {
+    ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i + SH, SH); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i - SH, SH); ctx.stroke();
+  }
+  // Border putih luar
+  ctx.strokeStyle = 'rgba(255,255,255,.15)';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(6, 6, SW - 12, SH - 12);
+
+  // ===== 3. INNER MERAH GELAP =====
+  const innerX = PAD - 12;
+  const innerY = HEAD - 12;
+  const innerW = SW - innerX * 2;
+  const innerH = SH - HEAD - PAD + 24;
+
+  const redGrad = ctx.createLinearGradient(0, innerY, 0, innerY + innerH);
+  redGrad.addColorStop(0, '#8b1a1f');
+  redGrad.addColorStop(0.5, '#a01820');
+  redGrad.addColorStop(1, '#6b1015');
+  ctx.fillStyle = redGrad;
+  roundRect(ctx, innerX, innerY, innerW, innerH, 8);
+  ctx.fill();
+
+  // Garis putih tipis
+  ctx.strokeStyle = 'rgba(255,255,255,.2)';
+  ctx.lineWidth = 1.5;
+  roundRect(ctx, innerX + 3, innerY + 3, innerW - 6, innerH - 6, 6);
+  ctx.stroke();
+
+  // ===== 4. FOTO-FOTO =====
+  const startY = HEAD;
   const imgs = await Promise.all(camStripPhotos.map(loadImage));
+
   for (let i = 0; i < CAM_STRIP_TARGET; i++) {
-    const img = imgs[i]; if (!img) continue;
-    const px = PAD, py = startY + i * (FH + GAP);
-    ctx.fillStyle = '#000'; roundRect(ctx, px-6, py-6, FW+12, FH+12, 12); ctx.fill();
-    ctx.fillStyle = '#fff'; roundRect(ctx, px-2, py-2, FW+4, FH+4, 10); ctx.fill();
-    ctx.save(); roundRect(ctx, px, py, FW, FH, 8); ctx.clip(); ctx.drawImage(img, px, py, FW, FH); ctx.restore();
-    ctx.fillStyle = 'rgba(0,0,0,.75)'; roundRect(ctx, px+12, py+12, 60, 60, 30); ctx.fill();
-    ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 40px Bangers, cursive, sans-serif';
-    ctx.fillText(`${i+1}`, px+42, py+42);
+    const img = imgs[i];
+    if (!img) continue;
+    const px = PAD;
+    const py = startY + i * (FH + GAP);
+
+    // Border hitam tebal
+    ctx.fillStyle = '#000';
+    roundRect(ctx, px - 8, py - 8, FW + 16, FH + 16, 6);
+    ctx.fill();
+
+    // Foto
+    ctx.save();
+    roundRect(ctx, px, py, FW, FH, 3);
+    ctx.clip();
+    ctx.drawImage(img, px, py, FW, FH);
+    ctx.restore();
+
+    // Nomor
+    ctx.fillStyle = 'rgba(0,0,0,.6)';
+    roundRect(ctx, px + 10, py + 10, 40, 40, 20);
+    ctx.fill();
+    ctx.fillStyle = '#ffd978';
+    ctx.font = 'bold 26px "Bangers", cursive, sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(`${i+1}`, px + 30, py + 31);
   }
-  const footY = startY + CAM_STRIP_TARGET * FH + GAP * (CAM_STRIP_TARGET-1) + GAP + 20;
-  ctx.fillStyle = '#fffdf5'; ctx.strokeStyle = '#000'; ctx.lineWidth = 4;
-  roundRect(ctx, PAD, footY, SW - PAD*2, FOOT-40, 16); ctx.fill(); ctx.stroke();
-  ctx.fillStyle = '#e62429'; ctx.font = 'bold 32px Caveat, cursive, sans-serif';
-  ctx.fillText('Happy Sweet Seventeen, dek Fania! 🎂', SW/2, footY + (FOOT-40)/2 - 10);
-  ctx.fillStyle = '#666'; ctx.font = '18px Fredoka, sans-serif';
-  const ds = new Date().toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
-  ctx.fillText(`📸 ${ds}`, SW/2, footY + (FOOT-40)/2 + 25);
-  if (camCurrentSticker !== 'none') {
-    const em = CAM_STICKERS[camCurrentSticker] || [];
-    ctx.font = '70px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText(em[0] || '⭐', PAD+20, PAD+HEAD-20);
-    ctx.fillText(em[1] || '⭐', SW-PAD-20, footY + FOOT - 60);
-    ctx.fillText(em[2] || '⭐', PAD+20, footY - 20);
-    ctx.fillText(em[3] || '⭐', SW-PAD-20, PAD+HEAD+30);
-  }
-  return canvas.toDataURL('image/jpeg', 0.92);
+
+  // ===== 5. FOOTER — SPIDERMAN BRAND NEW DAY =====
+  const footY = startY + CAM_STRIP_TARGET * FH + GAP * (CAM_STRIP_TARGET - 1) + GAP + 20;
+
+  // Garis pemisah
+  ctx.strokeStyle = 'rgba(255,255,255,.2)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(PAD, footY);
+  ctx.lineTo(SW - PAD, footY);
+  ctx.stroke();
+
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+
+  // SPIDERMAN — shadow hitam
+  ctx.fillStyle = '#000';
+  ctx.font = 'italic 900 76px "Bangers", cursive, sans-serif';
+  ctx.fillText('SPIDERMAN', SW/2 + 4, footY + 105 + 4);
+
+  // SPIDERMAN — text utama putih
+  const textGrad = ctx.createLinearGradient(0, footY + 65, 0, footY + 145);
+  textGrad.addColorStop(0, '#ffffff');
+  textGrad.addColorStop(0.5, '#f5f5f5');
+  textGrad.addColorStop(1, '#d8d8d8');
+  ctx.fillStyle = textGrad;
+  ctx.fillText('SPIDERMAN', SW/2, footY + 105);
+
+  // Outline hitam tipis
+  ctx.strokeStyle = '#000';
+  ctx.lineWidth = 2;
+  ctx.strokeText('SPIDERMAN', SW/2, footY + 105);
+
+  // BRAND NEW DAY
+  ctx.fillStyle = '#ffd978';
+  ctx.font = 'bold 26px "Fredoka", sans-serif';
+  ctx.letterSpacing = '6px';
+  ctx.fillText('BRAND NEW DAY', SW/2, footY + 158);
+
+  // Tanggal
+  ctx.fillStyle = 'rgba(255,255,255,.9)';
+  ctx.font = 'bold 22px "Fredoka", sans-serif';
+  const days = ['MINGGU','SENIN','SELASA','RABU','KAMIS','JUMAT','SABTU'];
+  const months = ['JANUARI','FEBRUARI','MARET','APRIL','MEI','JUNI','JULI','AGUSTUS','SEPTEMBER','OKTOBER','NOVEMBER','DESEMBER'];
+  const now = new Date();
+  const dateStr = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+  ctx.fillText(dateStr, SW/2, footY + 200);
+
+  return canvas.toDataURL('image/jpeg', 0.95);
 }
-function loadImage(src) {
-  return new Promise(resolve => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = () => resolve(null);
-    img.src = src;
-  });
-}
+function loadImage(src) { return new Promise(resolve => { const img = new Image(); img.onload = () => resolve(img); img.onerror = () => resolve(null); img.src = src; }); }
 function roundRect(ctx, x, y, w, h, r) {
   ctx.beginPath();
   ctx.moveTo(x + r, y);
@@ -1964,25 +1878,14 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y);
   ctx.closePath();
 }
-function showCamPreview() {
-  if (!camLastPhoto) return;
-  playThwipSound();
-  document.getElementById('camPreviewImg').src = camLastPhoto;
-  document.getElementById('camPreview').classList.add('show');
-}
-function closeCamPreview() {
-  playThwipSound();
-  document.getElementById('camPreview').classList.remove('show');
-}
-function retakeCamPhoto() {
-  playThwipSound(); closeCamPreview();
-  setTimeout(() => { if (!camStream) startCamera(); showToast('📸 Siap foto lagi!'); }, 300);
-}
+function showCamPreview() { if (!camLastPhoto) return; playThwipSound(); document.getElementById('camPreviewImg').src = camLastPhoto; document.getElementById('camPreview').classList.add('show'); }
+function closeCamPreview() { playThwipSound(); document.getElementById('camPreview').classList.remove('show'); }
+function retakeCamPhoto() { playThwipSound(); closeCamPreview(); setTimeout(() => { if (!camStream) startCamera(); showToast('📸 Siap foto lagi!'); }, 300); }
 function downloadCamPhoto() {
   if (!camLastPhoto) return;
   playTingSound(); setTimeout(() => playSfx('sfxFunfare'), 250);
   const a = document.createElement('a');
-  a.download = 'spidey-cam-fania-' + Date.now() + '.jpg';
+  a.download = 'spidey-bnd-fania-' + Date.now() + '.jpg';
   a.href = camLastPhoto; a.click();
   showToast('📥 Foto disimpan!');
   if (typeof confetti === 'function') confetti({ particleCount:80, spread:60, origin:{y:.7}, colors:['#e62429','#0d5cd4','#fbbf24'] });
@@ -1993,8 +1896,8 @@ async function shareCamPhoto() {
   try {
     const r = await fetch(camLastPhoto);
     const blob = await r.blob();
-    const file = new File([blob], 'spidey-cam.png', { type: 'image/png' });
-    if (navigator.canShare && navigator.canShare({ files: [file] })) await navigator.share({ files: [file], title: 'Spidey Cam 🕷️', text: 'Cek foto aku!' });
+    const file = new File([blob], 'spidey-bnd.png', { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) await navigator.share({ files: [file], title: 'Spidey BND 🕷️', text: 'Cek foto aku!' });
     else { downloadCamPhoto(); showToast('📥 Foto di-download'); }
   } catch(e) { downloadCamPhoto(); }
 }
@@ -2008,7 +1911,6 @@ function closeCambooth() {
   document.getElementById('camShuffleOverlay')?.classList.remove('show');
   camLastPhoto = null; camStripPhotos = []; camStripInProgress = false;
   updateStripProgress();
-  if (camMode === 'strip') setCamMode('single');
 }
 
 /* ============ SHUFFLE EDITOR ============ */
@@ -2022,13 +1924,9 @@ function openShuffleEditor() {
   renderShuffleGrid();
   document.getElementById('camShuffleOverlay').classList.add('show');
 }
-function closeShuffleEditor() {
-  playThwipSound();
-  document.getElementById('camShuffleOverlay').classList.remove('show');
-}
+function closeShuffleEditor() { playThwipSound(); document.getElementById('camShuffleOverlay').classList.remove('show'); }
 function renderShuffleGrid() {
-  const g = document.getElementById('camShuffleGrid');
-  if (!g) return;
+  const g = document.getElementById('camShuffleGrid'); if (!g) return;
   g.innerHTML = '';
   shuffleWorkingArray.forEach((src, i) => {
     const cell = document.createElement('div');
